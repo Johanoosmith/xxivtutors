@@ -1,0 +1,51 @@
+.ds-image-choose{
+	position: relative;
+}
+
+.ds-span-anchor-close {
+	position: absolute;	
+	right: 0;
+	display: block;
+	top: 1px; 
+  z-index: 2; 
+}
+
+.ds-image-choose-anchor-close {
+	position: absolute;
+	right: -3px;
+	top: -9px;
+	box-shadow: none;
+	border: none;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: #d1bba4;
+}
+
+#ds-image-choose-img-preview {
+  display: none;
+  width: 155px;
+  border: 2px dashed #333;
+  margin-bottom: 20px;
+}
+
+#ds-image-choose-img-preview {
+  display: block;
+}
+
+.ds-image-choose-file-input {
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.ds-image-choose-label {
+  font-family: sans-serif;  
+  padding: 1px 1px; 
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: block;
+}
+
