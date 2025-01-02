@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4 box-content">
+                    <div class="col-md-4 col-lg-4 box-content">
                         <div class="icon-with-content">
                             <span class="icon">
                                 <img src="{{asset('front/assets/images/icon-1.png')}}" alt="">
@@ -97,7 +97,7 @@
                             <p>{{$page->first_key_features_section_subheading}}</p>
                         </div>
                     </div>
-                    <div class="col-lg-4 box-content">
+                    <div class="col-md-4 col-lg-4 box-content">
                         <div class="icon-with-content">
                             <span class="icon">
                                 <img src="{{asset('front/assets/images/icon-2.png')}}" alt="">
@@ -106,7 +106,7 @@
                             <p>{{$page->second_key_features_section_subheading}}</p>
                         </div>
                     </div>
-                    <div class="col-lg-4 box-content">
+                    <div class="col-md-4 col-lg-4 box-content">
                         <div class="icon-with-content">
                             <span class="icon">
                                 <img src="{{asset('front/assets/images/icon-3.png')}}" alt="">
@@ -118,7 +118,7 @@
                 </div>
             </div>
         </section>
-        <section class="section py-0 img-with-text img-first">
+        <section class="section pt-0 py-lg-0 bg-light-green img-with-text img-first">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-7">
@@ -128,7 +128,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-5 py-100">
+                    <div class="col-lg-5 py-100 align-self-center py-4">
                         <h2 class="section-heading">{{$page->search_tutors_section_heading}}</h2>
                         <p>{!! $page->search_tutors_section_description !!}</p>
                         <div class="button-group">
@@ -140,7 +140,7 @@
                 </div>
             </div>
         </section>
-        <section class="section bg-lightgrey text-center browse-category">
+        <section class="section text-center browse-category">
             <div class="wave-shape">
                 <svg width="1920" height="220" viewBox="0 0 1920 220" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1053.24 189.748C299.711 239.656 -19.6444 -62.5258 -36.6941 11.843C-53.7438 86.2118 -184.684 219.5 23.302 219.5H1947.18C1955.34 29.326 1966.78 172.932 1947.18 154.744C1922.83 132.15 1808.19 139.743 1067.11 188.829L1053.24 189.748Z" fill="#112132"/>
@@ -216,7 +216,7 @@
                 </div>
             </div>
         </section>
-        <section class="section bg-lightgrey text-center ups-section">
+        <section class="section text-center ups-section">
             <div class="container small-container">
                 <div class="row">
                     <div class="col-12">
@@ -224,7 +224,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-3 box-content">
+                    <div class="col-sm-6 col-lg-3 box-content">
                         <div class="icon-with-content">
                             <span class="icon">
                                 <img src="{{asset('front/assets/images/icon-7.png')}}" alt="">
@@ -233,7 +233,7 @@
                             <p>{{$page->first_tutuition_difference_section_subheading}}</p>
                         </div>
                     </div>
-                    <div class="col-lg-3 box-content">
+                    <div class="col-sm-6 col-lg-3 box-content">
                         <div class="icon-with-content">
                             <span class="icon">
                                 <img src="{{asset('front/assets/images/icon-8.png')}}" alt="">
@@ -242,7 +242,7 @@
                             <p>{{$page->second_tutuition_difference_section_subheading}}</p>
                         </div>
                     </div>
-                    <div class="col-lg-3 box-content">
+                    <div class="col-sm-6 col-lg-3 box-content">
                         <div class="icon-with-content">
                             <span class="icon">
                                 <img src="{{asset('front/assets/images/icon-9.png')}}" alt="">
@@ -251,7 +251,7 @@
                             <p>{{$page->third_tutuition_difference_section_subheading}}</p>
                         </div>
                     </div>
-                    <div class="col-lg-3 box-content">
+                    <div class="col-sm-6 col-lg-3 box-content">
                         <div class="icon-with-content">
                             <span class="icon">
                                 <img src="{{asset('front/assets/images/icon-10.png')}}" alt="">
@@ -298,6 +298,12 @@
             </div>
         </section>
         <section class="section newsletter-sec">
+            <div class="newsletter-graphics">
+                <img class="newsletter-icon-1" src="assets/images/newsletter-icon-1.svg" alt="">
+                <img class="newsletter-icon-2" src="assets/images/newsletter-icon-2.svg" alt="">
+                <img class="newsletter-icon-3" src="assets/images/newsletter-icon-3.svg" alt="">
+                <img class="newsletter-icon-4" src="assets/images/newsletter-icon-4.svg" alt="">
+            </div>
             <div class="container small-container">
                 <div class="row">
                     <div class="col-lg-5">
