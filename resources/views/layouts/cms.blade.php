@@ -11,10 +11,11 @@
             <link rel="stylesheet" href="{{asset('front/assets/css/bootstrap.min.css') }}">
             <!-- Style Sheet -->
             <link rel="stylesheet" href="{{asset('front/assets/css/style.css')}}">
+            <link rel="stylesheet" href="{{asset('front/assets/css/responsive.css')}}">
 
         @show      
     </head>   
-    <body class="site_body home-body @yield('body_class')">    	       
+    <body class="site_body home-body bg-lightgrey @yield('body_class')">    	       
        
         @include('includes.front.header')
         @yield('content')

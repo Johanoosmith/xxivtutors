@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <span class="footer-block-heading">
+                    <span class="footer-block-heading mobile-accordion">
                         Search
                     </span>
                     <ul class="search-menu">
@@ -13,7 +13,7 @@
                     </ul>
                 </div>
                 <div class="col-lg-3">
-                    <span class="footer-block-heading">
+                    <span class="footer-block-heading mobile-accordion">
                         Subjects
                     </span>
                     <ul class="footer-links">
@@ -28,7 +28,7 @@
                     </ul>
                 </div>
                 <div class="col-lg-3">
-                    <span class="footer-block-heading">
+                    <span class="footer-block-heading mobile-accordion">
                         Locations
                     </span>
                     <ul class="footer-links">
@@ -45,8 +45,8 @@
                         <li><a href="#">Edinburgh</a></li>
                     </ul> 
                 </div>
-                <div class="col-lg-3">
-                    <span class="footer-block-heading">
+                <div class="col-lg-3 social-block">
+                    <span class="footer-block-heading social-heading">
                         Follow us
                     </span>
                     <ul class="social-links">
@@ -89,7 +89,7 @@
                     <div class="col">
                         <p>2024 yourlogo - All Rights Reserved</p>
                     </div>
-                    <div class="col text-md-end">
+                    <div class="col text-center text-lg-end mt-3 mt-lg-0">
                         <p>Website Designed & Developed by: <a href="https://www.dotsquares.com/" target="_blank"><img src="{{asset('front/assets/images/dotsquares.png')}}" alt="Dotsquares"> </a></p>
                     </div>
                 </div>
@@ -97,6 +97,72 @@
         </div>
     </footer>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const accordions = document.querySelectorAll('.mobile-accordion');
 
+        function slideUp(element) {
+            const height = element.offsetHeight;
+            const step = height / 10; // Adjust speed of sliding
+            let currentHeight = height;
+
+            function animate() {
+                currentHeight -= step;
+                if (currentHeight <= 0) {
+                    element.style.height = '';
+                    element.style.display = 'none';
+                    element.style.overflow = '';
+                } else {
+                    element.style.height = currentHeight + 'px';
+                    requestAnimationFrame(animate);
+                }
+            }
+            animate();
+        }
+
+        function slideDown(element) {
+            element.style.display = 'block';
+            element.style.overflow = 'hidden';
+            const height = element.scrollHeight;
+            let currentHeight = 0;
+            const step = height / 10; // Adjust speed of sliding
+
+            function animate() {
+                currentHeight += step;
+                if (currentHeight >= height) {
+                    element.style.height = '';
+                    element.style.overflow = '';
+                } else {
+                    element.style.height = currentHeight + 'px';
+                    requestAnimationFrame(animate);
+                }
+            }
+            animate();
+        }
+
+        accordions.forEach(function (accordion) {
+            accordion.addEventListener('click', function () {
+                accordions.forEach(function (otherAccordion) {
+                    if (otherAccordion !== accordion) {
+                        otherAccordion.classList.remove('active');
+                        const content = otherAccordion.nextElementSibling;
+                        if (content.style.display === 'block') {
+                            slideUp(content);
+                        }
+                    }
+                });
+
+                const content = this.nextElementSibling;
+                this.classList.toggle('active');
+                if (content.style.display === 'block') {
+                    slideUp(content);
+                } else {
+                    slideDown(content);
+                }
+            });
+        });
+    });
+
+</script>
 <!-- JavaScript -->
 <script src="{{asset('front/assets/js/bootstrap.bundle.min.js')}}"></script>
