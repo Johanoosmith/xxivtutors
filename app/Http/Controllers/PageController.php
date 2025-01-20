@@ -45,6 +45,7 @@ class PageController extends Controller {
                 }
             }
         }
+        $arr['courses_list'] = $this->getCourses();
         $arr['page'] = $page;
         // Pass all data to the frontend view
         return view('front/index')->with($arr);
@@ -80,9 +81,7 @@ class PageController extends Controller {
 		}
 		$page_templates = $page->template; 
    
-		if(isset($_REQUEST['key'])){
-			phpinfo();
-		}
+	
         $arr['cities'] = City::where('status', 1)->orderBy('name', 'asc')->get();
         $arr['courses'] = Course::where('status', 1)->orderBy('title', 'asc')->get();
         $arr['tutors'] = User::where('role_id', 2)->get();
@@ -110,6 +109,7 @@ class PageController extends Controller {
     }
     public function filterByCourse($course_id)
     {
+
         $tutor_list = DB::table('tutor_specializations')->where('course_id', $course_id)->get()->pluck('tutor_id');
         
         $tutors = DB::table('users')
@@ -122,18 +122,28 @@ class PageController extends Controller {
            
            
         $courses = Course::all(); // Fetch all courses for the filter
+        $courses_list = $this->getCourses();
         $page = Page::find(1); // Fetch the page
     
         return view('front.tutor', [
             'tutors' => $tutors,
             'courses' => $courses,
+            'courses_list' => $courses_list,
             'page' => $page,
         ]);
     }
-    public function tutorFilter(Request $request)
+ 
+    public function tutorFilter(Request $request,$course_id = null)
     {
-        $query = User::where('role_id', 2); // Tutors only
-
+        if ($request->has('course_id') && $request->course_id != null) {
+            $course_id = $request->course_id;  
+        }
+        $arr['course_id'] = $course_id;
+        $query = User::where('role_id', 2); 
+        // Tutors only
+        if(!empty($course_id)){         
+            $query->whereRaw("FIND_IN_SET(?, tutor_specializations)", [$course_id]);            
+        }
         // Apply price range filter
         if ($request->filled('min_price') && $request->filled('max_price')) {
             $query->whereBetween('rate', [$request->min_price, $request->max_price]);
@@ -149,9 +159,6 @@ class PageController extends Controller {
         if ($request->has('postcode') && $request->postcode != null) {
             $query->where('postcode', $request->postcode);
         }
-        if ($request->has('course_id') && $request->course_id != null) {
-            $query->where('course_id', $request->course_id);
-        }
         $specialization = User::where('role_id', 2)->get();
         $specialization_courses  = array();
         if(!empty($specialization)){
@@ -162,8 +169,8 @@ class PageController extends Controller {
             }
             $specialization_courses = array_merge(...$specialization_courses);
         }
-       
-        $arr['tutors']= $query->paginate(10);
+        $arr['tutors']= $query->paginate(2);
+        // echo $query->toSql();die;
         // Fetch the page
         $page = Page::find(1);    
         if (empty($page)) {
@@ -178,17 +185,23 @@ class PageController extends Controller {
                 }
             }
         }
-  
         $records = DB::table('courses')
         ->whereIn('id', $specialization_courses)
         ->get();
         $arr['records'] = $records;
-        //dd($records);
         $arr['page'] = $page;
         // Pass all data to the frontend view
         $arr['navigation'] = Category::where('status', 1)
         ->orderBy('order', 'asc')
         ->get();
+        $arr['courses_list'] = $this->getCourses();
+        $arr['courses'] = Course::where('status', 1)->orderBy('title', 'asc')->get();
+        
         return view('front.tutor')->with($arr);
+    }
+    public function student(Request $request)
+    {
+        return view('front.customer');
+
     }
 }

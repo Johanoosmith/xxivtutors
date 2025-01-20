@@ -37,6 +37,10 @@
         column-gap: 2rem;
     }
 
+    .animation-image-wrapper{
+        min-height: 600px;
+    }
+
 
     .img-block .animation-image-wrapper .shape-1{
         width: 320px;
@@ -90,6 +94,9 @@
     }
     .main-banner h2{
         font-size: 36px;
+    }
+    .animation-image-wrapper{
+        min-height: 560px;
     }
     .search-field-group{
         flex-wrap: wrap;

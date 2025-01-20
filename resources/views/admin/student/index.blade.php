@@ -76,7 +76,7 @@
                         <th>Email</th>
                         <th>Contact</th>
                         <th>Course</th>
-                        <th>Status</th>
+                        <!-- <th>Status</th> -->
                         <th class="text-right">Action</th>
                     </tr>
                 </thead>
@@ -84,15 +84,15 @@
             @foreach ($students as $student)
                 <tr>
                     <td>{{ $student->id }}</td>
-                    <td>{{ $student->fullname }}</td>
+                    <td>{{ $student->firstname }}{{ $student->lastname }}</td>
                     <td>{{ $student->email }}</td>
-                    <td>{{ $student->contact}}</td>
-					<td>{{ $student->course}}</td>
+                    <td>{{ $student->mobile}}</td>
+					<!-- <td>{{ $student->course}}</td> -->
                     <td>
-                    @if($student->status == 'active')
-                        <label class="badge bg-light-success">{{ ucfirst($student->status) }}</label>  <!-- Green badge for active status -->
-                    @elseif($student->status == 'inactive')
-                        <label class="badge bg-light-warning">{{ ucfirst($student->status) }}</label>  <!-- Red badge for inactive status -->
+                    @if($student->status == '1')
+                        <label class="badge bg-light-success">Active</label>  <!-- Green badge for active status -->
+                    @elseif($student->status == '0')
+                        <label class="badge bg-light-warning">Deactive</label>  <!-- Red badge for inactive status -->
                     @else
                         <label class="badge bg-light-warning">{{ ucfirst($student->status) }}</label>  <!-- Yellow badge for any other status -->
                     @endif

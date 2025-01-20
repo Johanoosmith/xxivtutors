@@ -8,7 +8,7 @@
 <section class="page-banner text-center text-white with-search">
             <div class="banner-img">
                 
-                <img src="http://192.168.9.32:8000/storage/tutors/tutor-details-bg.jpg" alt="">
+                <img src="http://192.168.9.32:18212/storage/tutors/tutor-details-bg.jpg" alt="">
             </div>
             <div class="container">
                 <div class="row">
@@ -106,7 +106,7 @@
                              
 
                             <button type="submit" class="btn btn-primary">Apply Filters</button>
-                            <a href="http://192.168.9.32:8000/tutors" class="btn btn-secondary">Clear Filter</a>
+                            <a href="http://192.168.9.32:18212/tutors" class="btn btn-secondary">Clear Filter</a>
 
                         </form>
                         
@@ -157,9 +157,8 @@
                                 @endforeach
                             @else 
                                 <div class="tutor-block not-found">
-                                    <p class="alert" style="margin-top: 50px;">Sorry, we could not find a tutor matching this criteria.</p>
+                                    <p>Tutors not found.</p>
                                 </div>
-                                
                             @endif
                     </div>
                     

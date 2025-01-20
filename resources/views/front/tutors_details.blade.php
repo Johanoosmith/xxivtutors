@@ -4,7 +4,7 @@
 
 <section class="page-banner text-center text-white">
             <div class="banner-img">
-                <img src="http://192.168.9.32:19620/storage/tutors/tutor-details-bg.jpg" alt="">
+                <img src="http://192.168.9.32:18212/storage/tutors/tutor-details-bg.jpg" alt="">
             </div>
             <div class="container">
                 <div class="row">
@@ -23,7 +23,7 @@
                                 @if($tutor->profile_image)
                                 <img src="{{ asset('storage/' . $tutor->profile_image) }}" alt="{{ $tutor->firstname }}" width="200">
                                 @else
-                                <img src="http://192.168.9.32:19620/storage/tutors/businessman-avatar-ilustration-free-vector.jpg" alt="Default Image" width="200">
+                                <img src="http://192.168.9.32:18212/storage/tutors/businessman-avatar-ilustration-free-vector.jpg" alt="Default Image" width="200">
                                 @endif
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                                 </div>
                             </div>
                             <div class="tutor-contact">
-                                <a href="http://192.168.9.32:19620/contact-us" class="user-btn">
+                                <a href="http://192.168.9.32:18212/contact-us" class="user-btn">
                                     Contact
                                     <span class="svg-wrapper">
                                         <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">

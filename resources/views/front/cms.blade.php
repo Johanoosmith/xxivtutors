@@ -4,9 +4,9 @@
 @section('meta_page_url'){{url($page->page_url)}}@endsection
 @section('body_class'){{$page->page_url}}@endsection
 @section('content')
-    <section class="page-banner text-center text-white shape-page-banner">
+<section class="page-banner text-center text-white shape-page-banner">
         <div class="banner-img">
-            <img src="https://xxivtutors.24livehost.com/uploads/pages/551734095564.jpg" alt="">
+            <img src="http://192.168.9.32:8000/uploads/pages/551734095564.jpg" alt="">
         </div>
         <div class="container">
             <div class="row">
@@ -28,6 +28,5 @@
             </div>
         </div>
     </section>
-    
 
 @endsection

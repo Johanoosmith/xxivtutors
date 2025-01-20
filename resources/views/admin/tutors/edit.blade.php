@@ -48,13 +48,11 @@
                         <label class="form-label">Email<span class="required">*</span></label>   
                         {{ html()->text('email')->class('form-control form-control-user required') }}  
                     </div>
-                        <div class="col-sm-2 mt-3">
-                                @if ($tutor->profile_image)
-                                    <img src="{{ asset('storage/' . $tutor->profile_image) }}" alt="Profile Image" width="50px">
-                                @endif
-                            
-                        </div>
-                   
+                    <div class="col-sm-2 mt-3">
+                            @if ($tutor->profile_image)
+                                <img src="{{ asset('storage/' . $tutor->profile_image) }}" alt="Profile Image" width="50px">
+                            @endif
+                    </div>
             </div>
             <div class="form-group row">
                 <div class="col-sm-8">
@@ -141,28 +139,24 @@
             </div>
             <div class="form-group row">
                     <label for="specialization" class="form-label">Select Specializations (Courses):</label>
-                    
-                                @foreach($courses as $course)
+                            @foreach($courses as $course)
                                 <div class="col-sm-4">
-                        
-                            <div id="specialization">
-                                    <div class="form-check">
-                                        <input 
-                                            type="checkbox" 
-                                            name="tutor_specializations[]" 
-                                            value="{{ $course->id }}" 
-                                            id="course_{{ $course->id }}" 
-                                            class="form-check-input"
-                                            @if(isset($tutor->tutor_specializations) && (in_array($course->id, $tutor->tutor_specializations))) checked @endif>
-                                        <label for="course_{{ $course->id }}" class="form-check-label">
-                                            {{ $course->title }}
-                                        </label>
+                                    <div id="specialization">
+                                        <div class="form-check">
+                                            <input 
+                                                type="checkbox" 
+                                                name="tutor_specializations[]" 
+                                                value="{{ $course->id }}" 
+                                                id="course_{{ $course->id }}" 
+                                                class="form-check-input"
+                                                @if(isset($tutor->tutor_specializations) && (in_array($course->id, $tutor->tutor_specializations))) checked @endif>
+                                            <label for="course_{{ $course->id }}" class="form-check-label">
+                                                {{ $course->title }}
+                                            </label>
+                                        </div>
                                     </div>
-                                    </div>
-                        </div>
-                        @endforeach
-                    
-
+                                </div>
+                            @endforeach
             </div>
             <div class="form-group row">
             <div class="col-sm-4">
