@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\Student; // Assuming you are managing the default User model
 
 class ManageUserController extends Controller
 {
@@ -43,7 +42,7 @@ class ManageUserController extends Controller
      // Get the results, paginated
      $students = $query->paginate($perPage);
  
-     // Pass the filtered tutors and the filter inputs back to the view
+     // Pass the filtered Students and the filter inputs back to the view
      return view('admin.student.index', compact('students'));
    
 }
@@ -111,14 +110,14 @@ class ManageUserController extends Controller
         // Validate the form data
         $validatedData = $request->validate([
             'fullname' => 'required|string|max:255',
-            'email' => 'required|email|unique:tutors,email,' . $id,
+            'email' => 'required|email|unique:users,email,' . $id,
             'contact' => 'required|string|max:15',
             'course' => 'required|string',
             'status' => 'required|string',
             'password' => 'nullable|string|min:8', // Password is optional
         ]);
-            // Find the tutor by ID
-        $student = Student::findOrFail($id);
+            // Find the Student by ID
+        $student = User::findOrFail($id);
 
         // Only update the password if provided
         if (!empty($request->password)) {
@@ -127,10 +126,10 @@ class ManageUserController extends Controller
             unset($validatedData['password']); // Remove password if not updating
         }
 
-        // Update the tutor's information
+        // Update the Student's information
         $student->update($validatedData);
 
-        // Redirect to the tutor list page or show success message
+        // Redirect to the Student list page or show success message
         return redirect()->route('admin.student.index')->with('success', 'User updated successfully!');
 
     }

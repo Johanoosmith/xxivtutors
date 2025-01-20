@@ -24,7 +24,7 @@
                         <div class="row text-center">
                             <div class="table-responsive">
                                 <div class="col-6 col-lg-3 dashboard-box">
-                                <table class="table table-hover">
+                                            <table class="table table-hover">
                                                 <thead>
                                                     <tr>
                                                         <th>Subject</th>
