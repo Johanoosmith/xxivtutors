@@ -19,7 +19,7 @@
 
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="fullname" value="{{ $student->fullname }}" required>
+            <input type="text" class="form-control" id="name" name="fullname" value="{{ $student->firstname }}{{ $student->lastname }}" required>
         </div>
 
         <div class="form-group">
@@ -29,7 +29,7 @@
 
         <div class="form-group">
             <label for="contact">Contact</label>
-            <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact number" value="{{ $student->contact }}" required>
+            <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact number" value="{{ $student->mobile }}" required>
         </div>
 
         <div class="form-group">
