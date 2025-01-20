@@ -18,14 +18,14 @@
     <section class="dashboard-with-sidebar">
     <div class="container">
         <div class="row">
-            <div class="col-12 mb-4">
+            <!-- <div class="col-12 mb-4">
                 <div class="important important bg-danger bg-opacity-10 text-danger text-sm">
                     <p>You currently have not selected any Subjects!</p>
                     <p>Without subjects you won't be found in searches. Please <a href="#">Add a Subject</a> to continue.</p>
                 </div>
-            </div>
+            </div> -->
             <div class="col dashboard-menu">
-<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardNavbarNavigation" aria-controls="dashboardNavbarNavigation" aria-expanded="false" aria-label="Toggle navigation">
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardNavbarNavigation" aria-controls="dashboardNavbarNavigation" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"><svg class="icon">
                             <use xlink:href="#dashboard"></use>
                         </svg></span> Dashboard Menu
@@ -110,7 +110,7 @@
                 <div class="dashboard-overview">
                     <div class="row">
                         <div class="col-md-4">
-                            <h2>Tutor Account</h2>
+                       
                             <p class="small">Last Logged in: 12th Nov 2024 7:30</p>
                         </div>
                         <div class="col-md-4">

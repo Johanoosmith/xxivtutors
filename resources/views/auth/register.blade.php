@@ -4,14 +4,9 @@
 @section('content')
 @php      
 	$header      =     getSettings('header'); 
-	
 	$global      =     getSettings('global'); 
-
-	
 	$footer      =     getSettings('footer'); 
 @endphp
-
-
 <main>
 	<section class="page-banner text-center text-white register-page-banner">
 		<div class="banner-img">
@@ -38,8 +33,10 @@
 			<div class="row">
 				<div class="col-12">
 					<div class="register-form bg-lightgrey">
-						<form id="multiStepForm">
+						<form id="multiStepForm" action="{{ route('register.step.post', $step) }} " novalidate="true" method="POST">
+							@csrf
 							<!-- Progress Navigation -->
+							
 							<div class="progress-nav">
 								<div class="step active">
 									<span class="icon-wrapper">
@@ -63,251 +60,28 @@
 									</span>
 									PROFILE INFORMATION</div>
 							</div>
-					
-							<!-- Step 1: Account Information -->
-							<div class="form-step active">
-								<div class="row">
-									<div class="col-12 d-block d-sm-none">
-										<h3 class="step-heading">
-											<span class="icon-wrapper">
-												<svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<path d="M19.4082 17.6276C17.9803 15.1591 15.78 13.3891 13.2122 12.5501C14.4824 11.7939 15.4692 10.6417 16.0212 9.27048C16.5731 7.89922 16.6597 6.38468 16.2676 4.95945C15.8755 3.53422 15.0264 2.27711 13.8506 1.38117C12.6749 0.485228 11.2376 0 9.75941 0C8.28122 0 6.84391 0.485228 5.66818 1.38117C4.49246 2.27711 3.64334 3.53422 3.25123 4.95945C2.85911 6.38468 2.94569 7.89922 3.49765 9.27048C4.04961 10.6417 5.03644 11.7939 6.3066 12.5501C3.73878 13.3882 1.53847 15.1582 0.110659 17.6276C0.0582987 17.7129 0.0235684 17.8079 0.00851736 17.9069C-0.00653367 18.006 -0.00160057 18.107 0.0230256 18.2041C0.0476518 18.3011 0.0914723 18.3923 0.151901 18.4722C0.212331 18.552 0.288144 18.619 0.37487 18.6691C0.461595 18.7192 0.557476 18.7514 0.656854 18.7638C0.756232 18.7763 0.857095 18.7687 0.953492 18.7415C1.04989 18.7143 1.13987 18.6681 1.21812 18.6056C1.29637 18.5431 1.3613 18.4656 1.4091 18.3776C3.17535 15.3251 6.29722 13.5026 9.75941 13.5026C13.2216 13.5026 16.3435 15.3251 18.1097 18.3776C18.1575 18.4656 18.2225 18.5431 18.3007 18.6056C18.379 18.6681 18.4689 18.7143 18.5653 18.7415C18.6617 18.7687 18.7626 18.7763 18.862 18.7638C18.9613 18.7514 19.0572 18.7192 19.1439 18.6691C19.2307 18.619 19.3065 18.552 19.3669 18.4722C19.4273 18.3923 19.4712 18.3011 19.4958 18.2041C19.5204 18.107 19.5254 18.006 19.5103 17.9069C19.4952 17.8079 19.4605 17.7129 19.4082 17.6276ZM4.50941 6.75255C4.50941 5.7142 4.81732 4.69917 5.39419 3.83581C5.97107 2.97245 6.79101 2.29954 7.75032 1.90218C8.70963 1.50482 9.76523 1.40086 10.7836 1.60343C11.802 1.806 12.7375 2.30601 13.4717 3.04024C14.2059 3.77447 14.706 4.70993 14.9085 5.72833C15.1111 6.74673 15.0071 7.80233 14.6098 8.76164C14.2124 9.72095 13.5395 10.5409 12.6762 11.1178C11.8128 11.6946 10.7978 12.0026 9.75941 12.0026C8.36748 12.0011 7.03299 11.4475 6.04874 10.4632C5.0645 9.47897 4.5109 8.14448 4.50941 6.75255Z" fill="black"/>
-												</svg>
-											</span>
-											ACCOUNT INFORMATION</h3>
-									</div>
-									<div class="col-12 form-field">
-										<label class="form-label" for="accountType">Account Type</label>
-										<div class="select-field">
-											<select class="form-select" id="accountType" name="accountType" required>
-												<option value="" disabled selected>I'm a Tutor</option>
-												<option value="Student">I'm a Student</option>
-												<option value="Tutor">I'm a Tutor</option>
-											</select>
-											<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-											</svg>
-										</div>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="username">Username</label>
-										<input class="form-control" type="text" id="username" name="username" placeholder="Name" required>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="email">Email Address</label>
-										<input class="form-control" type="email" id="email" name="email" placeholder="Email" required>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="password">Password</label>
-										<input class="form-control" type="password" id="password" name="password" placeholder="Password" required>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="confirmPassword">Confirm Password</label>
-										<input class="form-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
-									</div>
-									<div class="col-12 form-field">
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" value="" id="agreeTerms">
-											<label class="form-check-label" for="agreeTerms">
-												I agree to Tuition's <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
-											</label>
-										</div>
-									</div>
-									<div class="col-12 step-submit">
-										<button type="button" class="btn btn-green next-btn" onclick="nextStep()">Continue</button>
-									</div>
+							<!-- @if ($errors->any())
+								<div class="alert alert-danger">
+									<ul>
+										@foreach ($errors->all() as $error)
+											<li>{{ $error }}</li>
+										@endforeach
+									</ul>
 								</div>
+							@endif -->
+							@include('elements.user.alert_message')
+							<!-- Step 1: Account Information -->
+							<div class="form-step {{ ($step == 1)?'active':'' }}">
+								@include('elements.user.account_info')
 							</div>
 							<!-- Step 2: PERSONAL INFORMATION -->
-							<div class="form-step">
-								<div class="row">
-									<div class="col-12 d-block d-sm-none">
-										<h3 class="step-heading">
-											<span class="icon-wrapper">
-												<svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<path d="M17.8697 14.1206C18.2896 13.7012 18.5756 13.1667 18.6916 12.5846C18.8077 12.0026 18.7485 11.3992 18.5215 10.8509C18.2945 10.3025 17.91 9.83375 17.4166 9.50396C16.9232 9.17417 16.343 8.99814 15.7495 8.99814C15.156 8.99814 14.5759 9.17417 14.0825 9.50396C13.5891 9.83375 13.2045 10.3025 12.9776 10.8509C12.7506 11.3992 12.6914 12.0026 12.8074 12.5846C12.9234 13.1667 13.2095 13.7012 13.6294 14.1206C12.8407 14.6238 12.2686 15.4036 12.0253 16.3069C11.9741 16.4991 12.0013 16.7037 12.101 16.8759C12.2007 17.048 12.3647 17.1735 12.5569 17.2247C12.6199 17.2413 12.6848 17.2498 12.75 17.25C12.9154 17.2499 13.0761 17.1952 13.2072 17.0943C13.3383 16.9934 13.4323 16.8521 13.4747 16.6922C13.74 15.6956 14.6756 15 15.75 15C16.8244 15 17.76 15.6956 18.0253 16.6922C18.0491 16.789 18.0919 16.8802 18.1513 16.9603C18.2107 17.0404 18.2854 17.1078 18.3712 17.1587C18.457 17.2096 18.552 17.2428 18.6508 17.2565C18.7496 17.2702 18.8501 17.264 18.9464 17.2384C19.0428 17.2128 19.1331 17.1682 19.212 17.1073C19.291 17.0464 19.357 16.9703 19.4061 16.8836C19.4553 16.7968 19.4867 16.7011 19.4985 16.6021C19.5103 16.5031 19.5022 16.4027 19.4747 16.3069C19.2312 15.4034 18.6587 14.6236 17.8697 14.1206ZM15.75 10.5C16.0467 10.5 16.3367 10.588 16.5834 10.7528C16.83 10.9176 17.0223 11.1519 17.1358 11.426C17.2494 11.7001 17.2791 12.0017 17.2212 12.2926C17.1633 12.5836 17.0204 12.8509 16.8107 13.0607C16.6009 13.2704 16.3336 13.4133 16.0426 13.4712C15.7517 13.5291 15.4501 13.4994 15.176 13.3858C14.9019 13.2723 14.6676 13.08 14.5028 12.8334C14.338 12.5867 14.25 12.2967 14.25 12C14.25 11.6022 14.408 11.2206 14.6893 10.9393C14.9706 10.658 15.3522 10.5 15.75 10.5ZM19.5 3.75V6.75C19.5 6.94891 19.421 7.13968 19.2803 7.28033C19.1397 7.42098 18.9489 7.5 18.75 7.5C18.5511 7.5 18.3603 7.42098 18.2197 7.28033C18.079 7.13968 18 6.94891 18 6.75V3.75H10.0003C9.67589 3.7492 9.36033 3.64401 9.10031 3.45L6.49969 1.5H1.5V14.25H9C9.19891 14.25 9.38968 14.329 9.53033 14.4697C9.67098 14.6103 9.75 14.8011 9.75 15C9.75 15.1989 9.67098 15.3897 9.53033 15.5303C9.38968 15.671 9.19891 15.75 9 15.75H1.5C1.10218 15.75 0.720644 15.592 0.43934 15.3107C0.158035 15.0294 0 14.6478 0 14.25V1.5C0 1.10218 0.158035 0.720644 0.43934 0.43934C0.720644 0.158035 1.10218 0 1.5 0H6.49969C6.82411 0.000804693 7.13967 0.105989 7.39969 0.3L10.0003 2.25H18C18.3978 2.25 18.7794 2.40804 19.0607 2.68934C19.342 2.97064 19.5 3.35218 19.5 3.75Z" fill="black"/>
-												</svg>                                                
-											</span>
-											PERSONAL INFORMATION</h3>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="title">Title</label>
-										<div class="select-field">
-											<select class="form-select" id="title" name="title" required>
-												<option value="" disabled selected>Select</option>
-												<option value="Mr">Mr</option>
-												<option value="Ms">Ms</option>
-												<option value="Mrs">Mrs</option>
-											</select>
-											<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-											</svg>
-										</div>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="gender">Gender</label>
-										<div class="select-field">
-											<select class="form-select" id="gender" name="gender" required>
-												<option value="" disabled selected>Select</option>
-												<option value="Male">Male</option>
-												<option value="Female">Female</option>
-											</select>
-											<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-											</svg>
-										</div>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="firstName">First Name</label>
-										<input class="form-control" type="text" id="firstName" name="firstName" placeholder="First Name" required>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="lastName">Last Name</label>
-										<input class="form-control" type="text" id="lastName" name="lastName" placeholder="Last Name" required>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="address1">Address 1</label>
-										<input class="form-control" type="text" id="address1" name="address1" placeholder="Address 1" required>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="address2">Address 2</label>
-										<input class="form-control" type="text" id="address2" name="address2" placeholder="Address 2">
-									</div>
-									<div class="col-lg-3 col-md-6 form-field">
-										<label class="form-label" for="town">Town</label>
-										<input class="form-control" type="text" id="town" name="town" placeholder="Town" required>
-									</div>
-									<div class="col-lg-3 col-md-6 form-field">
-										<label class="form-label" for="county">County</label>
-										<div class="select-field">
-											<select class="form-select" id="county" name="county">
-												<option value="" disabled selected>Select</option>
-												<option value="County1">County 1</option>
-												<option value="County2">County 2</option>
-											</select>
-											<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-											</svg>
-										</div>
-									</div>
-									<div class="col-lg-3 col-md-6 form-field">
-										<label class="form-label" for="country">Country</label>
-										<div class="select-field">
-											<select class="form-select" id="country" name="country">
-												<option value="" disabled selected>Select</option>
-												<option value="Country1">United Kingdom</option>
-												<option value="Country2">United States</option>
-											</select>
-											<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-											</svg>
-										</div>
-									</div>
-									<div class="col-lg-3 col-md-6 form-field">
-										<label class="form-label" for="postcode">Postcode</label>
-										<input class="form-control" type="text" id="postcode" name="postcode" placeholder="Postcode" required>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="phoneNumber">Phone Number</label>
-										<input class="form-control" type="tel" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
-									</div>
-									<div class="col-md-12 form-field">
-										<label class="form-label" for="dobYear">Date of Birth</label>
-										<div class="dob-select">
-											<div class="select-field">
-												<select class="form-select" id="dobYear" name="dobYear">
-													<option value="" disabled selected>Year</option>
-												</select>
-												<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-												</svg>
-											</div>
-											<div class="select-field">
-												<select class="form-select" id="dobMonth" name="dobMonth">
-													<option value="" disabled selected>Month</option>
-												</select>
-												<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-												</svg>
-											</div>
-											<div class="select-field">
-												<select class="form-select" id="dobDay" name="dobDay">
-													<option value="" disabled selected>Day</option>
-												</select>
-												<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-												</svg>
-											</div>
-										</div>
-									</div>
-									<div class="col-12 step-submit">
-										<button type="button" onclick="prevStep()" class="btn btn-yellow">Previous</button>
-										<button type="button" onclick="nextStep()" class="btn btn-green">Continue</button>
-									</div>
-								</div>
+							<div class="form-step {{ ($step == 2)?'active':'' }}">
+								@include('elements.user.personal_info')
 							</div>
 
 							<!-- Step 3: PROFILE INFORMATION -->
-							<div class="form-step">
-								<div class="row">
-									<div class="col-12 d-block d-sm-none">
-										<h3 class="step-heading">
-											<span class="icon-wrapper">
-												<svg width="23" height="17" viewBox="0 0 23 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<path d="M22.2003 9.59919C22.1215 9.65828 22.0318 9.70128 21.9364 9.72573C21.841 9.75017 21.7417 9.75558 21.6442 9.74165C21.5467 9.72772 21.4529 9.69473 21.3682 9.64455C21.2834 9.59437 21.2094 9.52798 21.1503 9.44919C20.6982 8.84156 20.1098 8.34856 19.4324 8.00986C18.7551 7.67117 18.0076 7.49625 17.2503 7.49919C17.1028 7.49918 16.9586 7.45568 16.8357 7.37414C16.7128 7.2926 16.6167 7.17664 16.5593 7.04075C16.5204 6.94848 16.5004 6.84934 16.5004 6.74919C16.5004 6.64904 16.5204 6.5499 16.5593 6.45763C16.6167 6.32174 16.7128 6.20578 16.8357 6.12424C16.9586 6.0427 17.1028 5.9992 17.2503 5.99919C17.6711 5.99915 18.0835 5.8811 18.4406 5.65845C18.7976 5.43579 19.0851 5.11746 19.2704 4.7396C19.4556 4.36175 19.5312 3.93952 19.4885 3.52087C19.4458 3.10223 19.2865 2.70395 19.0288 2.37127C18.7711 2.0386 18.4253 1.78487 18.0306 1.63889C17.6359 1.49292 17.2082 1.46056 16.796 1.54549C16.3838 1.63041 16.0038 1.82923 15.6989 2.11934C15.3941 2.40945 15.1767 2.77924 15.0715 3.18669C15.0469 3.2821 15.0037 3.37173 14.9445 3.45046C14.8852 3.52919 14.811 3.59547 14.7261 3.64553C14.6413 3.69559 14.5474 3.72843 14.4498 3.7422C14.3522 3.75596 14.2529 3.75038 14.1575 3.72575C14.0621 3.70113 13.9724 3.65796 13.8937 3.59869C13.815 3.53943 13.7487 3.46524 13.6986 3.38037C13.6486 3.29549 13.6157 3.20158 13.602 3.10401C13.5882 3.00643 13.5938 2.9071 13.6184 2.81169C13.7644 2.24667 14.0403 1.72353 14.4241 1.2839C14.8079 0.844258 15.289 0.500259 15.8291 0.279269C16.3692 0.0582794 16.9534 -0.0336011 17.5353 0.0109381C18.1172 0.0554774 18.6807 0.235207 19.1809 0.535827C19.681 0.836446 20.1042 1.24966 20.4166 1.74258C20.729 2.23551 20.922 2.79454 20.9803 3.3752C21.0387 3.95586 20.9607 4.54212 20.7526 5.08733C20.5444 5.63254 20.2119 6.12165 19.7815 6.51575C20.8014 6.95731 21.6879 7.65802 22.3531 8.54825C22.4122 8.62725 22.4551 8.71712 22.4794 8.81273C22.5037 8.90834 22.5089 9.0078 22.4947 9.10543C22.4805 9.20305 22.4472 9.29691 22.3967 9.38164C22.3462 9.46637 22.2794 9.5403 22.2003 9.59919ZM17.149 15.3742C17.2033 15.4596 17.2397 15.555 17.2562 15.6548C17.2726 15.7546 17.2686 15.8567 17.2446 15.955C17.2205 16.0532 17.1768 16.1456 17.1161 16.2265C17.0554 16.3074 16.979 16.3753 16.8914 16.4259C16.8039 16.4765 16.7069 16.5089 16.6065 16.5211C16.5061 16.5333 16.4043 16.525 16.3071 16.4968C16.21 16.4687 16.1195 16.4211 16.0412 16.3571C15.963 16.293 15.8984 16.2138 15.8515 16.1242C15.3791 15.3242 14.7062 14.6612 13.8993 14.2006C13.0924 13.7401 12.1794 13.4978 11.2503 13.4978C10.3212 13.4978 9.40816 13.7401 8.60126 14.2006C7.79436 14.6612 7.12149 15.3242 6.64903 16.1242C6.60215 16.2138 6.53762 16.293 6.45932 16.3571C6.38102 16.4211 6.29058 16.4687 6.19344 16.4968C6.09629 16.525 5.99445 16.5333 5.89403 16.5211C5.79362 16.5089 5.69671 16.4765 5.60914 16.4259C5.52156 16.3753 5.44513 16.3074 5.38445 16.2265C5.32376 16.1456 5.28007 16.0532 5.25601 15.955C5.23194 15.8567 5.228 15.7546 5.24441 15.6548C5.26083 15.555 5.29727 15.4596 5.35153 15.3742C6.07866 14.1249 7.18734 13.1417 8.51466 12.5692C7.76778 11.9973 7.21887 11.2058 6.9451 10.3059C6.67132 9.40597 6.68644 8.44287 6.98833 7.55198C7.29022 6.66108 7.8637 5.88719 8.62816 5.33907C9.39262 4.79096 10.3096 4.49619 11.2503 4.49619C12.1909 4.49619 13.1079 4.79096 13.8724 5.33907C14.6369 5.88719 15.2103 6.66108 15.5122 7.55198C15.8141 8.44287 15.8292 9.40597 15.5555 10.3059C15.2817 11.2058 14.7328 11.9973 13.9859 12.5692C15.3132 13.1417 16.4219 14.1249 17.149 15.3742ZM11.2503 11.9992C11.8436 11.9992 12.4236 11.8232 12.917 11.4936C13.4103 11.164 13.7949 10.6954 14.0219 10.1472C14.249 9.59906 14.3084 8.99586 14.1926 8.41392C14.0769 7.83198 13.7912 7.29743 13.3716 6.87787C12.952 6.45831 12.4175 6.17259 11.8356 6.05683C11.2536 5.94108 10.6504 6.00049 10.1022 6.22755C9.55406 6.45461 9.08552 6.83913 8.75588 7.33248C8.42623 7.82583 8.25028 8.40585 8.25028 8.99919C8.25028 9.79484 8.56635 10.5579 9.12896 11.1205C9.69157 11.6831 10.4546 11.9992 11.2503 11.9992ZM6.00028 6.74919C6.00028 6.55028 5.92127 6.35951 5.78061 6.21886C5.63996 6.07821 5.4492 5.99919 5.25028 5.99919C4.82947 5.99915 4.41709 5.8811 4.06 5.65845C3.70292 5.43579 3.41543 5.11746 3.23019 4.7396C3.04495 4.36175 2.96939 3.93952 3.01209 3.52087C3.0548 3.10223 3.21405 2.70395 3.47176 2.37127C3.72947 2.0386 4.07531 1.78487 4.47 1.63889C4.86469 1.49292 5.29241 1.46056 5.70457 1.54549C6.11672 1.63041 6.4968 1.82923 6.80164 2.11934C7.10647 2.40945 7.32383 2.77924 7.42903 3.18669C7.47876 3.37939 7.603 3.54444 7.77442 3.64553C7.94584 3.74662 8.1504 3.77548 8.3431 3.72575C8.53579 3.67602 8.70084 3.55179 8.80194 3.38037C8.90303 3.20895 8.93189 3.00439 8.88216 2.81169C8.73614 2.24667 8.46026 1.72353 8.07648 1.2839C7.6927 0.844258 7.21161 0.500259 6.67149 0.279269C6.13137 0.0582794 5.54712 -0.0336011 4.96524 0.0109381C4.38336 0.0554774 3.81991 0.235207 3.31972 0.535827C2.81952 0.836446 2.39639 1.24966 2.08399 1.74258C1.77159 2.23551 1.57855 2.79454 1.52022 3.3752C1.4619 3.95586 1.5399 4.54212 1.74801 5.08733C1.95613 5.63254 2.28862 6.12165 2.71903 6.51575C1.70024 6.95773 0.814704 7.6584 0.150284 8.54825C0.0308127 8.70738 -0.0205517 8.90745 0.00749082 9.10446C0.0355334 9.30146 0.140686 9.47925 0.299816 9.59872C0.458946 9.71819 0.659018 9.76956 0.856019 9.74152C1.05302 9.71347 1.23081 9.60832 1.35028 9.44919C1.80233 8.84156 2.39073 8.34856 3.06812 8.00986C3.74551 7.67117 4.49295 7.49625 5.25028 7.49919C5.4492 7.49919 5.63996 7.42017 5.78061 7.27952C5.92127 7.13887 6.00028 6.9481 6.00028 6.74919Z" fill="black"/>
-												</svg>                                                
-											</span>
-											PROFILE INFORMATION</h3>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="distance">Distance Willing to Travel </label>
-										<div class="select-field">
-											<select class="form-select" id="distance" name="distance">
-												<option value="none" selected="selected">Select</option>
-												<option value="0">Home Only</option>
-												<option value="1">1 mile</option>
-												<option value="2">2 miles</option>
-												<option value="3">3 miles</option>
-												<option value="4">4 miles</option>
-												<option value="5">5 miles</option>
-												<option value="8">8 miles</option>
-												<option value="10">10 miles</option>
-												<option value="12">12 miles</option>
-												<option value="15">15 miles</option>
-												<option value="20">20 miles</option>
-												<option value="30">30 miles</option>
-												<option value="50">50 miles</option>
-											</select>
-											<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-											</svg>
-										</div>
-									</div>
-									<div class="col-md-6 form-field">
-										<label class="form-label" for="language">Your Native Language </label>
-										<div class="select-field">
-											<select class="form-select" id="language" name="language">
-												<option value="none" selected="selected">Select</option>
-												<option value="1">English</option>
-											</select>
-											<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-											</svg>
-										</div>
-									</div>
-									<div class="col-12 form-field">
-										<label class="form-label" for="bio">Your Bio</label>
-										<textarea class="form-control" id="bio"></textarea>
-									</div>
-									<div class="col-12 form-field">
-										<label class="form-label" for="experience">Your Experience <span class="required">*</span></label>
-										<textarea class="form-control" id="experience"></textarea>
-									</div>
-									<div class="col-12 step-submit">
-										<button type="button" onclick="prevStep()" class="btn btn-yellow">Previous</button>
-										<button type="submit" onclick="nextStep()" class="btn btn-green">Continue</button>
-									</div>
-								</div>
+							<div class="form-step {{ ($step == 3)?'active':'' }}">
+								@include('elements.user.profile_info')
 							</div>
 					
 							
@@ -320,106 +94,6 @@
 </main>
 
 
-<div class="regesterWrap container-fluid">
-
-<div class="row">
-<?php /*?> 
-<div class="col-lg-6">
-		@include('includes.front.left-sidebar')
-</div>
-<?php*/ ?>
-
-<div class="col-lg-6">
-	<div class="regesterCenter">
-		<div class="innerBlock">
-			<form method="POST" id="registerForm" action="{{ route('register') }}">
-				@csrf
-				<h3 class="font_bold mb-20"><?php /*?>{!! $global['global_registration_heading'];  !!} <?php*/ ?> </h3>
-				<div class="formWrap">
-					<div class="control">
-						<label for="Name">First Name</label>
-						<input id="firstname" type="text"
-							class="inputText @error('firstname') is-invalid @enderror required" name="firstname"
-							value="{{ old('firstname') }}" placeholder="First Name">
-						@error('firstname')
-						<span class="invalid-feedback" role="alert">
-							<strong>{{ $message }}</strong>
-						</span>
-						@enderror
-					</div>
-
-					<div class="control">
-						<label for="Name">Last Name</label>
-						<input id="lastname" type="text"
-							class="inputText @error('lastname') is-invalid @enderror required" name="lastname"
-							value="{{ old('lastname') }}" placeholder="Last Name">
-						@error('lastname')
-						<span class="invalid-feedback" role="alert">
-							<strong>{{ $message }}</strong>
-						</span>
-						@enderror
-					</div>
-					<div class="control">
-						<label for="Email">Username / Email</label>
-						<input id="email" type="email" class="inputText @error('email') is-invalid @enderror required"
-							name="email" value="{{ old('email') }}" placeholder="Username/ Email address">
-						@error('email')
-						<span class="invalid-feedback" role="alert">
-							<strong>{{ $message }}</strong>
-						</span>
-						@enderror
-					</div>
-					<div class="control">
-						<label for="birthday">Date of Birth</label>
-						<input id="birthday" type="text"
-							class="inputText @error('birthday') is-invalid @enderror required" name="birthday"
-							value="{{ old('birthday') }}" placeholder="07/04/1988">
-						@error('birthday')
-						<span class="invalid-feedback" role="alert">
-							<strong>{{ $message }}</strong>
-						</span>
-						@enderror
-					</div>
-					<div class="control">
-						<label for="password">Password</label>
-						<input id="password" type="password"
-							class="inputText @error('password') is-invalid @enderror required" id="password" name="password"
-							placeholder="********">
-							<span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-						@error('password')
-						<span class="invalid-feedback" role="alert">
-							<strong>{{ $message }}</strong>
-						</span>
-						@enderror
-					</div>
-					<div class="control">
-						<label for="password">Confirm Password</label>
-						<input id="password_confirmation" type="password" class="inputText required"
-							name="password_confirmation" placeholder="********">
-							<span toggle="#password_confirmation" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-					</div>
-				</div>
-				<div class="termsBlock">
-					<input name="is_term" value="1" class="required" type="checkbox" />
-					
-				</div>
-				<div class="actionBtn">
-					<button type="submit" class="greenBtn">Sign Up</button>
-					@if (Route::has('password.request'))
-					<a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-						href="{{ route('login') }}">{{ __('Already registered?') }}</a>
-					@endif
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-
-</div>
-
-
-
-</div>
 
 @endsection
 @section('inline-js')

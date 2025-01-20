@@ -6,10 +6,15 @@
 <main>
 	<section class="page-banner text-center text-white register-page-banner">
 		<div class="banner-img">
-			<img src="assets/images/banner.jpg" alt="">
+			<img src="http://192.168.9.32:8000/storage/tutors/tutor-details-bg.jpg" alt="">
 		</div>
 		<div class="container">
 			<div class="row">
+			@if (session('message'))
+				<div class="alert alert-success">
+					{{ session('message') }}
+				</div>
+			@endif
 				<div class="col-12">
 					<h1>Login</h1>
 					<p>If you are a tutor or student looking to make full use of Tutuition please fill in the form below. <br>
@@ -43,6 +48,10 @@
 									<label class="form-label" for="password">Password</label>
 									<input class="form-control" type="password" id="password" name="password" placeholder="Password" alue="{{ old('password') }}" required>
 									<x-input-error :messages="$errors->get('password')" class="mt-2" />
+								</div>
+								<div>
+									<input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
+									<label for="remember">Remember Me</label>
 								</div>
 								<div class="col-12 step-submit">
 									<button type="submit" class="btn btn-green next-btn">Login</button>

@@ -19,7 +19,10 @@ class ManageUserController extends Controller
      */
     public function index(Request $request)
 {
-    $query = Student::query();
+    $query = User::query();
+    
+    // Filter by role_id = 1
+    $query->where('role_id', 1);
 
     // Apply filters
   
@@ -35,7 +38,7 @@ class ManageUserController extends Controller
         $query->where('status', $request->status);
     }
      // Handle "Per Page" Selection
-     $perPage = $request->input('per_page', 10);  // Default to 10 records per page
+     $perPage = $request->input('per_page', 20);  // Default to 10 records per page
 
      // Get the results, paginated
      $students = $query->paginate($perPage);
@@ -44,16 +47,6 @@ class ManageUserController extends Controller
      return view('admin.student.index', compact('students'));
    
 }
-    // public function index()
-    // {
-    //     // Retrieve users (you can customize to exclude or include roles)
-    //     $students = Student::paginate(10);
-    //     //$students = Student::all();
-
-    //     // Change view name to "student.index"
-    //     return view('admin.student.index', compact('students'));
-    // }
-
     /**
      * Show the form for creating a new user.
      */
@@ -78,7 +71,7 @@ class ManageUserController extends Controller
         ]);
 
          // Save data to the student table
-        Student::create([
+         User::create([
         'fullname' => $validatedData['fullname'],
         'email' => $validatedData['email'],
         'contact' => $validatedData['contact'],
@@ -94,7 +87,7 @@ class ManageUserController extends Controller
      */
     public function show($id)
     {
-        $student = Student::findOrFail($id);
+        $student = User::findOrFail($id);
         // Change view name to "student.show"
         return view('admin.student.show', compact('student'));
     }
@@ -104,7 +97,8 @@ class ManageUserController extends Controller
      */
     public function edit($id)
     {
-        $student = Student::findOrFail($id);
+
+        $student = User::findOrFail($id);
         // Change view name to "student.edit"
         return view('admin.student.edit', compact('student'));
     }
@@ -146,7 +140,7 @@ class ManageUserController extends Controller
      */
     public function destroy($id)
     {
-        $user = Student::findOrFail($id);
+        $user = User::findOrFail($id);
 
 
         $user->delete();

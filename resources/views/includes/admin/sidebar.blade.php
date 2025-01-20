@@ -99,8 +99,12 @@
                         <span class="pc-mtext">Manage Contact Us</span>
                      </a>
                 </li> 
-       
-
+                <li class=" nav-item {{ ($currentRoute === 'admin.subscriber.index' || $currentRoute === 'admin.subscriber.create') ? 'active' : '' }} ">
+                    <a class="pc-link" href="{{route('admin.subscriber.index')}}">                    
+                    <span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
+                        <span class="pc-mtext">Manage Subscriber</span>
+                     </a>
+                </li> 
             </ul>
         </div>
     </div>

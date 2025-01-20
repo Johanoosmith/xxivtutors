@@ -15,7 +15,9 @@
 
         @show      
     </head>   
+   
     <body class="site_body home-body bg-lightgrey @yield('body_class')">    	       
+	       
        
         @include('includes.front.header')
         @yield('content')

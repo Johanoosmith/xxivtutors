@@ -21,7 +21,7 @@
                             </ul>
                             <div class="search-field-group">
                                 <div class="field">
-                                    <input type="text" placeholder="Enter a subject" class="input">
+                                  {{ html()->select('course_id', $courses_list)->class('input select2')->id('subjectSearch')->placeholder("Enter a subject")  }}
                                 </div>
                                 <div class="field select-field">
                                     <select class="select">
@@ -33,7 +33,7 @@
                                     </svg>
                                 </div>
                                 <div class="field postcode">
-                                    <input type="number" placeholder="Postcode" class="input">
+                                <input type="text" placeholder="Postcode" class="input number" maxlength="8">
                                 </div>
                                 <div class="btn-field">
                                     <button type="submit" class="search-btn">
@@ -224,7 +224,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6 col-lg-3 box-content">
+                     <div class="col-sm-6 col-lg-3 box-content">
                         <div class="icon-with-content">
                             <span class="icon">
                                 <img src="{{asset('front/assets/images/icon-7.png')}}" alt="">
@@ -233,7 +233,7 @@
                             <p>{{$page->first_tutuition_difference_section_subheading}}</p>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 box-content">
+                     <div class="col-sm-6 col-lg-3 box-content">
                         <div class="icon-with-content">
                             <span class="icon">
                                 <img src="{{asset('front/assets/images/icon-8.png')}}" alt="">
@@ -242,7 +242,7 @@
                             <p>{{$page->second_tutuition_difference_section_subheading}}</p>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 box-content">
+                     <div class="col-sm-6 col-lg-3 box-content">
                         <div class="icon-with-content">
                             <span class="icon">
                                 <img src="{{asset('front/assets/images/icon-9.png')}}" alt="">
@@ -251,7 +251,7 @@
                             <p>{{$page->third_tutuition_difference_section_subheading}}</p>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 box-content">
+                     <div class="col-sm-6 col-lg-3 box-content">
                         <div class="icon-with-content">
                             <span class="icon">
                                 <img src="{{asset('front/assets/images/icon-10.png')}}" alt="">
@@ -297,49 +297,17 @@
                 </div>
             </div>
         </section>
-        <section class="section newsletter-sec">
-            <div class="newsletter-graphics">
-                <img class="newsletter-icon-1" src="assets/images/newsletter-icon-1.svg" alt="">
-                <img class="newsletter-icon-2" src="assets/images/newsletter-icon-2.svg" alt="">
-                <img class="newsletter-icon-3" src="assets/images/newsletter-icon-3.svg" alt="">
-                <img class="newsletter-icon-4" src="assets/images/newsletter-icon-4.svg" alt="">
-            </div>
-            <div class="container small-container">
-                <div class="row">
-                    <div class="col-lg-5">
-                        <h2 class="section-heading">Don’t miss out! Subscribe to our newsletter</h2>
-                    </div>
-                    <div class="col-lg-7">
-                        <form class="newsletter-form">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="field">
-                                        <input type="text" class="input" placeholder="First Name" name="First Name">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="field">
-                                        <input type="email" class="input" placeholder="Email" name="Email">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="field select-field">
-                                        <select class="select">
-                                            <option>Who are you</option>
-                                        </select>
-                                        <svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-green">Subscribe Now</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        
+        <script>
+            document.querySelector('.search-btn').addEventListener('click', function (event) {
+                event.preventDefault();
+                const courseId = document.querySelector('#subjectSearch').value.trim();
+                if (courseId) {
+                const url = `http://192.168.9.32:8000/tutors/?course_id=${courseId}`;
+                window.location.href = url;
+                } else {
+                    window.location.href;
+                }
+            });
+        </script>
 @endsection

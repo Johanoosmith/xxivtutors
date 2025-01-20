@@ -13,12 +13,71 @@ use App\Models\Transportqfcorder;
 use App\Models\Transportoborder;
 use App\Models\News;
 use App\Models\Course;
-
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 function getCityCourses($cityid){
 	return Course::where('status',1)->whereRaw('FIND_IN_SET(?, cities)', [$cityid])->get();
 
 }
+
+function getUserViewCounts($userId) {
+    return [
+        'all_views' => DB::table('user_views')
+            ->where('user_id', $userId)
+            ->sum('view'),
+
+        'last_7_days' => DB::table('user_views')
+            ->where('user_id', $userId)
+            ->where('date', '>=', Carbon::now()->subDays(7)->toDateString())
+            ->sum('view'),
+
+        'current_month' => DB::table('user_views')
+            ->where('user_id', $userId)
+            ->whereYear('date', Carbon::now()->year)
+            ->whereMonth('date', Carbon::now()->month)
+            ->sum('view'),
+
+		'last_14_days' => DB::table('user_views')
+		->selectRaw('DATE(date) as date, SUM(view) as total_views')
+		->where('user_id', $userId)
+		->where('date', '>=', Carbon::now()->subDays(14)->toDateString())
+		->groupBy('date')
+		->orderBy('date', 'desc')
+		->get(),
+
+        'last_2_months' => DB::table('user_views')
+            ->where('user_id', $userId)
+            ->whereBetween('date', [
+                Carbon::now()->subMonths(2)->startOfMonth()->toDateString(),
+                Carbon::now()->subMonth()->endOfMonth()->toDateString()
+            ])
+            ->sum('view'),
+    ];
+	
+}
+function getlastforteenView($userId)
+	{
+		// Generate an array of the past 14 days (including today)
+		$last14Days = collect(range(0, 13))->map(function ($day) {
+			return Carbon::today()->subDays($day)->toDateString();
+		});
+		// Fetch views from the database for the past 14 days
+		$views = DB::table('user_views')
+			->selectRaw('DATE(date) as date, SUM(view) as total_views')
+			->where('user_id', $userId)
+			->where('date', '>=', Carbon::today()->subDays(13)->toDateString())
+			->groupBy(DB::raw('DATE(date)'))
+			->pluck('total_views', 'date'); // Key-value pairs (date => total_views)
+
+		// Merge the two to ensure all days are accounted for
+		return $last14Days->map(function ($date) use ($views) {
+			return [
+				'date' => $date,
+				'total_views' => $views[$date] ?? 0, // Default to 0 if no views exist for the date
+			];
+		});
+	}
 /** get all setting  */
 function getSettings($type) {
 	$options = Option::where(['type' => $type])->get();
@@ -84,9 +143,6 @@ function getCityCountryDetail( $country_id, $city_id) {
 	return $city_name.', '.$country_name;
 	
 } 
-
-
-
 function generateOrderIdold($id,$serviceType = null){
 	
 	//TR.01072024.VK.C.TBLGE-LNDUK
@@ -165,9 +221,6 @@ function generateOrderIdold($id,$serviceType = null){
 	 return $custom_order_id;
 
 }
-
-
-
 function generateOrderId($id,$serviceType = null){
 	//TR.01072024.VK.C.TBLGE-LNDUK
 	$transportorder = 	Transportorder::find($id);
@@ -222,8 +275,6 @@ function generateOrderId($id,$serviceType = null){
 	 return $custom_order_id;
 
 }
-
-
 function generateCTOrderId($id,$serviceType = null){
 	//TR.01072024.VK.C.TBLGE-LNDUK
 	$transportorder = 	Transportctorder::find($id);
@@ -271,8 +322,6 @@ function generateCTOrderId($id,$serviceType = null){
 	 return $custom_order_id;
 
 }
-
-
 function generateOBOrderId($id,$serviceType = null){
 	//TR.01072024.VK.C.TBLGE-LNDUK
 	$transportorder = 	Transportoborder::find($id);
@@ -327,8 +376,6 @@ function generateOBOrderId($id,$serviceType = null){
 	 return $custom_order_id;
 
 }
-
-
 function generateQFCOrderId($id,$serviceType = null){
 	//TR.01072024.VK.C.TBLGE-LNDUK
 	$transportorder = 	Transportqfcorder::find($id);
@@ -392,10 +439,6 @@ function generateQFCOrderId($id,$serviceType = null){
 	 return $custom_order_id;
 
 }
-
-
-
-
 function getCityCountryShortName($city_id) {
 	$city = City::find($city_id);
 	$citycode = '';
@@ -404,7 +447,6 @@ function getCityCountryShortName($city_id) {
 	}
 	return $citycode;
 } 
-
 function getCountryShortName($country_id) {
 	$country = Country::find($country_id);
 	$code2l = '';
@@ -413,12 +455,23 @@ function getCountryShortName($country_id) {
 	}	
 	return $code2l;	
 } 
-
 function getCurrency($currency_code){
 	return 	Currency::where("code",$currency_code)->first();
 }
-
 function getLatestNews(){
 		$news = News::where('status',1)->orderBy('id', 'desc')->first();
 		return $news->slug;
+}
+function getTutorCourses($course_ids){
+	$course_ids = explode(",", $course_ids);	
+	$couses =  Course::whereIn('id', $course_ids)->get();
+	if(!empty($couses) && count($couses)>0 ){
+		$course_title = array();
+		foreach($couses as $row){
+			$course_title[] =  $row->title;
+		}
+		$couse_title_list = implode(", ",$course_title);
+		return '<div class="tutor-subject"><span>('.$couse_title_list.')</span></div>';
+	}
+    
 }

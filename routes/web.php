@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\TutorDetailsController;
+use App\Http\Controllers\SubscriptionController;
+
 
 
 
@@ -36,6 +38,8 @@ Route::get('/', [PageController::class, 'index'])->name('landingpage');
 Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.show');
 
 Route::get('/tutors', [PageController::class, 'tutorFilter'])->name('tutors.tutorFilter');
+Route::get('/student', [PageController::class, 'student'])->name('student.student');
+
 
 Route::get('/tutors/{id}', [TutorDetailsController::class, 'show'])->name('tutors.show');
 
@@ -46,6 +50,8 @@ Route::get('/tutors/course/{id}', [PageController::class, 'tutorsByCourse'])->na
 
 Route::get('/tutors/filter/{course_id}', [PageController::class, 'tutorFilter'])->name('tutors.filterByCourse');
 
+Route::get('/subscribe', [SubscriptionController::class, 'showForm'])->name('subscribe.form');
+Route::post('/subscribe', [SubscriptionController::class, 'store'])->name('subscribe.store');
 
 Route::middleware(['auth', 'verified','disablepreventback'])->group(function () {
 	/** public user  details page */
@@ -59,9 +65,8 @@ Route::group(['middleware' => 'disablepreventback'], function () {
 });
 
 /** frontend routes START */
-Route::group(['middleware' => 'disablepreventback'], function () {
-	Route::group(['namespace' => '', 'prefix' => 'customer', 'as' => 'customer.'], function () {
-		require __DIR__ . '/customer_routes.php';
-	});
-	
-});
+//Route::group(['middleware' => 'disablepreventback'], function () {
+	//Route::group(['namespace' => '', 'prefix' => 'customer', 'as' => 'customer.'], function () {
+		//});
+	//});
+require __DIR__ . '/customer_routes.php';

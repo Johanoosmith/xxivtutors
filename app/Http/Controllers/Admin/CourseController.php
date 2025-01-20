@@ -54,8 +54,6 @@ class CourseController extends Controller
         Course::create($request->all());
         return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
     }
-    
-
     public function edit($id)
     {
         $course = Course::find($id);  

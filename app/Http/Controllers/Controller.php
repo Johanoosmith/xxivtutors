@@ -15,11 +15,8 @@ use App\Models\EmailLog;
 use App\Models\Transport;
 use App\Models\TextCategory;
 use App\Models\Language;
-
-
-
+use App\Models\Course;
 use File;
-
 use Config;
 
 class Controller extends BaseController
@@ -45,10 +42,6 @@ class Controller extends BaseController
         }
         return $mail_status;
     }
-
-   
-
-
     /**
     * callSendMail.
     *
@@ -62,19 +55,14 @@ class Controller extends BaseController
             $email_subject      = $emailTemplate->subject;
             $email_body         = $emailTemplate->message;
             $constant           = explode(',', $emailTemplate->constants);
-           
             $email_constants    = array_map(function ($str) {
                 return '{'.$str.'}';
             }, $constant);
-          
-            $email_body         = str_replace($email_constants, $replace_array, $email_body);          
-
-            $mail_status        = $this->sendMail($email_to, $email_subject, $email_body, 'order');           
-            
+            $email_body= str_replace($email_constants, $replace_array, $email_body);      
+            $mail_status= $this->sendMail($email_to, $email_subject, $email_body, 'order');  
         }
         return $mail_status;
     }
-
     public function uploadMedia($request, $user_id) {
 
         $data = $request->all();        
@@ -104,24 +92,23 @@ class Controller extends BaseController
         $post->image = null;
         $post->save(); 
     }
+    function getCourses(){
+        $list_arr = Course::where(['status'=>'1'])->orderBy('title','asc')->pluck('title','id');
+        return $list_arr;
+    }
+    function getCoursesLevel(){
+    $list_arr = Course::where('status', '1')->orderBy('level', 'asc')->select('level')->distinct()->pluck('level');
+    return $list_arr;
+    }
 
-   
-   
-  
-    
     function getPageTemplates(){
         $list_arr = Pagetemplate::where(['status'=>'1'])->orderBy('name','asc')->pluck('full_name', 'name')->prepend("Please Select","");
         return $list_arr;
     }
-
     function getPageTemplatesForNewPage(){
         $list_arr = Pagetemplate::where(['status'=>'1','temp_status'=>'1'])->orderBy('name','asc')->pluck('full_name', 'name')->prepend("Please Select","");
         return $list_arr;
     }
-
-
-  
-  
     // Page slug
     public function pageSlug($title, $id = 0) {
 		// Normalize the title		      
@@ -140,7 +127,6 @@ class Controller extends BaseController
 		if (!$allSlugs->contains('slug', $slug)) {
 			return $slug;
 		}
-
 		// Just append numbers like a savage until we find not used.
 		for ($i = 1; $i <= 10; $i++) {
 			$newSlug = $slug . '-' . $i;
@@ -150,30 +136,20 @@ class Controller extends BaseController
 		}
 		throw new \Exception('Can not create a unique slug');
 	}
-
-    	
 	protected function getRelatedPageSlugs($slug, $id = 0) {
 		return Page::select('page_url')
 			->where('page_url', '=', $slug)
 			->where('id', '<>', $id)
 			->get();
 	}
-
-
-
-
-
     public function getTextCategoryDropdown() {        
         $field_name =  'en_name';
         $list_arr = TextCategory::where('status', '1')->pluck($field_name, 'id')->prepend("Please Select","");
         return $list_arr;
     }
-
     function createDirecrotory($path) {
         if (!File::exists($path)) {
             File::makeDirectory($path, 0755, true, true);
         }
     }
-
-   
 }

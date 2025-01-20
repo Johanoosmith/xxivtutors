@@ -20,10 +20,10 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'email', 'password', 'firstname', 'lastname', 'mobile', 
-        'address', 'profile_image', 'short_description', 'full_description',
-        'qualification_1', 'qualification_2', 'qualification_3', 'qualification_4',
-        'experience', 'rate', 'status','postcode', 'gender', 'rating','tutor_specializations'
+        'role_id', 'username', 'title','town', 'county', 'country', 'email', 'password', 'firstname', 'lastname',
+        'mobile', 'dob_year', 'dob_month', 'dob_day', 'language', 'distance', 'bio', 'address', 'profile_image', 
+        'short_description', 'full_description','qualification_1', 'qualification_2', 'qualification_3', 'qualification_4',
+        'experience', 'rate', 'status','postcode', 'gender', 'rating','tutor_specializations', 'comments_about_tuition', 'availability'
     ];
 
     /**
@@ -35,7 +35,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
     ];
-
     /**
      * The attributes that should be cast.
      *
