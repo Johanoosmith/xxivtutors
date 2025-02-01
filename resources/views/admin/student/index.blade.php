@@ -84,9 +84,9 @@
             @foreach ($students as $student)
                 <tr>
                     <td>{{ $student->id }}</td>
-                    <td>{{ $student->firstname }}{{ $student->lastname }}</td>
+                    <td>{{ $student->fullname }}</td>
                     <td>{{ $student->email }}</td>
-                    <td>{{ $student->mobile}}</td>
+                    <td>{{ $student->contact}}</td>
 					<!-- <td>{{ $student->course}}</td> -->
                     <td>
                     @if($student->status == '1')

@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\City;
 use App\Models\Course;
 use App\Models\User;
+use App\Models\Tutor;
 use App\Models\ContactUs;
 use Illuminate\Support\Facades\DB;
 use Auth;
@@ -47,6 +48,8 @@ class PageController extends Controller {
         }
         $arr['courses_list'] = $this->getCourses();
         $arr['page'] = $page;
+        $arr['levels'] = DB::table('levels')->select('id', 'title')->get();  
+
         // Pass all data to the frontend view
         return view('front/index')->with($arr);
     }
@@ -84,8 +87,10 @@ class PageController extends Controller {
 	
         $arr['cities'] = City::where('status', 1)->orderBy('name', 'asc')->get();
         $arr['courses'] = Course::where('status', 1)->orderBy('title', 'asc')->get();
+
         $arr['tutors'] = User::where('role_id', 2)->get();
       
+        
         $navigation = Category::all(); // Replace with your actual navigation fetching logic
 		$arr['page'] = $page;
         return view('front.'.strtolower($page_templates))->with($arr);
@@ -139,18 +144,25 @@ class PageController extends Controller {
             $course_id = $request->course_id;  
         }
         $arr['course_id'] = $course_id;
-        $query = User::where('role_id', 2); 
+        $query = User::where('role_id', 2)->with('tutor');
+        $tutorQuery = Tutor::query(); 
+        
+        $user_ids = [];
+        $hasTutorFilter = false;
         // Tutors only
         if(!empty($course_id)){         
-            $query->whereRaw("FIND_IN_SET(?, tutor_specializations)", [$course_id]);            
+            $tutorQuery->whereRaw("FIND_IN_SET(?, tutor_specializations)", [$course_id]);            
+            $hasTutorFilter = true;
         }
         // Apply price range filter
         if ($request->filled('min_price') && $request->filled('max_price')) {
-            $query->whereBetween('rate', [$request->min_price, $request->max_price]);
+            $tutorQuery->whereBetween('rate', [$request->min_price, $request->max_price]);
+            $hasTutorFilter = true;
         }
         // Apply rating filter
         if ($request->filled('min_rating') && $request->filled('max_rating')) {
-            $query->whereBetween('rating', [$request->min_rating, $request->max_rating]);
+            $tutorQuery->whereBetween('rating', [$request->min_rating, $request->max_rating]);
+            $hasTutorFilter = true;
         }
         // Apply gender filter
         if ($request->filled('gender')) {
@@ -159,17 +171,25 @@ class PageController extends Controller {
         if ($request->has('postcode') && $request->postcode != null) {
             $query->where('postcode', $request->postcode);
         }
-        $specialization = User::where('role_id', 2)->get();
+        if($hasTutorFilter){
+            $user_ids = $tutorQuery->get()->pluck('id');
+        }
+        $specialization = User::where('role_id', 2)->with('tutor')->get();
         $specialization_courses  = array();
         if(!empty($specialization)){
             foreach($specialization as $row){
-                if(!empty($row->tutor_specializations)){
-                    $specialization_courses[]  = explode(",",$row->tutor_specializations);
+                if(!empty($row->tutor->tutor_specializations)){
+                    $specialization_courses[]  = explode(",",$row->tutor->tutor_specializations);
                 }
             }
             $specialization_courses = array_merge(...$specialization_courses);
         }
-        $arr['tutors']= $query->paginate(2);
+        
+        if(!empty($user_ids)){
+            $query->whereIn('id', $user_ids);    
+        }
+        
+        $arr['tutors']= $query->with('tutor')->paginate(10);
         // echo $query->toSql();die;
         // Fetch the page
         $page = Page::find(1);    
@@ -185,6 +205,8 @@ class PageController extends Controller {
                 }
             }
         }
+        $specialization_courses = array_unique($specialization_courses);
+        
         $records = DB::table('courses')
         ->whereIn('id', $specialization_courses)
         ->get();
@@ -195,8 +217,17 @@ class PageController extends Controller {
         ->orderBy('order', 'asc')
         ->get();
         $arr['courses_list'] = $this->getCourses();
-        $arr['courses'] = Course::where('status', 1)->orderBy('title', 'asc')->get();
         
+        $arr['courses'] = Course::where('status', 1)->orderBy('title', 'asc')->get();
+
+        $arr['course_level'] = DB::table('levels')
+        ->join('course_levels', 'levels.id', '=', 'course_levels.level_id')
+        ->select('levels.id', 'levels.title', 'course_levels.course_id')
+        ->get();
+
+        //dd($levels);
+
+        $arr['levels'] = DB::table('levels')->select('id', 'title')->get();  
         return view('front.tutor')->with($arr);
     }
     public function student(Request $request)

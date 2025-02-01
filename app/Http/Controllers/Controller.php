@@ -96,6 +96,7 @@ class Controller extends BaseController
         $list_arr = Course::where(['status'=>'1'])->orderBy('title','asc')->pluck('title','id');
         return $list_arr;
     }
+
     function getCoursesLevel(){
     $list_arr = Course::where('status', '1')->orderBy('level', 'asc')->select('level')->distinct()->pluck('level');
     return $list_arr;

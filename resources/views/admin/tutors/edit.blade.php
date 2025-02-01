@@ -48,16 +48,17 @@
                         <label class="form-label">Email<span class="required">*</span></label>   
                         {{ html()->text('email')->class('form-control form-control-user required') }}  
                     </div>
+                    
                     <div class="col-sm-2 mt-3">
-                            @if ($tutor->profile_image)
-                                <img src="{{ asset('storage/' . $tutor->profile_image) }}" alt="Profile Image" width="50px">
+                            @if ($tutor->tutor->profile_image)
+                                <img src="{{ asset('storage/' . $tutor->tutor->profile_image) }}" alt="Profile Image" width="50px">
                             @endif
                     </div>
             </div>
             <div class="form-group row">
                 <div class="col-sm-8">
                     <label class="form-label">Short Description<span class="required">*</span></label>
-                    {{ html()->text('short_description')->class('form-control form-control-user short_desc required') }}
+                    {{ html()->text('tutor[short_description]')->class('form-control form-control-user short_desc required') }}
                     @if ($errors->has('short-message'))
                     <span class="error" role="alert">{{ $errors->first('short-message') }}</span>
                     @endif
@@ -66,7 +67,7 @@
             <div class="form-group row">
                 <div class="col-sm-8">
                     <label class="form-label">Full Description<span class="required">*</span></label> 
-                    {{ html()->text('full_description')->class('form-control form-control-user short_desc required') }}
+                    {{ html()->text('tutor[full_description]')->class('form-control form-control-user short_desc required') }}
                     @if ($errors->has('full-message'))
                     <span class="error" role="alert">{{ $errors->first('full-message') }}</span>
                     @endif
@@ -106,21 +107,21 @@
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <label class="form-label">First<span class="required">*</span></label>
-                        {{ html()->text('qualification_1')->class('form-control form-control-user required') }} 
+                        {{ html()->text('tutor[qualification_1]')->class('form-control form-control-user required') }} 
                         </div>
                     <div class="col-sm-4">
                         <label class="form-label">Second<span class="required">*</span></label>   
-                        {{ html()->text('qualification_2')->class('form-control form-control-user required') }} 
+                        {{ html()->text('tutor[qualification_2]')->class('form-control form-control-user required') }} 
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <label class="form-label">Third<span class="required">*</span></label>
-                        {{ html()->text('qualification_3')->class('form-control form-control-user required') }} 
+                        {{ html()->text('tutor[qualification_3]')->class('form-control form-control-user required') }} 
                     </div>
                     <div class="col-sm-4">
                         <label class="form-label">Fourth<span class="required">*</span></label>   
-                        {{ html()->text('qualification_4')->class('form-control form-control-user required') }} 
+                        {{ html()->text('tutor[qualification_4]')->class('form-control form-control-user required') }} 
                     </div>
                 </div>
             </div>
@@ -130,26 +131,47 @@
             <div class="form-group row">
                     <div class="col-sm-4">
                         <label class="form-label">Experience<span class="required">*</span></label>
-                        {{ html()->text('experience')->class('form-control form-control-user required') }} 
+                        {{ html()->text('tutor[experience]')->class('form-control form-control-user required') }} 
                     </div>
                     <div class="col-sm-4">
                         <label class="form-label">Rate<span class="required">*</span><h8>(hr)</h8></label>   
-                        {{ html()->text('rate')->class('form-control form-control-user required') }} 
+                        {{ html()->text('tutor[rate]')->class('form-control form-control-user required') }} 
                     </div>
             </div>
             <div class="form-group row">
                     <label for="specialization" class="form-label">Select Specializations (Courses):</label>
+
+                            @php
+                                //pr($tutor->tutor);
+                            @endphp
+
+                            @php
+                            $tutorSpecializations = $tutor->tutor->tutor_specializations ?? [];
+                            if (is_string($tutorSpecializations)) {
+                                $tutorSpecializations = json_decode($tutorSpecializations, true) ?? explode(',', $tutorSpecializations);
+                            }
+
+                            $tutorSpecializations = [];
+                            if(!empty($tutor->tutor->tutor_specializations)){
+                                $tutorSpecializations = explode(',', $tutor->tutor->tutor_specializations);
+                            }
+
+                            @endphp
+
                             @foreach($courses as $course)
                                 <div class="col-sm-4">
                                     <div id="specialization">
                                         <div class="form-check">
+                                            
                                             <input 
                                                 type="checkbox" 
                                                 name="tutor_specializations[]" 
                                                 value="{{ $course->id }}" 
                                                 id="course_{{ $course->id }}" 
                                                 class="form-check-input"
-                                                @if(isset($tutor->tutor_specializations) && (in_array($course->id, $tutor->tutor_specializations))) checked @endif>
+
+                                                @if(in_array($course->id, $tutorSpecializations)) checked @endif>
+                                                                                            
                                             <label for="course_{{ $course->id }}" class="form-check-label">
                                                 {{ $course->title }}
                                             </label>
@@ -167,12 +189,12 @@
                 </select>
             </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <div class="col-sm-4">
                     <label for="password">Password (leave blank to keep current password)</label>
                     <input type="password" name="password" id="password" class="form-control">
                 </div>
-            </div>
+            </div> -->
             <div class="form-group row">
                 <div class="col-sm-4">
                 <a href="{{ route('admin.tutors.index') }}" class="btn btn-dark btn-md">Back</a> 

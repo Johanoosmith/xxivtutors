@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Student; // Assuming you are managing the default User model
 
 class ManageUserController extends Controller
 {
@@ -17,35 +18,32 @@ class ManageUserController extends Controller
      * Display a listing of the users.
      */
     public function index(Request $request)
-{
-    $query = User::query();
+    {
+        $query = Student::query();
+
+        // Apply filters
     
-    // Filter by role_id = 1
-    $query->where('role_id', 1);
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('fullname', 'like', '%' . $searchTerm . '%')
+                ->orWhere('email', 'like', '%' . $searchTerm . '%');
+            });
+        }
 
-    // Apply filters
-  
-    if ($request->filled('search')) {
-        $searchTerm = $request->input('search');
-        $query->where(function($q) use ($searchTerm) {
-            $q->where('fullname', 'like', '%' . $searchTerm . '%')
-              ->orWhere('email', 'like', '%' . $searchTerm . '%');
-        });
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        // Handle "Per Page" Selection
+        $perPage = $request->input('per_page', 10);  // Default to 10 records per page
+
+        // Get the results, paginated
+        $students = $query->paginate($perPage);
+    
+        // Pass the filtered tutors and the filter inputs back to the view
+        return view('admin.student.index', compact('students'));
+    
     }
-
-    if ($request->filled('status')) {
-        $query->where('status', $request->status);
-    }
-     // Handle "Per Page" Selection
-     $perPage = $request->input('per_page', 20);  // Default to 10 records per page
-
-     // Get the results, paginated
-     $students = $query->paginate($perPage);
- 
-     // Pass the filtered Students and the filter inputs back to the view
-     return view('admin.student.index', compact('students'));
-   
-}
     /**
      * Show the form for creating a new user.
      */
@@ -70,7 +68,7 @@ class ManageUserController extends Controller
         ]);
 
          // Save data to the student table
-         User::create([
+        Student::create([
         'fullname' => $validatedData['fullname'],
         'email' => $validatedData['email'],
         'contact' => $validatedData['contact'],
@@ -86,7 +84,7 @@ class ManageUserController extends Controller
      */
     public function show($id)
     {
-        $student = User::findOrFail($id);
+        $student = Student::findOrFail($id);
         // Change view name to "student.show"
         return view('admin.student.show', compact('student'));
     }
@@ -96,8 +94,7 @@ class ManageUserController extends Controller
      */
     public function edit($id)
     {
-
-        $student = User::findOrFail($id);
+        $student = Student::findOrFail($id);
         // Change view name to "student.edit"
         return view('admin.student.edit', compact('student'));
     }
@@ -110,14 +107,14 @@ class ManageUserController extends Controller
         // Validate the form data
         $validatedData = $request->validate([
             'fullname' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'email' => 'required|email|unique:tutors,email,' . $id,
             'contact' => 'required|string|max:15',
             'course' => 'required|string',
             'status' => 'required|string',
             'password' => 'nullable|string|min:8', // Password is optional
         ]);
-            // Find the Student by ID
-        $student = User::findOrFail($id);
+            // Find the tutor by ID
+        $student = Student::findOrFail($id);
 
         // Only update the password if provided
         if (!empty($request->password)) {
@@ -126,10 +123,10 @@ class ManageUserController extends Controller
             unset($validatedData['password']); // Remove password if not updating
         }
 
-        // Update the Student's information
+        // Update the tutor's information
         $student->update($validatedData);
 
-        // Redirect to the Student list page or show success message
+        // Redirect to the tutor list page or show success message
         return redirect()->route('admin.student.index')->with('success', 'User updated successfully!');
 
     }
@@ -139,7 +136,7 @@ class ManageUserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
+        $user = Student::findOrFail($id);
 
 
         $user->delete();

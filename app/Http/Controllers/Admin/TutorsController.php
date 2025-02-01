@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User; // Assuming you are managing the default User model
 use App\Models\Course;
+use App\Models\Tutor;
 use App\Models\Pagemeta;
 use Illuminate\Support\Facades\Storage;
 
@@ -70,8 +71,8 @@ class TutorsController extends Controller
     {
         // Validate the incoming request
         $validatedData = $request->validate([
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
+            'user.firstname' => 'required|string|max:255',
+            'user.lastname' => 'required|string|max:255',
             'email' => 'required|email|unique:tutors,email',
             'mobile' => 'required|string|max:15',
             'address' => 'required|string|max:30',
@@ -147,11 +148,12 @@ class TutorsController extends Controller
      */
      public function edit($id)
      {
-         $tutor = User::with('specialization')->findOrFail($id);
+         $tutor = User::with('specialization','tutor')->findOrFail($id);
+         //dd($tutor->toArray());
          $courses = Course::all(); // Retrieve all courses
 
          if ($tutor->tutor_specializations) {
-            $tutor->tutor_specializations  = explode(",",$tutor->tutor_specializations);
+            $tutor->tutor_specializations  = explode(',',$tutor->tutor_specializations);
          }
 
          if($tutor){			
@@ -179,58 +181,80 @@ class TutorsController extends Controller
 
      public function update(Request $request, $id)
     {
-        $data = $request->all();	
+        $data = $request->all();
+        //dd($data);	
         // Validate the form data
         $validatedData = $request->validate([
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|email|unique:tutors,email,' . $id,
+            'email' => 'required|email|unique:users,email,' . $id,
             'mobile' => 'required|string|max:15',
-            'short_description' => 'required|string',
-            'full_description' => 'required|string',
-            'qualification_1' => 'required|string',
-            'qualification_2' => 'required|string',
-            'qualification_3' => 'required|string',
-            'qualification_4' => 'required|string',
-            'experience' => 'required|string',
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'rate' => 'required|string',
             'status' => 'required|int',
-            'password' => 'nullable|string|min:8',
             'postcode' => 'nullable|string|max:10',
             'gender' => 'nullable|string|in:male,female,other',
-            'rating' => 'nullable|numeric|min:0|max:5',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            
+            'tutor.short_description' => 'required|string',
+            'tutor.full_description' => 'required|string',
+            'tutor.qualification_1' => 'required|string',
+            'tutor.qualification_2' => 'required|string',
+            'tutor.qualification_3' => 'required|string',
+            'tutor.qualification_4' => 'required|string',
+            'tutor.experience' => 'required|string',
+            'tutor.rate' => 'required|string',
+            'tutor.rating' => 'nullable|numeric|min:0|max:5',
         ]);
 
+
+
         // Find the tutor by ID
-        $tutor = User::findOrFail($id);
+        $user = User::findOrFail($id);
+        $tutor = Tutor::where('user_id',$user->id)->first();
         // Only update the password if provided
-        if (!empty($request->password)) {
-            $validatedData['password'] = bcrypt($request->password);
-        } else {
-            unset($validatedData['password']); // Remove password if not updating
-        }
+        // if (!empty($request->password)) {
+        //     $validatedData['password'] = bcrypt($request->password);
+        // } else {
+        //     unset($validatedData['password']); // Remove password if not updating
+        // }
         // Update the tutor's main information
-        $tutor->update($validatedData);
-        if(isset($data['pagemeta'])){
-			$this->update_meta($data['pagemeta'],$id);
-		}
-        // Sync selected specialization s
-        if ($request->has('tutor_specializations')) {
-            $tutor->tutor_specializations  = implode(",",$request->tutor_specializations);
-        }else{
-            $tutor->tutor_specializations= '';
-        }
+        //$user->update($validatedData);
+
         if ($request->hasFile('profile_image')) {
             $newImagePath = $request->file('profile_image')->store('tutors', 'public');
             // Delete the old image if it exists
             if ($tutor->profile_image && Storage::disk('public')->exists($tutor->profile_image)) {
                 Storage::disk('public')->delete($tutor->profile_image);
             }
-            $validatedData['profile_image'] = $newImagePath;
+            $user->profile_image = $newImagePath;
         }
 
-        $tutor->update($validatedData);
+
+        $user->firstname = $data['firstname'];
+        $user->lastname  = $data['lastname'];
+        $user->email     = $data['email'];
+        $user->mobile    = $data['mobile'];
+        $user->status    = $data['status'];
+        $user->address   = $data['address'];
+        $user->postcode  = $data['postcode'];
+        $user->status    = $data['status'];
+        $user->gender    = $data['gender'];
+        
+        $user->save();
+
+        $tutor_data = $data['tutor'];
+        
+        if(isset($data['pagemeta'])){
+			$this->update_meta($data['pagemeta'],$id);
+		}
+        // Sync selected specialization s
+        if ($request->has('tutor_specializations')) {
+            $tutor_data['tutor_specializations'] = implode(",",$request->tutor_specializations);
+        }else{
+            $tutor_data['tutor_specializations'] = '';
+        }
+        
+        $tutor->update($tutor_data);
+        
         // Redirect to the tutor list page or show success message
         return redirect()->route('admin.tutors.index')->with('success', 'Tutor updated successfully!');
     }

@@ -13,6 +13,8 @@ use App\Models\UserView;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
+use App\Models\Student;
+
 
 class CustomerController extends Controller
 {
@@ -27,11 +29,10 @@ class CustomerController extends Controller
         } else {
             $roleText = 'Unknown Role';
         }
-
         if($user->role_id == 1){
             return view('customer.student_dashboard', compact('user', 'roleText'));
         }else{
-            return view('customer.dashboard', compact('user', 'roleText'));
+            return view('tutor.dashboard', compact('user', 'roleText'));
         } 
     }
     public function create($step=1)
@@ -74,9 +75,9 @@ class CustomerController extends Controller
                     'country' => 'required|string|max:255',
                     'postcode' => 'required|string|max:15',
                     'phoneNumber' => 'required|string|max:15',
-                    'dobYear' => 'required|integer',
-                    'dobMonth' => 'required|integer',
-                    'dobDay' => 'required|integer',
+                    'dobYear' => 'integer',
+                    'dobMonth' => 'integer',
+                    'dobDay' => 'integer',
                 ];
                 break;
             case 3:
@@ -124,16 +125,19 @@ class CustomerController extends Controller
                 'username' => $userData['username'],
                 'email' => $userData['email'],
                 'password' => Hash::make($userData['password']), 
-                'title' => $userData['title'],
                 'gender' => $userData['gender'],
                 'firstname' => $userData['firstName'],
                 'lastname' => $userData['lastName'],
                 'address' => trim($userData['address1'] . ' ' . $userData['address2']),
-                'town' => $userData['town'],
-                'county' => $userData['county'],
-                'country' => $userData['country'],
                 'postcode' => $userData['postcode'],
                 'mobile' => $userData['phoneNumber'],
+            ]);
+            $student = Student::create([
+                'user_id' => $user->id,
+                'title' => $userData['title'],
+                'town' => $userData['town'],
+                'county' => $userData['county'],
+                'country' => $userData['country'],	
                 'dob_year' => $userData['dobYear'],
                 'dob_month' => $userData['dobMonth'],
                 'dob_day' => $userData['dobDay'],
@@ -153,7 +157,6 @@ class CustomerController extends Controller
             return redirect()->route('login');
         }
     }
-
     public function viewStudent($username)
     {
         $userView = new UserView();
@@ -189,7 +192,6 @@ class CustomerController extends Controller
         // Redirect back with a success message
         return redirect()->route('customer.profile.view')->with('success', 'Profile updated successfully!');
     }
-
     public function showProfileStats()
     {
         $userId = Auth::user();
@@ -208,5 +210,119 @@ class CustomerController extends Controller
         $courses_list = $this->getCourses();
         $courses_list_level = $this->getCoursesLevel();
         return view('customer.student_add_subject', compact('courses_list','courses_list_level'));
+    }
+    public function personalinfo()
+    { 
+        $personalinfo = Auth::user();
+        $student = $personalinfo->student;
+        $countyies = County::get()->pluck('name','id');
+        return view('customer.student_personalinfo', compact('personalinfo','student','countyies'));
+    }
+    public function personalinfoupdate()
+    { 
+        $request = request();
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'mobile' => 'required|string|max:15',
+            'postcode' => 'nullable|string|max:10',
+            'address' => 'nullable|string',
+            'town' => 'required|string|max:255',
+            'county' => 'required|exists:county,id',
+        ]);
+        
+      // Step 2: Fetch the authenticated user and their associated student
+      $user = Auth::user();
+      $student = $user->student;
+      // Step 3: Update the User model
+      $user->update([
+          'email' => $validatedData['email'],
+          'lastname' => $validatedData['lastname'],
+          'address' => $validatedData['address'],
+          'postcode' => $validatedData['postcode'],
+          'mobile' => $validatedData['mobile'],
+      ]);
+      // Step 4: Update the Student model (if it exists)
+      if ($student) {
+          $student->update([
+              'title' => $validatedData['title'],
+              'town' => $validatedData['town'],
+              'county' => $validatedData['county'],
+          ]);
+      }
+      return redirect()->back()->with('success', 'Personal information updated successfully!');
+    }
+    public function studpassword()
+    { 
+        $studpassword = Auth::user();
+        return view('customer.student_password', compact('studpassword'));
+    }
+    public function studpasswordupdate()
+    {    
+        
+        $request = request();
+        $validatedData = $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|min:8|confirmed',
+        ]);
+        
+        // Step 2: Fetch the authenticated user and their associated student
+        $user = Auth::user();
+
+          // Check if the current password is correct
+        if (!Hash::check($validatedData['current_password'], $user->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        }
+
+        // Update the password
+        $user->update([
+            'password' => Hash::make($validatedData['password']),
+        ]);
+        return back()->with('success', 'Password updated successfully!');
+    }
+    public function showUploadForm()
+    {
+        $student = Auth::user(); // Assuming you are using Auth for students
+        return view('customer.student_profilephoto', compact('student'));
+    }
+    public function uploadProfilePhoto(Request $request)
+    {
+        $request->validate([
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Max size 2MB
+        ]);
+        $user = Auth::user(); // Get the authenticated user
+        $file = $request->file('profile_image');
+
+        // Store the file in the "profile_images" directory and get its path
+        $path = $file->store('profile_images', 'public');
+
+        // Optionally, delete the old photo if it exists
+        if ($user->profile_image) {
+            \Storage::disk('public')->delete($user->profile_image);
+        }
+        // Save the new photo path in the user's record
+        $user->profile_image = $path;
+        $user->save();
+        return back()->with('success', 'Profile photo uploaded successfully!');
+    }
+    public function show($id)
+    {
+        $user = User::findOrFail($id); // Fetch the user by ID
+        $student = $user->student;
+        //dd($user);
+        return view('customer.student_profile', compact('user','student')); // Pass user data to the profile view
+    }
+    public function studmyclients()
+    { 
+        $courses_list = $this->getCourses();
+        $courses_list_level = $this->getCoursesLevel();
+        return view('customer.student_myclient', compact('courses_list'));
+    }
+    public function studprivacy()
+    { 
+        $courses_list = $this->getCourses();
+        $courses_list_level = $this->getCoursesLevel();
+        return view('customer.student_privacy', compact('courses_list'));
     }
 }

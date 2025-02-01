@@ -35,10 +35,9 @@
 				<x-auth-session-status class="mb-4" :status="session('status')" />
 				<div class="col-12">
 					<div class="register-form bg-lightgrey">
-						<form method="post" id="loginForm" action="{{ route('login') }}">
+						<form method="post" id="loginForm" action="{{ route('login')}}">
 							@csrf
 							<div class="row">
-								
 								<div class="col-md-12 form-field">
 									<label class="form-label" for="email">Email Address</label>
 									<input class="form-control" type="email" id="email" name="email" placeholder="Email" value="{{ old('email') }}" required>

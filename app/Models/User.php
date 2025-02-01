@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'role_id', 'username', 'title','town', 'county', 'country', 'email', 'password', 'firstname', 'lastname',
         'mobile', 'dob_year', 'dob_month', 'dob_day', 'language', 'distance', 'bio', 'address', 'profile_image', 
         'short_description', 'full_description','qualification_1', 'qualification_2', 'qualification_3', 'qualification_4',
-        'experience', 'rate', 'status','postcode', 'gender', 'rating','tutor_specializations', 'comments_about_tuition', 'availability'
+        'experience', 'rate', 'status','postcode', 'gender', 'rating','tutor_specializations', 'comments_about_tuition', 'availability','last_login'
     ];
 
     /**
@@ -43,12 +43,20 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'last_login' => 'datetime',
     ];
  
     public function media(){
         return $this->hasMany(Media::class,'user_id','id');
-    }  
+    }
     
+    public function tutor(){
+        return $this->hasOne(Tutor::class,'user_id','id');
+    }
+    
+    public function student(){
+        return $this->hasOne(Student::class,'user_id','id');
+    }
     public function specialization()
     {
         return $this->belongsToMany(Course::class, 'tutor_specializations', 'tutor_id', 'course_id');
@@ -57,6 +65,4 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Course::class, 'tutor_specializations', 'tutor_id', 'course_id');
     }
-
-
 }

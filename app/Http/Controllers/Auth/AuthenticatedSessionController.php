@@ -42,12 +42,14 @@ class AuthenticatedSessionController extends Controller {
             ]);
         }else{
             $request->session()->regenerate();
-            
-            if(Auth::user()->status == 1){
+            if(Auth::user()->role_id == 1){
               
                 return redirect()->route('customer.dashboard'); // Replace 'home' with the correct route name
                // return redirect()->route('newsfeed');
-            }else{
+            }elseif (Auth::user()->role_id == 2) {
+                return redirect()->route('tutor.dashboard');
+            }
+            else{
                   Auth::guard('web')->logout();
                     $request->session()->invalidate();
                       throw ValidationException::withMessages([

@@ -122,9 +122,9 @@ function getSlugById( $id, $model) {
 } 
 
 function pr($arr){
-	echo "<pre>";
+	echo '<pre>';
 	print_r($arr);
-	die;
+	echo '</pre>';
 }
 
 function getCityCountryDetail( $country_id, $city_id) {  

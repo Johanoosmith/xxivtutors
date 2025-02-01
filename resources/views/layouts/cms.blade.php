@@ -9,6 +9,8 @@
             <!-- <link rel="icon" href="{{asset('front/assets/images/favicon.ico')}}"> -->
             <!-- Bundle -->
             <link rel="stylesheet" href="{{asset('front/assets/css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.css" />
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
             <!-- Style Sheet -->
             <link rel="stylesheet" href="{{asset('front/assets/css/style.css')}}">
             <link rel="stylesheet" href="{{asset('front/assets/css/responsive.css')}}">
