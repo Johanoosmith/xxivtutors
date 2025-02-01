@@ -44,7 +44,7 @@
                         My Subjects</a>
                     </li>
                     <li class="nav-link {{ request('tab') == 'personalinfo' ? 'active' : '' }}">
-                        <a href="{{ route('customer.personalinfo', ['tab' => 'personalinfo']) }}">
+                        <a href="{{ route('customer.personalinfo')}}">
                         <svg class="icon">
                             <use xlink:href="#user"></use>
                         </svg>
@@ -60,7 +60,8 @@
                             <use xlink:href="#study"></use>
                         </svg>
                         My Suggested Students</a></li>
-                    <li><a href="#">
+                    <li class="nav-link {{ request('tab') == 'profilephoto' ? 'active' : '' }}">
+                        <a href="{{ route('customer.photo.upload')}}">
                         <svg class="icon">
                             <use xlink:href="#camera"></use>
                         </svg>

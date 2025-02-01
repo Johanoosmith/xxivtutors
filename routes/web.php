@@ -5,9 +5,6 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\TutorDetailsController;
 use App\Http\Controllers\SubscriptionController;
 
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,8 +36,6 @@ Route::get('/category/{id}', [CategoryController::class, 'show'])->name('categor
 
 Route::get('/tutors', [PageController::class, 'tutorFilter'])->name('tutors.tutorFilter');
 Route::get('/student', [PageController::class, 'student'])->name('student.student');
-
-
 Route::get('/tutors/{id}', [TutorDetailsController::class, 'show'])->name('tutors.show');
 
 Route::get('/{slug}', [PageController::class, 'display'])->name('display');

@@ -52,15 +52,15 @@
             </div>
 </section>
 <script>
-    window.onload = function () {
-        // Check if there's a success or error flag in the session
-        @if(session('success') || session('error'))
-            const formElement = document.getElementById('subscribe-form');
-            if (formElement) {
-                formElement.scrollIntoView({ behavior: 'smooth' });
-            }
-        @endif
-    };
+    // window.onload = function () {
+    //     // Check if there's a success or error flag in the session
+    //     @if(session('success') || session('error'))
+    //         const formElement = document.getElementById('subscribe-form');
+    //         if (formElement) {
+    //             formElement.scrollIntoView({ behavior: 'smooth' });
+    //         }
+    //     @endif
+    // };
 </script>
 
 </main>
@@ -164,7 +164,7 @@
 
 
 <!-- JavaScript -->
-<script src="{{asset('front/assets/js/bootstrap.bundle.min.js')}}"></script>
+@section('inline-js')  
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const accordions = document.querySelectorAll('.mobile-accordion');
@@ -225,3 +225,4 @@
         });
     });
 </script>
+@endsection

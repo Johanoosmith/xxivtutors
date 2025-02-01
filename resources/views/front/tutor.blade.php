@@ -21,13 +21,21 @@
                                 <li>Online</li>
                             </ul>
                             <div class="search-field-group">
+                            <script>
+                                // Convert Laravel $courses_list to JavaScript array
+                                var availableTags = @json($courses_list->map(fn($title, $id) => ['label' => $title, 'value' => $id])->values());
+                            </script>
                                 <div class="field">                                    
-                                    {{ html()->select('course_id', $courses_list)->class('input select2')->id('subjectSearch')->placeholder("Enter a subject")  }}
+                                    <?php /*{{ html()->select('course_id', $courses_list)->class('input select2')->id('subjectSearch')->placeholder("Enter a subject")  }} */ ?>
+                                    <input type="text" name="course_id" id="subjectSearch" class="input" placeholder="Enter a subject">
+                                    <input type="hidden" name="course_id" id="course_id">
                                 </div>
                                 <div class="field select-field">
-                                    <select class="select">
-                                        <option>All Levels</option>
-                                        <option>Trainee</option>
+                                    <select id="level" name="level" class="select">
+                                    <option value="All Levels">All Levels</option>
+                                    @foreach ($levels as $level)
+                                        <option value="{{$level->id}}">{{$level->title}}</option>
+                                    @endforeach
                                     </select>
                                     <svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"></path>
@@ -78,8 +86,31 @@
         <section class="tutor-listing">
             <div class="container">
                 <div class="row">
+                <div class="col-3 py-3 align-self-center">
+                        <h4 class="filter-collapsable-link">Filters</h4>
+                    </div>
+                    <div class="col-9 py-3 d-flex align-items-center justify-content-end sortby">
+                        <label>Sort By</label>
+                        <div class="select-field">
+                            <select class="select">
+                                <option>Lessons Taught</option>
+                                <option>Lessons Taught</option>
+                            </select>
+                            <svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
                     <div class="col col-filter">
                         <form method="GET" action="{{route('tutors.tutorFilter')}}" id="filterForm">
+                            <div class="filter-mobile-heading">
+                                <h4>Filter</h4>
+                                <button type="button" class="filter-close-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                                        <path d="M10.05 23.95a1 1 0 0 0 1.414 0L17 18.414l5.536 5.536a1 1 0 0 0 1.414-1.414L18.414 17l5.536-5.536a1 1 0 0 0-1.414-1.414L17 15.586l-5.536-5.536a1 1 0 0 0-1.414 1.414L15.586 17l-5.536 5.536a1 1 0 0 0 0 1.414z"></path>
+                                    </svg>
+                                </button>
+                            </div>
                             <label for="price_range">Price Range:</label><br>
                             <strong id="priceDisplay"></strong>
                             <div id="priceSlider"></div>
@@ -98,24 +129,24 @@
                             <input type="number" name="distance" id="distance" value="{{ request('distance', 15) }}">
 
                            <br> <label for="gender">Gender:</label>
-                            <select name="gender" id="gender">
-                                <option value="">All</option>
-                                <option value="male" {{ request('gender') == 'male' ? 'selected' : '' }}>Male</option>
-                                <option value="female" {{ request('gender') == 'female' ? 'selected' : '' }}>Female</option>
-                            </select>
-                             
-
+                           <div class="field select-field">
+                                <select class="select" name="gender" id="gender">
+                                    <option value="">All</option>
+                                    <option value="male" {{ request('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                                    <option value="female" {{ request('gender') == 'female' ? 'selected' : '' }}>Female</option>
+                                </select>
+                                <svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"></path>
+                                </svg>
+                            </div>
                             <button type="submit" class="btn btn-primary">Apply Filters</button>
                             <a href="http://192.168.9.32:8000/tutors" class="btn btn-secondary">Clear Filter</a>
-
                         </form>
-                        
                     </div>
                     <div class="col col-tutor-listing">
                             @if(!empty($tutors) && count($tutors) > 0)
                                 @foreach($tutors as $tutor)
-                                    @php $tutorcourses = getTutorCourses($tutor->tutor_specializations); @endphp
-
+                                    @php $tutorcourses = getTutorCourses($tutor->tutor->tutor_specializations); @endphp
                                     <div class="tutor-block">
                                         @if(!empty($tutor->profile_image) && file_exists(public_path('storage/'.$tutor->profile_image)))
                                         <div class="tutor-img">
@@ -134,10 +165,10 @@
                                             <div class="tutor-title">
                                                 <h3><a href="{{route('tutors.show', $tutor->id)}}">{{ $tutor->firstname }} {{ $tutor->lastname }}</a></h3>
                                                 {!! $tutorcourses !!}
-                                                <div class="tutor-price">£{{$tutor->rate}}/ hr</div>
+                                                <div class="tutor-price">£{{ @$tutor->tutor->rate}}/ hr</div>
                                             </div>
                                             <div class="tutor-description">
-                                                <p>{{ $tutor->short_description }}</p>
+                                                <p>{{ Str::limit(@$tutor->tutor->short_description, 240, '...') }}</p>
                                             </div>
                                             <div class="tutor-location">
                                                 <svg width="17" height="21" viewBox="0 0 17 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -146,11 +177,11 @@
                                                 {{ $tutor->address }}
                                             </div>
                                             <div class="tutoe-meta">
-                                                <div class="repeat"><span>{{ $tutor->qualification_1 }}</span></div>
-                                                <div class="hours"><span>{{ $tutor->qualification_2 }}</span></div>
-                                                <div class="travels"><span>{{ $tutor->qualification_3 }}</span></div>
-                                                <div class="response"><span>{{ $tutor->qualification_4 }}</span></div>
-                                                <div class="member"><span>{{ $tutor->experience }}</span></div>
+                                                <div class="repeat"><span>{{ @$tutor->tutor->qualification_1 }}</span></div>
+                                                <div class="hours"><span>{{ @$tutor->tutor->qualification_2 }}</span></div>
+                                                <div class="travels"><span>{{ @$tutor->tutor->qualification_3 }}</span></div>
+                                                <div class="response"><span>{{ @$tutor->tutor->qualification_4 }}</span></div>
+                                                <div class="member"><span>{{ @$tutor->tutor->experience }}</span></div>
                                             </div>
                                         </div>
                                     </div>
@@ -161,8 +192,7 @@
                                 </div>
                                 
                             @endif
-                    </div>
-                    
+                    </div> 
                     <nav class="pagination-block" aria-label="Tutor Pagination">
                         <ul class="pagination justify-content-center">
                         {{ $tutors->links() }}
@@ -171,10 +201,8 @@
                 </div>
             </div>
         </section>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.js"></script>
-
-
+@endsection
+@section('inline-js')        
 <script>
     // Price Range Slider
     const priceSlider = document.getElementById('priceSlider');
@@ -190,13 +218,11 @@
             from: value => parseInt(value)
         }
     });
-
     priceSlider.noUiSlider.on('update', function(values) {
         document.getElementById('minPrice').value = values[0];
         document.getElementById('maxPrice').value = values[1];
         document.getElementById('priceDisplay').innerText = `$${values[0]} - $${values[1]}`;
     });
-
     // // Rating Range Slider
     const ratingSlider = document.getElementById('ratingSlider');
     noUiSlider.create(ratingSlider, {
@@ -211,16 +237,54 @@
             from: value => parseFloat(value).toFixed(1)
         }
     });
-
     ratingSlider.noUiSlider.on('update', function(values) {
         document.getElementById('minRating').value = values[0];
         document.getElementById('maxRating').value = values[1];
         document.getElementById('ratingDisplay').innerText = `${values[0]} - ${values[1]} Stars`;
     });
+    document.querySelectorAll('.filter-collapsable-link').forEach(link => {
+        link.addEventListener('click', function() {
+            const targetDiv = document.querySelector('.col-filter'); // Replace with your target div selector
+            if (targetDiv) {
+                targetDiv.classList.toggle('active'); // Replace 'your-class' with the class to toggle
+            }
+        });
+    });
+    document.querySelectorAll('.filter-close-button').forEach(link => {
+        link.addEventListener('click', function() {
+            const targetDiv = document.querySelector('.col-filter'); // Replace with your target div selector
+            if (targetDiv) {
+                targetDiv.classList.remove('active'); // Replace 'your-class' with the class to toggle
+            }
+        });
+    });
     $('.select2').select2();
 </script>
+<!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
 <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
+-->
+<script>
+    jQuery(document).ready(function(){
+    // Initialize jQuery Autocomplete
+    jQuery("#subjectSearch").autocomplete({
+    source: availableTags,
+    select: function(event, ui) {
+        // Populate the input with the course title (label)
+        jQuery("#subjectSearch").val(ui.item.label);
 
+        // Optionally populate a hidden input with the course ID (value)
+        jQuery("#course_id").val(ui.item.value);
+
+        return false; // Prevent default behavior
+    },
+    _renderItem: function(ul, item) {
+        return $("<li>")
+            .append(item.label)
+            .appendTo(ul);
+    }
+    });
+    });
+</script>
 @endsection

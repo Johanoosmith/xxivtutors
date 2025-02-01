@@ -4,7 +4,7 @@
 
 <section class="page-banner text-center text-white">
             <div class="banner-img">
-                <img src="http://192.168.9.32:18212/storage/tutors/tutor-details-bg.jpg" alt="">
+                <img src="http://192.168.9.32:8001/storage/tutors/tutor-details-bg.jpg" alt="">
             </div>
             <div class="container">
                 <div class="row">
@@ -49,11 +49,11 @@
                             <div class="tutor-qualification">
                                 <p><strong>My Qualifications</strong></p>
                                 <div class="tutoe-meta">
-                                    <div class="repeat"><span>{{ $tutor->qualification_1 }}</span></div>
-                                    <div class="hours"><span>{{ $tutor->qualification_2 }}</span></div>
-                                    <div class="travels"><span>{{ $tutor->qualification_3 }}</span></div>
-                                    <div class="response"><span>{{ $tutor->qualification_4 }}</span></div>
-                                    <div class="member"><span>{{ $tutor->experience }}</span></div>
+                                    <div class="repeat"><span>{{  @$tutor->tutor->qualification_1 }}</span></div>
+                                    <div class="hours"><span>{{ @$tutor->tutor->qualification_2 }}</span></div>
+                                    <div class="travels"><span>{{ @$tutor->tutor->qualification_3 }}</span></div>
+                                    <div class="response"><span>{{ @$tutor->tutor->qualification_4 }}</span></div>
+                                    <div class="member"><span>{{ @$tutor->tutor->experience }}</span></div>
                                 </div>
                             </div>
                             <div class="other-information">
@@ -69,7 +69,7 @@
                                 </div>
                             </div>
                             <div class="tutor-contact">
-                                <a href="http://192.168.9.32:18212/contact-us" class="user-btn">
+                                <a href="http://192.168.9.32:8001/contact-us" class="user-btn">
                                     Contact
                                     <span class="svg-wrapper">
                                         <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -83,10 +83,10 @@
                     <div class="col col-tutor-description">
                         <h1>About {{ $tutor->firstname }} {{ $tutor->lastname }}</h1>
                         <p>
-                        {{ $tutor->short_description }}
+                        {{ @$tutor->tutor->short_description }}
                         </p>
                         <h2>Detailed information about me:</h2>
-                        <p>{{ $tutor->full_description }}</p>
+                        <p>{{ @$tutor->tutor->full_description }}</p>
                         <h2>About the lesson</h2>
                         <ul class="subject-list">
                             <li class="subject-item">

@@ -14,10 +14,14 @@ class Tutor extends Authenticatable
         'email', 'password', 'firstname', 'lastname', 'mobile', 
         'address', 'profile_image', 'short_description', 'full_description',
         'qualification_1', 'qualification_2', 'qualification_3', 'qualification_4',
-        'experience', 'rate', 'status'
+        'experience', 'rate', 'status','tutor_specializations', 'user_id', 'user_id', 'title', 'town', 'county', 'country'
     ];
     public function specialization()
-{
-    return $this->belongsToMany(Course::class, 'tutor_specializations', 'tutor_id', 'course_id');
-}
+        {
+            return $this->belongsToMany(Course::class, 'tutor_specializations', 'tutor_id', 'course_id');
+        }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

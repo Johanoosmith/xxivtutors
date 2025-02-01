@@ -7,9 +7,8 @@
     <title> @yield('meta_title')</title>
     <meta name="description" content="@yield('meta_desc')">
     <link rel="canonical" href="@yield('meta_page_url')" />
- 
 
-   
+ 
     <script type="text/javascript">
         var APP_URL = {!! json_encode(url('/')) !!};
         var MEDIA_URL = {!! json_encode(url('public/')) !!};
