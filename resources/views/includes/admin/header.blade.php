@@ -8,7 +8,7 @@
 <!-- [ Mobile header ] start -->
 <div class="pc-mob-header pc-header">
     <div class="pcm-logo">
-    <a href="javascript:void(0);" class="b-brand"><span>Test</span></a>
+    <a href="javascript:void(0);" class="b-brand"><span>MyProTutor</span></a>
     </div>
     <div class="pcm-toolbar">
         <a href="#!" class="pc-head-link" id="mobile-collapse">

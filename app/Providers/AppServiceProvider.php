@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
     {
         try {
             
-            if (!$this->isAdminRequest()) {
+            //if (!$this->isAdminRequest()) {
                 \DB::connection()->getPdo();
                     
                 if(\Schema::hasTable('categories'))
@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
 
                     \View::share(compact('navigation'));
                 }
-            }
+            //}
         } catch (\Exception $e){
             \Log::info('Navigation is not loaded.');
         }

@@ -25,13 +25,20 @@ return [
     '998' => '998'],
     'FILE_TYPE'        =>  ['1'=>'Image','2'=>'Video'],
 
-    'OB_CURRENCY'        =>  ['gbp'=>'GBP','eur'=>'EUR'],
-    'CT_CURRENCY'        =>  ['gbp'=>'GBP','eur'=>'EUR','usd'=>'USD'],
-    'TR_CURRENCY'        =>  ['gbp'=>'GBP','eur'=>'EUR','usd'=>'USD'],
-   
-
-
-    
+    'OB_CURRENCY' => ['gbp'=>'GBP','eur'=>'EUR'],
+    'CT_CURRENCY' => ['gbp'=>'GBP','eur'=>'EUR','usd'=>'USD'],
+    'TR_CURRENCY' => ['gbp'=>'GBP','eur'=>'EUR','usd'=>'USD'],
+	'ROLE'		  => [ 'STUDENT'=>1, 'TUTOR'=>2, 'ADMIN'=>10 ],
+	'CURRENCY_SYMBOL' =>  '£',
+	'SITE'		  => [
+		'TITLE'=>'MyProTutor',
+		'STUDENT_RATE'=>25, // Increase student rate than hourly rate by 25 percent
+		'TUTOR_PAYMENT_HELP_PAGE_ID'=>12,
+		'ONLINE_LESSON_PAGE_ID'=>13,
+		'ENQUIRY_MESSAGE_LIMIT'=>30,
+		'CURRENCY'=>'gbp',
+        'DATE_FORMAT'=>'d/m/Y'
+	],
 ];
 
 ?>

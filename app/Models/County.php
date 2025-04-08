@@ -14,4 +14,18 @@ class County extends Model
 
     // Define fillable fields
     protected $fillable = ['name'];
+	
+    public function tutors()
+    {
+        return $this->hasMany(Tutor::class, 'county');
+    }
+	
+	public static function getList(){
+		return self::orderBy('name','ASC')->get()->pluck('name','id')->toArray();
+	}
+
+    public static function getCountyNameById($county_id){
+		$county = self::where('id',$county_id)->first();
+        return $county->name;
+	}
 }

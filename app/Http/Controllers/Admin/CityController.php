@@ -36,13 +36,16 @@ class CityController extends Controller
         return view('admin.city.edit', compact('city'));
     }
 
-    public function update(Request $request,City $cities)
-    {
+    public function update(Request $request, City $city)
+    { 
         $request->validate([
             'name' => 'required|string|max:255',          
         ]);
-        $city   =  $request->all(); 
-        $cities->update($city);
+    
+        $cityData = $request->only(['name']);
+        
+        $city->update($cityData);
+    
         return redirect()->route('admin.cities.index')->with('alert-success', 'City updated successfully!');
     }
     public function destroy($id)

@@ -13,11 +13,17 @@ use App\Models\UserView;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
+use App\Models\Subject;
 use App\Models\Student;
+use App\Services\StripeService;
+use Illuminate\Support\Facades\Notification;
 
 
 class CustomerController extends Controller
 {
+	
+	protected $stripeService;
+	
     public function index()
     {
         $user = Auth::user(); // Get the currently logged-in user
@@ -37,6 +43,11 @@ class CustomerController extends Controller
     }
     public function create($step=1)
     {
+		/*
+		For Testing:
+		Notification::route('mail', 'khelesh.mehra@dotsquares.com')->notify(new CustomEmailNotification('khelesh.mehra@dotsquares.com', [], 'CUSTOMER_REGISTRATION'));
+		*/
+		
         $request = request();
         $countries = Country::get()->pluck('name','id');
         $countyies = County::get()->pluck('name','id'); // Fetch all records from the `county` table
@@ -71,13 +82,14 @@ class CustomerController extends Controller
                     'address1' => 'required|string|max:255',
                     'address2' => 'nullable|string|max:255',
                     'town' => 'required|string|max:255',
-                    'county' => 'nullable|string|max:255',
+                    //'county' => 'nullable|string|max:255',
+                    'county' => 'required|string|max:255',
                     'country' => 'required|string|max:255',
                     'postcode' => 'required|string|max:15',
                     'phoneNumber' => 'required|string|max:15',
-                    'dobYear' => 'integer',
-                    'dobMonth' => 'integer',
-                    'dobDay' => 'integer',
+                    'dobYear' => 'required|integer',
+                    'dobMonth' => 'required|integer',
+                    'dobDay' => 'required|integer',
                 ];
                 break;
             case 3:
@@ -119,9 +131,8 @@ class CustomerController extends Controller
             // Optionally, you can hash the password here if you're saving it to the database
             //$userData['password'] = hash($userData['password']);
         
-            // Create a new user record or update if needed
             $user = User::create([
-                'role_id' => ($userData['role'] == 'Tutor') ? 2 : 1,
+                'role_id' => ($userData['role'] == 'Tutor') ? config('constants.ROLE.TUTOR') : config('constants.ROLE.STUDENT'),
                 'username' => $userData['username'],
                 'email' => $userData['email'],
                 'password' => Hash::make($userData['password']), 
@@ -131,21 +142,33 @@ class CustomerController extends Controller
                 'address' => trim($userData['address1'] . ' ' . $userData['address2']),
                 'postcode' => $userData['postcode'],
                 'mobile' => $userData['phoneNumber'],
+				'dob_year' => $userData['dobYear'],
+                'dob_month' => $userData['dobMonth'],
+                'dob_day' 	=> $userData['dobDay'],
             ]);
+            
             $student = Student::create([
                 'user_id' => $user->id,
                 'title' => $userData['title'],
                 'town' => $userData['town'],
                 'county' => $userData['county'],
                 'country' => $userData['country'],	
-                'dob_year' => $userData['dobYear'],
-                'dob_month' => $userData['dobMonth'],
-                'dob_day' => $userData['dobDay'],
                 'language' => $userData['language'],
                 'distance' => $userData['distance'],
                 'bio' => $userData['yourbio'],
                 'experience' => $userData['yourexperience'],
             ]);
+            // Send email
+            $userArray = $user->toArray(); 
+
+            // Add username manually (not needed because it's already in $userArray)
+            $userArray['username'] = $user->username;
+            //dd($userArray);
+            $emailSent = sendMail($user->email, $userArray, 'CUSTOMER_REGISTRATION');
+            
+            if($user && $user->role_id == config('constants.ROLE.TUTOR')){
+				$this->stripeAccountCreate($user->id);
+			}
 
             //dd($user);
             // Flash message
@@ -157,8 +180,61 @@ class CustomerController extends Controller
             return redirect()->route('login');
         }
     }
+	
+	public function stripeAccountCreate($user_id){
+		
+		$this->stripeService = new StripeService();
+		
+		$user   = User::where('id',$user_id)->with(['tutor'])->first()->toArray(); 
+		
+		$country= \App\Models\Country::where('id',$user['tutor']['country'])->first();
+		$county	= \App\Models\County::where('id',$user['tutor']['county'])->first();
+		
+		$data = [
+			'first_name'=>$user['firstname'],
+			'last_name' =>$user['lastname'],
+			'email' 	=> $user['email'],
+			'phone'		=> $user['mobile'],
+			'dob_day'	=> $user['dob_day'],
+			'dob_month' => $user['dob_month'],
+			'dob_year'	=> $user['dob_year'],
+			'address_line1' => $user['address'],
+			'city' 			=> (!empty($user['tutor']['town'])) ? $user['tutor']['town'] : 'Eastbourne',
+			'state' 		=> (!empty($county['name'])) ? $county['name'] : 'Avon',
+			'postal_code' 	=> $user['postcode'],
+			'company'		=> $user['username'],
+			'country' 		=> !empty($country) ? $country->code2l : 'GB',
+		];
+		
+		
+		$response	= $this->stripeService->createAccount($data);
+		
+		if($response['status'] == 1){
+			$link_response	= $this->stripeService->accountLinks($response['data']->id);
+			
+			if($link_response['status'] == 1){
+				$paymentGatway = new \App\Models\PaymentGateway();
+				
+				$paymentGatway->user_id			= $user_id;
+				$paymentGatway->account_id		= $response['data']->id;
+				$paymentGatway->email 			= $user['email'];
+				$paymentGatway->currency 		= 'GBP';
+				$paymentGatway->account_link_url= $link_response['data']['url'];
+				$paymentGatway->save();
+				
+				$data['url'] = $link_response['data']['url'];
+				
+				
+				sendMail($user['email'], $data, 'STRIPE_REGISTRATION');
+			}
+		}
+		
+		return redirect()->route('login');
+	}
+	
     public function viewStudent($username)
     {
+       
         $userView = new UserView();
         // Render the user's profile
         $user = User::where('username', $username)->first();
@@ -168,7 +244,10 @@ class CustomerController extends Controller
     public function viewProfile()
     {
         $customer = Auth::user(); 
-        return view('customer.student_dashboard', compact('customer'));
+        
+        $student = $customer->student;
+      
+        return view('customer.student_dashboard', compact('customer','student'));
     }
     public function updateProfile(Request $request)
     {
@@ -181,16 +260,17 @@ class CustomerController extends Controller
 
         // Fetch the logged-in user
         $customer = Auth::user(); 
-
-        // Update the user's profile data
-        $customer->update([
+     
+        $student = $customer->student;
+        // Step 4: Update the Student model (if it exists)
+      if ($student) {
+        $student->update([
             'comments_about_tuition' => $request->input('comments_about_tuition'),
             'availability' => $request->input('availability'),
             'distance' => $request->input('distance'),
         ]);
-
-        // Redirect back with a success message
-        return redirect()->route('customer.profile.view')->with('success', 'Profile updated successfully!');
+    }
+     return redirect()->route('customer.profile.view')->with('success', 'Profile updated successfully!');
     }
     public function showProfileStats()
     {
@@ -259,22 +339,18 @@ class CustomerController extends Controller
         return view('customer.student_password', compact('studpassword'));
     }
     public function studpasswordupdate()
-    {    
-        
+    {   
         $request = request();
         $validatedData = $request->validate([
             'current_password' => 'required',
             'password' => 'required|min:8|confirmed',
         ]);
-        
         // Step 2: Fetch the authenticated user and their associated student
         $user = Auth::user();
-
           // Check if the current password is correct
         if (!Hash::check($validatedData['current_password'], $user->password)) {
             return back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
-
         // Update the password
         $user->update([
             'password' => Hash::make($validatedData['password']),
@@ -308,10 +384,46 @@ class CustomerController extends Controller
     }
     public function show($id)
     {
-        $user = User::findOrFail($id); // Fetch the user by ID
+        
+        $user = User::where('role_id', config('constants.ROLE.STUDENT'))->findOrFail($id);
         $student = $user->student;
-        //dd($user);
-        return view('customer.student_profile', compact('user','student')); // Pass user data to the profile view
+        //$subjects = \App\Models\SubjectStudent::getStudentSubjectByUser($user->id);
+
+        $subjects =  \App\Models\SubjectStudent::with(['subject', 'level'])
+        ->where('user_id', $user->id)
+        ->get();
+
+        // Get all unique levels dynamically
+        $levels = $subjects->pluck('level.title')->unique()->sort()->values()->toArray();
+
+        // Group subjects by name and assign levels
+        $groupedSubjects = [];
+
+        foreach ($subjects as $subject) {
+            $title = $subject->subject->title; // Get subject name
+            $level = $subject->level->title; // Get level title
+
+            if (!isset($groupedSubjects[$title])) {
+                // Initialize subject row with empty levels
+                $groupedSubjects[$title] = [
+                    'title' => $title,
+                ];
+
+                // Set all levels to '-'
+                foreach ($levels as $lvl) {
+                    $groupedSubjects[$title][$lvl] = '-';
+                    
+                }
+            }
+            // Assign checkmark to the correct level
+            $groupedSubjects[$title][$level] = '✔';
+        }
+            $levels =  \App\Models\SubjectStudent::with('level')
+            ->where('user_id', $user->id)->get()->pluck('level.title')->unique()->sort()->values()->toArray();       
+            //dd($levels);
+
+            
+            return view('customer.student_profile', compact('user','student','subjects','levels', 'groupedSubjects')); // Pass user data to the profile view
     }
     public function studmyclients()
     { 
@@ -325,4 +437,26 @@ class CustomerController extends Controller
         $courses_list_level = $this->getCoursesLevel();
         return view('customer.student_privacy', compact('courses_list'));
     }
+    public function noaccess()
+    { 
+       return view('customer.student_noaccess');
+    }
+    public function tags()
+    {
+        $user = Auth::user();
+        $tags = $user->tags ?? []; // Ensure an empty array if no tags exist
+        return view('customer.student_tags', compact('tags'));
+    }
+    public function history()
+    {
+        $user = Auth::user();
+        $dailyViews = getUserViewCounts($user);
+        $user_views = UserView::where('user_id', $user->id)
+            ->with(['user:id,firstname,lastname', 'viewer:id,firstname,lastname,created_at'])
+            ->select('viewer_id')  // Add this to select the viewer_id
+            ->get();
+       //dd( $user_views);
+        return view('customer.student_history', compact('dailyViews', 'user_views', 'user'));
+    }
+
 }

@@ -1,7 +1,10 @@
 <?php
 
-Route::get('/', 'App\Http\Controllers\Admin\AdminController@login')->name('login');
-Route::get('/admin', 'App\Http\Controllers\Admin\AdminController@login')->name('login');
+use App\Http\Controllers\Admin\SubjectController; 
+use App\Http\Controllers\Admin\LevelController;
+
+Route::get('/', 'App\Http\Controllers\Admin\AdminController@login')->name('adlogin');
+#Route::get('/admin', 'App\Http\Controllers\Admin\AdminController@login')->name('login');
 Route::get('/login', 'App\Http\Controllers\Admin\AdminController@login')->name('login');
 Route::post('/loginProcess', 'App\Http\Controllers\Admin\AdminController@loginProcess')->name('loginprocess');	
 Route::get('/forgot-password', 'App\Http\Controllers\Admin\AdminController@forgotPassword')->name('forgotpassword');
@@ -62,7 +65,7 @@ Route::group(['middleware' => ['admin']], function () {
 
 	//users student
 	Route::resource('student', 'App\Http\Controllers\Admin\ManageUserController');
-	Route::post('/student/store', 'App\Http\Controllers\Admin\ManageUserController@store')->name('student.store');
+	#Route::post('/student/store', 'App\Http\Controllers\Admin\ManageUserController@store')->name('student.store');
 	Route::any('delete-student/{id}', 'App\Http\Controllers\Admin\ManageUserController@destroy')->name('delete-student');
 
 	//users tutors
@@ -78,6 +81,13 @@ Route::group(['middleware' => ['admin']], function () {
 	Route::resource('course', 'App\Http\Controllers\Admin\CourseController');
 	Route::resource('courses', 'App\Http\Controllers\Admin\CourseController');
 	Route::any('delete-course/{id}', 'App\Http\Controllers\Admin\CourseController@destroy')->name('delete-course');
+
+
+	//manage subjects
+	Route::resource('subjects', SubjectController::class);
+	
+	//manage levels
+	Route::resource('levels', LevelController::class);
 
 	//manage city course
 	Route::resource('cities', 'App\Http\Controllers\Admin\CityController');

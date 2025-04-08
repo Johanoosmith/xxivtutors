@@ -13,12 +13,36 @@ use App\Models\Transportqfcorder;
 use App\Models\Transportoborder;
 use App\Models\News;
 use App\Models\Course;
+use App\Models\Subject;
+use App\Models\Level;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Notifications\CustomEmailNotification;
+use Illuminate\Support\Facades\Notification;
+
+
+function sendMail($email, $data, $slug){
+	$site_var = getSiteVariable();
+	$data	  = array_merge($data, $site_var);
+	
+	// comment this line because of stream_socket_enable_crypto is not proper set up
+	//Notification::route('mail', $email)->notify(new CustomEmailNotification($email, $data, $slug));
+}
+
+function getSiteVariable(){
+	return [
+		'site_name'=>'MyProTutor',
+		'support_email'=>'support@tutor.com'
+	];
+}
+
 
 function getCityCourses($cityid){
 	return Course::where('status',1)->whereRaw('FIND_IN_SET(?, cities)', [$cityid])->get();
+}
 
+function getCitySubjects($cityid){
+	return Subject::where('status',1)->whereRaw('FIND_IN_SET(?, cities)', [$cityid])->get();
 }
 
 function getUserViewCounts($userId) {
@@ -474,4 +498,200 @@ function getTutorCourses($course_ids){
 		return '<div class="tutor-subject"><span>('.$couse_title_list.')</span></div>';
 	}
     
+}
+
+function getTeachingLocation(){
+	return [
+		1=>"Student's Home",
+		2=>"Tutor's Home",
+		3=>"Online",
+		4=>"Public Place"
+	];
+}
+
+function getBookingStatus(){
+	return [
+		1=>'Pending',
+		2=>'Confirmed',
+		3=>'Cancel',
+	];
+}
+
+function getPaymentStatus(){
+	return [
+		'pending'=>'Pending',
+		'paid'=>'Paid',
+		'cancel'=>'Cancelled',
+		'refund'=>'Refund',
+	];
+}
+
+function getEnquiryStatus(){
+	return [
+		1=>'Running',
+		2=>'Reported',
+		3=>'Closed',
+	];
+}
+
+function getBookingDuration(){
+	$durations = [];
+    for ($hours = 1; $hours <= 8; $hours++) {
+        for ($minutes = 0; $minutes < 60; $minutes += 15) {
+            $totalMinutes = ($hours * 60) + $minutes;
+            $label = $hours . ' hour' . ($hours > 1 ? 's' : '');
+            if ($minutes > 0) {
+                $label .= ' ' . $minutes . ' minutes';
+            }
+            $durations[$totalMinutes] = $label;
+        }
+    }
+	
+	return $durations;
+}
+
+function getStudentPrice($hourly_rate){
+	$percentage = config('constants.SITE.STUDENT_RATE');
+	$increment = ($hourly_rate * $percentage) / 100;
+	$student_price = $hourly_rate + $increment;
+	/* 
+		Example:
+		$hourly_rate = 10
+		ceil  return 13 from 12.5
+		floor return 12 from 12.5
+	*/
+	return floor($student_price);
+}
+
+function getHourList(){
+	$hours = [];
+    
+    for ($i = 0; $i < 24; $i++) {
+        $hourValue = str_pad($i, 2, '0', STR_PAD_LEFT); // Ensures two-digit format (e.g., 01, 02)
+        $hourLabel = ($i < 12) ? "$hourValue am" : (($i == 12) ? "12" : "$hourValue");
+        
+        $hours[$hourValue] = $hourLabel;
+    }
+
+    return $hours;
+}
+
+function getSubjectList(){
+	$subjects = Subject::getSubjectList();
+	return $subjects;
+}
+
+function getLevelList(){
+	$levels = Level::getLevelList();
+	return $levels;
+}
+
+function getCountyNameById($county_id){
+	return \App\Models\County::getCountyNameById($county_id);
+}
+
+function getUserTagged($user_from_id, $user_to_id){
+	return \App\Models\Tag::getUserTagged($user_from_id, $user_to_id);
+}
+
+function getTutorByCounty(){
+	
+	$counties = \App\Models\County::with([
+		'tutors' => function ($query) {
+			$query->whereHas('subject_tutors') // Ensure tutors have subject_tutors
+				  ->with('subject_tutors')
+				  ->distinct();
+		}
+	])->whereHas('tutors.subject_tutors') // Ensure counties have at least one tutor with subject_tutors
+	->get();
+	
+	return $counties;
+}
+
+function getTutorByTown(){
+	$tutor = \App\Models\Tutor::with(['subject_tutors'])
+					->whereHas('subject_tutors')
+					->distinct()
+					->get()
+					->groupBy('town');
+	
+	return $tutor;
+}
+
+function getTutorByTownStatic(){
+	$town_subjects = [
+		'London' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'chemistry' => 'Chemistry'
+		],
+		'Birmingham' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'biology'   => 'Biology'
+		],
+		'Glasgow' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'extra'    => '11+'
+		],
+		'Liverpool' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'french'    => 'French'
+		],
+		'Sheffield' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'spanish'   => 'Spanish'
+		],
+		'Newcastle' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'extra'    => '14+'
+		],
+		'Edinburgh' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'physics'   => 'Physics'
+		],
+		'Leeds' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'history'   => 'History'
+		],
+		'Manchester' => [
+			'maths'         => 'Maths',
+			'english'       => 'English',
+			'engineering'   => 'Engineering'
+		],
+		'Bradford' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'psychology' => 'Psychology'
+		],
+		'Bristol' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'german'    => 'German'
+		],
+		'Coventry' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'arabic'    => 'Arabic'
+		],
+		'Belfast' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'geography' => 'Geography'
+		],
+		'Cardiff' => [
+			'maths'     => 'Maths',
+			'english'   => 'English',
+			'it'        => 'IT'
+		],
+	];
+
+	return $town_subjects;
+	
 }

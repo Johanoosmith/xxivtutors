@@ -5,7 +5,7 @@
 <main>
     <section class="page-banner text-center text-white">
         <div class="banner-img">
-            <img src="assets/images/banner.jpg" alt="">
+            <img src="{{ asset('/storage/tutors/tutor-details-bg.jpg') }}" alt="">
         </div>
         <div class="container">
             <div class="row">
@@ -20,7 +20,7 @@
         <div class="row">
             @include('layouts.student_tabs')
             <div class="col dashboard-content">
-            @if (request('tab') == 'profile' || !request('tab'))
+            @if (request('tab') == 'profile')
                     @if (session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
@@ -43,14 +43,11 @@
                                 <input type="hidden" name="section" value="profile">
                                 <input type="hidden" name="openaccount" id="openaccount" value="yes">
                                 <label class="form-label" for="edit-bio">Comments About Tuition You Are Looking For</label>
-                                <textarea value="{{ request('comments_about_tuition') }}" class="form-control"  rows="30" cols="11" id="comments" maxlength="6500" name="comments_about_tuition" style="height:210px;">
-                                {{ old('comments_about_tuition', $customer->comments_about_tuition ?? '') }}
-                                </textarea>
+                                <textarea value="{{ old('comments_about_tuition', $student->comments_about_tuition ?? '') }}" class="form-control"  rows="30" cols="11" id="comments" maxlength="6500" name="comments_about_tuition" style="height:210px;">{{ old('comments_about_tuition', $student->comments_about_tuition ?? '') }}</textarea>
                             </div>
                             <div class="col-12 form-field">
                                 <label class="form-label" for="edit-availability">Your Availability</label>
-                                <textarea value="{{ request('availability') }}"  name="availability"  class="form-control" id="edit-availability"> {{ old('availability', $customer->availability ?? '') }}
-                                </textarea>
+                                <textarea value="{{ request('availability') }}"  name="availability"  class="form-control" id="edit-availability"> {{ old('availability', $student->availability ?? '') }}</textarea>
                             </div>
 
                             <div class="col-md-6 form-field">
@@ -61,7 +58,7 @@
                                                 5 => '5 miles', 8 => '8 miles', 10 => '10 miles', 12 => '12 miles', 15 => '15 miles', 
                                                 20 => '20 miles', 30 => '30 miles', 50 => '50 miles'] as $key => $value)
                                             <option value="{{ $key }}" 
-                                                {{ (old('distance', $customer->distance ?? 10) == $key) ? 'selected' : '' }}>
+                                                {{ (old('distance', $student->distance ?? 10) == $key) ? 'selected' : '' }}>
                                                 {{ $value }}
                                             </option>
                                         @endforeach
@@ -78,13 +75,13 @@
                             </p>
                         </div>
                     </form>
-                    <div class="title-with-link-wrapper">
+                    <div class="title-with-link-wrapper mt-5">
                         <h3>Who's Found Me?</h3>
                     </div>
                     <p>Here you can view <a href="/users/1092682158946/">your profile</a> 
                     statistics such as the amount of times you profile has been viewed. </p>
 
-                    <div class="title-with-link-wrapper">
+                    <div class="title-with-link-wrapper mt-5">
                         <h3>Overall Statistics</h3>
                     </div>
                     <p>Overall statistics show your weekly, monthly and all time profile views.</p>
@@ -93,36 +90,36 @@
                                 @php
                                     $views = getUserViewCounts(auth()->id());
                                 @endphp
-                        <table class="table table-striped">
+                        <table class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="col-qualification">Total Profile Views</th>
-                                    <th class="col-institute">Views</th>
+                                <th class="col-qualification large-col">Total Profile Views</th>
+                                <th class="col-institute small-col">Views</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="col-qualification"> All Time </td>
-                                    <td class="col-institute">{{$views['all_views'] }}</td>
+                                    <td class="col-qualification large-col"> All Time </td>
+                                    <td class="col-institute small-col">{{$views['all_views'] }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="col-qualification"> Last 7 Days </td>
-                                    <td class="col-institute">{{ $views['last_7_days'] }}</td>
+                                    <td class="col-qualification large-col"> Last 7 Days </td>
+                                    <td class="col-institute small-col">{{ $views['last_7_days'] }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="col-qualification"> This Month  </td>
-                                    <td class="col-institute">{{ $views['current_month'] }}</td>
+                                    <td class="col-qualification large-col"> This Month  </td>
+                                    <td class="col-institute small-col">{{ $views['current_month'] }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="col-qualification">Last Month</td>
-                                    <td class="col-institute">{{ $views['last_2_months'] }}</td>
+                                    <td class="col-qualification large-col">Last Month</td>
+                                    <td class="col-institute small-col">{{ $views['last_2_months'] }}</td>
                                 </tr>
-                            </tbody>
+                                </tbody>
                         </table>
-                        <p>Your Profile has been tagged <strong>0 times</strong>. </p>
                     </div>
 
-                    <div class="title-with-link-wrapper">
+                    <p>Your Profile has been tagged <strong>0 times</strong>. </p>
+                    <div class="title-with-link-wrapper mt-5">
                         <h3>Last 14 Daily Statistics</h3>
                     </div>
                     <p>Below are total daily profile views you've had for the past 14 days, this report includes non-logged in users.</p>
@@ -131,11 +128,11 @@
                                 @php
                                     $views = getUserViewCounts(auth()->id());
                                 @endphp
-                        <table class="table table-striped">
+                        <table class="table  table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="col-qualification">Date</th>
-                                    <th class="col-institute">Views</th>
+                                <th class="col-qualification large-col">Date</th>
+                                <th class="col-institute small-col">Views</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -144,20 +141,20 @@
                                     @endphp
                                     @foreach ($dailyViews as $view)
                                         <tr>
-                                            <td  class="col-qualification">
+                                            <td  class="col-qualification large-col">
                                                 @if (\Carbon\Carbon::parse($view['date'])->isToday())
                                                     Today
                                                 @else
                                                     {{ \Carbon\Carbon::parse($view['date'])->format('m/d/Y') }}
                                                 @endif
                                             </td>
-                                            <td class="col-institute">{{ $view['total_views'] }}</td>
+                                            <td class="col-institute small-col">{{ $view['total_views'] }}</td>
                                         </tr>
                                     @endforeach
                             </tbody>
                         </table>
                     </div>
-            @elseif (request('tab') == 'dashboard')
+            @elseif (request('tab') == 'dashboard' || !request('tab'))
             <div class="dashboard-overview">
                 <div class="row">
                     <div class="col-md-4">
@@ -172,7 +169,7 @@
                         <h4>Your Profile Link:</h4>
                         <p>
                             <a href="{{ route('profile', ['id' => $user->id]) }}" class="text-truncate" target="_blank">
-                                www.example.com/users/{{ $user->id }}
+                            {{ route('profile', ['id' => $user->id]) }}
                             </a>
                         </p>
                     </div>

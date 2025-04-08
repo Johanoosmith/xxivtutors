@@ -68,11 +68,12 @@ class PageController extends Controller {
     public function display(Request $request,$slug){
 		$arr = array();
 		
-         $arr['navigation'] = Category::where('status', 1)
+        $arr['navigation'] = Category::where('status', 1)
             ->orderBy('order', 'asc')
             ->get();
-      	$page= Page::Where('page_url',$slug)->Where('status','1')->first();
-		if(empty($page)){
+      	$page= Page::where('page_url',$slug)->where('status','1')->first();
+
+       if(empty($page)){
            return view('errors.404');
 		}else{
             $pagedata = Pagemeta::where("page_id",$page->id)->where("page_type","page")->get();
@@ -102,7 +103,6 @@ class PageController extends Controller {
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phonenumber' => 'required|string|max:15',
             'message' => 'required|string',
         ]);
 
@@ -146,6 +146,20 @@ class PageController extends Controller {
         $arr['course_id'] = $course_id;
         $query = User::where('role_id', 2)->with('tutor');
         $tutorQuery = Tutor::query(); 
+		
+		if ($request->has('teach_type') && !empty($request->teach_type)) {
+			$subject_tutors = \App\Models\SubjectTutor::query();
+			if(!empty($request->subject_id)){
+				$subject_tutors->where('subject_id',$request->subject_id);
+			}
+			
+			if(!empty($request->level_id)){
+				$subject_tutors->where('level_id',$request->level_id);
+			}
+			
+			$tutor_user_ids = $subject_tutors->get()->pluck('user_id');	
+										
+		}
         
         $user_ids = [];
         $hasTutorFilter = false;

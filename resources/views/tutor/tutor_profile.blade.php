@@ -3,7 +3,7 @@
 
 <section class="page-banner text-center text-white">
             <div class="banner-img">
-                <img src="assets/images/banner.jpg" alt="">
+                <img src="{{ asset('/storage/tutors/tutor-details-bg.jpg') }}" alt="">
             </div>
             <div class="container">
                 <div class="row">
@@ -11,10 +11,12 @@
                     </div>
                 </div>
             </div>
-            
+
         </section>
+        
         <section class="tutor-full-details">
             <div class="container">
+                @include('elements.alert_message')
                 <div class="row">
                     <div class="col col-tutor-info">
                         <div class="tutor-profile">
@@ -23,7 +25,7 @@
                                 @if($user->profile_image)
                                     <img src="{{ Storage::url($user->profile_image) }}" alt="Profile Image" class="profile-image">
                                 @else
-                                    <img src="{{ asset('default-avatar.png') }}" alt="Default Avatar" class="profile-image">
+                                    <img src="{{ asset('storage/profile_images/default.png') }}" alt="Default Avatar" class="profile-image">
                                 @endif
                                 </div>
                             </div>
@@ -64,6 +66,34 @@
                                     </span>
                                 </a>
                             </div>
+                            <div class="student-updatepro">
+                                @php
+                                    $tagged = false;
+                                    if (Auth::check()) {
+                                        $tagged = getUserTagged(Auth::user()->id, $user->id);
+                                    }
+                                @endphp
+
+                                @if($tagged)
+                                    <a href="#" class="user-btn">
+                                        Tutor Tagged
+                                        <span class="svg-wrapper">
+                                            <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.787 6.02812C16.071 5.73644 16.071 5.26355 15.787 4.97187L11.1586 0.218756C10.8746 -0.0729186 10.4142 -0.0729186 10.1301 0.218756C9.84612 0.510433 9.84612 0.983328 10.1301 1.27501L14.2442 5.49999L10.1301 9.72502C9.84612 10.0167 9.84612 10.4895 10.1301 10.7813C10.4142 11.0729 10.8746 11.0729 11.1586 10.7813L15.787 6.02812ZM0 6.24687H15.2727V4.75311H0V6.24687Z" fill="currentColor"/>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                @else
+                                    <a href="{{ route('tutor.tag.create', $user->id)}}" class="user-btn">
+                                        Tag this Tutor
+                                        <span class="svg-wrapper">
+                                            <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.787 6.02812C16.071 5.73644 16.071 5.26355 15.787 4.97187L11.1586 0.218756C10.8746 -0.0729186 10.4142 -0.0729186 10.1301 0.218756C9.84612 0.510433 9.84612 0.983328 10.1301 1.27501L14.2442 5.49999L10.1301 9.72502C9.84612 10.0167 9.84612 10.4895 10.1301 10.7813C10.4142 11.0729 10.8746 11.0729 11.1586 10.7813L15.787 6.02812ZM0 6.24687H15.2727V4.75311H0V6.24687Z" fill="currentColor"/>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                     </div>
                     <div class="col col-tutor-description">
@@ -74,6 +104,146 @@
                         <h2>Detailed information about me:</h2>
                         <p>{{ $tutor->full_description }}</p>
                         <h2>About the lesson</h2>
+
+                        <h5>Subjects</h5>
+                        <br>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#InPlace">In-Place</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#Online">Online</a>
+                            </li>
+                        </ul>
+
+                        
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane fade active show" id="InPlace">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped default-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Subject</th>
+                                                @foreach ($inPlaceSubjects['levels'] as $level)
+                                                    <th>{{ $level }}</th> <!-- Dynamically adding table headers -->
+                                                @endforeach
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($inPlaceSubjects['subjects'] as $subject)
+                                            <tr>
+                                                <td>{{ $subject['title'] }}</td>
+                                                @foreach ($inPlaceSubjects['levels'] as $level)
+                                                    <td>{{ $subject[$level] }}</td> <!-- Display checkmark or '-' dynamically -->
+                                                @endforeach
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="Online">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped default-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Subject</th>
+                                                @foreach ($onlineSubjects['levels'] as $level)
+                                                    <th>{{ $level }}</th> <!-- Dynamically adding table headers -->
+                                                @endforeach
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($onlineSubjects['subjects'] as $subject)
+                                            <tr>
+                                                <td>{{ $subject['title'] }}</td>
+                                                @foreach ($onlineSubjects['levels'] as $level)
+                                                    <td>{{ $subject[$level] }}</td> <!-- Display checkmark or '-' dynamically -->
+                                                @endforeach
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+                        @if($availability->isNotEmpty())
+                            <h5>Availabilities</h5>
+                            <br>
+                            @php
+                                $availability = $availability->toArray();
+                            @endphp
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Mon</th>
+                                        <th>Tue</th>
+                                        <th>Wed</th>
+                                        <th>Thus</th>
+                                        <th>Fri</th>
+                                        <th>Sat</th>
+                                        <th>Sun</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                                    @endphp
+                                @foreach($availability as $avail)
+                                <tr>
+                                    <td>{{ $avail['time_slot'] }}</td>
+                                    @foreach($days as $day)
+                                        @php
+                                            $tutor_days = !empty($avail['days']) ? explode(',', $avail['days']) : [];
+                                        @endphp
+                                    <td>
+                                        @if(in_array($day, $tutor_days)) 
+                                            ✔
+                                        @else
+                                            - 
+                                        @endif
+                                    </td>
+                                    @endforeach
+                                </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+
+                        @if($userQualifications->isNotEmpty())
+                        <br>
+                        <h5>Qualification</h5>
+                        <br>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped default-table">
+                                <thead>
+                                    <tr>
+                                        <th>Degree</th>
+                                        <th>Institute/University</th>
+                                        <th>Grade</th>
+                                        <th>Year</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($userQualifications as $qualification)
+                                    <tr>
+                                        <td>{{ $qualification->qualification->qualification }}</td>
+                                        <td>{{ $qualification->institute_name }}</td>
+                                        <td>{{ $qualification->grade }}</td>
+                                        <td>{{ $qualification->qyear }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        @endif
+
+
+                        <!--
                         <ul class="subject-list">
                             <li class="subject-item">
                                 <a href="#" class="item-link">
@@ -100,6 +270,8 @@
                                 </a>
                             </li>
                         </ul>
+                        -->
+
                     </div>                
                 </div>
             </div>

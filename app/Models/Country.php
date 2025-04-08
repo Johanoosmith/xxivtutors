@@ -20,4 +20,9 @@ class Country extends Model
 
     // Optionally, specify the fields that can be mass-assigned
     protected $fillable = ['name']; // Adjust the fields as per your table columns
+	
+	public static function getList(){
+		return self::orderBy('name','ASC')->get()->pluck('name','id')->toArray();
+	}
+
 }

@@ -10,6 +10,7 @@ class Verification extends Model
     protected $fillable = [
         'user_id',
         'document_type',
+        'dbs_number',
         'firstname_on_doc',
         'lastname_on_doc',
         'othername_on_doc',

@@ -4,7 +4,7 @@
 
 <section class="page-banner text-center text-white">
             <div class="banner-img">
-                <img src="http://192.168.9.32:8001/storage/tutors/tutor-details-bg.jpg" alt="">
+                <img src="{{ url('/storage/tutors/tutor-details-bg.jpg') }}" alt="">
             </div>
             <div class="container">
                 <div class="row">
@@ -23,7 +23,7 @@
                                 @if($tutor->profile_image)
                                 <img src="{{ asset('storage/' . $tutor->profile_image) }}" alt="{{ $tutor->firstname }}" width="200">
                                 @else
-                                <img src="http://192.168.9.32:18212/storage/tutors/businessman-avatar-ilustration-free-vector.jpg" alt="Default Image" width="200">
+                                <img src="{{ url('/storage/tutors/businessman-avatar-ilustration-free-vector.jpg') }}" alt="Default Image" width="200">
                                 @endif
                                 </div>
                             </div>
@@ -69,8 +69,8 @@
                                 </div>
                             </div>
                             <div class="tutor-contact">
-                                <a href="http://192.168.9.32:8001/contact-us" class="user-btn">
-                                    Contact
+                                <a href="{{ url('/contact-us') }}" class="user-btn">
+                                    Contact This Tutor
                                     <span class="svg-wrapper">
                                         <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M15.787 6.02812C16.071 5.73644 16.071 5.26355 15.787 4.97187L11.1586 0.218756C10.8746 -0.0729186 10.4142 -0.0729186 10.1301 0.218756C9.84612 0.510433 9.84612 0.983328 10.1301 1.27501L14.2442 5.49999L10.1301 9.72502C9.84612 10.0167 9.84612 10.4895 10.1301 10.7813C10.4142 11.0729 10.8746 11.0729 11.1586 10.7813L15.787 6.02812ZM0 6.24687H15.2727V4.75311H0V6.24687Z" fill="currentColor"></path>
@@ -84,8 +84,9 @@
                         <h1>About {{ $tutor->firstname }} {{ $tutor->lastname }}</h1>
                         <p>
                         {{ @$tutor->tutor->short_description }}
+                        
                         </p>
-                        <h2>Detailed information about me:</h2>
+                        <h2>Experience:</h2>
                         <p>{{ @$tutor->tutor->full_description }}</p>
                         <h2>About the lesson</h2>
                         <ul class="subject-list">

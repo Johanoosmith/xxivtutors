@@ -15,17 +15,44 @@
                         <input class="form-control form-control-user required" type="text" name="title" id="title"  required>
                     </div>
                 </div>
-                  <!-- Select Level Field -->
-                    <div class="form-group row">
-                    <div class="col-sm-6">
-                        <label for="course">Level</label>
-                        <select name="level" id="course" class="form-control" required>
-                            <option value="beginner">Beginner</option>
-                            <option value="intermediate">Intermediate</option>
-                            <option value="expert">Expert</option>
-                        </select>
-                    </div>
-                    </div>
+				<!-- Select Level Type Field -->
+				<div class="form-group row">
+					<div class="col-sm-6">
+						<label for="level_type">Level Type</label>
+						<select name="level_type" id="LevelType" class="form-control" required>
+							<option value="single">Single</option>
+							<option value="multiple">Multiple</option>
+						</select>
+					</div>
+				</div>
+				
+				
+				<div class="form-group row">
+					<label for="level_type">Include course levels</label>
+					@if(!empty($levels)) 	
+						@foreach($levels as $level_id => $level_title )   
+							@php 									
+								$checked = '';
+							 
+							@endphp
+							@if(!empty($course_levels))			
+							  
+								@if (in_array($level_id, $course_levels))
+									@php 								
+										$checked = 'checked';
+									@endphp
+								@endif
+							@endif
+							
+							<div class="col-sm-3">					
+								<label class="checkbox">		
+									<input type="checkbox" class="cities" name="course_levels[]" value="{{$level_id}}" {{$checked}} /> {{$level_title}}
+								</label>
+							</div>
+							
+						@endforeach
+					@endif
+				</div>
                     
                 <div class="form-group row">
                     <div class="col-sm-4">

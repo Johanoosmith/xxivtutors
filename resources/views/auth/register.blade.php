@@ -10,13 +10,13 @@
 <main>
 	<section class="page-banner text-center text-white register-page-banner">
 		<div class="banner-img">
-			<img src="assets/images/banner.jpg" alt="">
+			<img src="{{ asset('/storage/tutors/tutor-details-bg.jpg') }}" alt="">
 		</div>
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
-					<h1>Register at Tutuition</h1>
-					<p>If you are a tutor or student looking to make full use of Tutuition please fill in the form below. <br>
+					<h1>Register at {{ config('constants.SITE.TITLE') }} </h1>
+					<p>If you are a tutor or student looking to make full use of {{ config('constants.SITE.TITLE') }} please fill in the form below. <br>
 						If any student / tutor viewing this site searches for your criteria, we will give them the opportunity to contact you.
 						</p>
 				</div>

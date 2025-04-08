@@ -354,7 +354,7 @@
 </div>
 
 <div class="browse-subject">
-    <h5 class="mt-5">Manage Explore Your City Section</h5>
+    <h5 class="mt-5">Manage Explore Your Citydfgdfghd Section</h5>
     <hr>
         <div class="form-group row">
         <div class="col-sm-4">
@@ -364,7 +364,7 @@
         </div>
 </div>
 <div class="tutuition-difference">
-    <h5 class="mt-5">Manage Tutuition Difference Section</h5>
+    <h5 class="mt-5">Manage {{ config('constants.SITE.TITLE') }} Difference Section</h5>
     <hr>
         <div class="form-group row">
         <div class="col-sm-4">
@@ -374,7 +374,7 @@
         </div>
         <div class="form-group row">
             <div class="col-sm-12">
-            <h6 class="mt-5">1st Tutuition Difference Section</h6>
+            <h6 class="mt-5">1st {{ config('constants.SITE.TITLE') }} Difference Section</h6>
             </div>
         </div>
         <div class="form-group row">
@@ -413,7 +413,7 @@
 
         <div class="form-group row">
             <div class="col-sm-12">
-            <h6 class="mt-5">2nd Tutuition Difference Section</h6>
+            <h6 class="mt-5">2nd {{ config('constants.SITE.TITLE') }} Difference Section</h6>
             </div>
         </div>
         <div class="form-group row">
@@ -452,7 +452,7 @@
 
         <div class="form-group row">
             <div class="col-sm-12">
-            <h6 class="mt-5">3rd Tutuition Difference Section</h6>
+            <h6 class="mt-5">3rd {{ config('constants.SITE.TITLE') }} Difference Section</h6>
             </div>
         </div>
         <div class="form-group row">
@@ -490,7 +490,7 @@
         </div>
         <div class="form-group row">
             <div class="col-sm-12">
-            <h6 class="mt-5">4th Tutuition Difference Section</h6>
+            <h6 class="mt-5">4th {{ config('constants.SITE.TITLE') }} Difference Section</h6>
             </div>
         </div>
         <div class="form-group row">
@@ -528,7 +528,7 @@
         </div>
 </div>
 <div class="explore-tutuition">
-    <h5 class="mt-5">Manage Explore Tutuition Section</h5>
+    <h5 class="mt-5">Manage Explore {{ config('constants.SITE.TITLE') }} Section</h5>
     <hr>
         <div class="form-group row">
         <div class="col-sm-4">

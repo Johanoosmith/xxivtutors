@@ -56,7 +56,7 @@
 										<div class="form-check">
 											<input class="form-check-input" type="checkbox" value="" id="agreeTerms">
 											<label class="form-check-label" for="agreeTerms">
-												I agree to Tuition's <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+												I agree to Tuition's <a href="https://xxivtutors.24livehost.com/privacy-policy">Terms & Conditions</a> and <a href="https://xxivtutors.24livehost.com/privacy-policy">Privacy Policy</a>
 											</label>
 										</div>
 									</div>

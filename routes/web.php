@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\TutorDetailsController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\MailController;
+
+/* Student */
+use App\Http\Controllers\Customer\BookingController as BookingStudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +32,16 @@ Route::get('/clear-all', function () {
 	return 'All cache cleared';
 });
 
+Route::get('/storage-link', function () {
+	
+	Artisan::call('storage:link');
+	return 'Set the Storage Link';
+});
+
 require __DIR__ . '/auth.php';
+
+Route::get('send-mail', [MailController::class, 'sendEmail']);
+
 
 /** Front-end routes START  */
 Route::get('/', [PageController::class, 'index'])->name('landingpage');
@@ -38,7 +51,7 @@ Route::get('/tutors', [PageController::class, 'tutorFilter'])->name('tutors.tuto
 Route::get('/student', [PageController::class, 'student'])->name('student.student');
 Route::get('/tutors/{id}', [TutorDetailsController::class, 'show'])->name('tutors.show');
 
-Route::get('/{slug}', [PageController::class, 'display'])->name('display');
+
 Route::post('contact-us', [PageController::class, 'store'])->name('contact-us.store');
 
 Route::get('/tutors/course/{id}', [PageController::class, 'tutorsByCourse'])->name('tutors.byCourse');
@@ -47,6 +60,7 @@ Route::get('/tutors/filter/{course_id}', [PageController::class, 'tutorFilter'])
 
 Route::get('/subscribe', [SubscriptionController::class, 'showForm'])->name('subscribe.form');
 Route::post('/subscribe', [SubscriptionController::class, 'store'])->name('subscribe.store');
+
 
 Route::middleware(['auth', 'verified','disablepreventback'])->group(function () {
 	/** public user  details page */
@@ -65,3 +79,10 @@ Route::group(['middleware' => 'disablepreventback'], function () {
 		//});
 	//});
 require __DIR__ . '/customer_routes.php';
+
+
+
+Route::get('/{slug}', [PageController::class, 'display'])
+    ->name('display');
+
+

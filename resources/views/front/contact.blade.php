@@ -61,12 +61,10 @@
                         </div>
                     </div>
                     <div class="col-md-7 col-lg-4 contact-middle">
-                    @if(session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
-                    @endif
-
                     <form class="contact-form" action="{{ route('contact-us.store') }}" method="POST">
                         @csrf
+                        @include('elements.user.alert_message')
+
                         <div class="form-fields">
                             <div class="form-field">
                                 <input type="text" name="firstname" id="firstname" class="form-control"  placeholder="FirstName*" required>

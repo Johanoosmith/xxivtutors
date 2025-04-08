@@ -37,7 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ],
+		],
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
@@ -72,5 +72,8 @@ class Kernel extends HttpKernel
         'guestAdmin' => \App\Http\Middleware\GuestAdmin::class,
         'front' => \App\Http\Middleware\Front::class,
         'disablepreventback' => \App\Http\Middleware\DisablePreventBack::class,
+		
+		'tutor'   => \App\Http\Middleware\TutorRoleVerification::class,
+		'student' => \App\Http\Middleware\StudentRoleVerification::class,
     ];
 }

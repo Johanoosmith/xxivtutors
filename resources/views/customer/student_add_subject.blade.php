@@ -15,7 +15,7 @@
                         <a href="{{ route('customer.student_subject')}}" class="btn btn-yellow btn-small">Back</a>
                     </div>
                     <p>Here you can add a subject, these will be viewable in your profile. It is important that you add each subject you wish to teach otherwise students will not be able to find you while searching.</p>
-                    <p class="instruction bg-success text-white">Please do not enter email addresses/urls/websites/home addresses (or any other information that can allow contact) within your profile. Users who do so will immediately be removed from Tutuition.</p>
+                    <p class="instruction bg-success text-white">Please do not enter email addresses/urls/websites/home addresses (or any other information that can allow contact) within your profile. Users who do so will immediately be removed from {{ config('constants.SITE.TITLE') }}.</p>
                     <form class="edit-form" method="POST" action="{{ route('customer.student_add_subject') }}">
                      @csrf
                         <div class="row">

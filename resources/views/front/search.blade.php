@@ -15,7 +15,12 @@
                         <div class="col-12">
                             <h1 class="page-title">{{$page->search_top_section_title1}}</h1>
                             <p>{{$page->search_top_section_title2}}</p>
-                            <form class="search-form">
+                            
+							<!-- Tutor Filter -->
+							@include('includes/front/site_search')
+							
+							<!--
+							<form class="search-form">
                                 <ul class="search-tabs">
                                     <li class="active">In-person</li>
                                     <li>Online</li>
@@ -45,6 +50,8 @@
                                     </div>
                                 </div>
                             </form>
+							-->
+							
                         </div>
                     </div>
                 </div>
