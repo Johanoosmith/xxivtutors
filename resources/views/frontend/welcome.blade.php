@@ -70,7 +70,7 @@
                     <div class="col content-block">
                         <h3>Unleash Your Inner Genius</h3>
                         <h2>Find the Perfect Tutor</h2>
-                        <p>Tutuition connects students with Home Tutors and Online Tutors</p>
+                        <p>{{ config('constants.SITE.TITLE') }} connects students with Home Tutors and Online Tutors</p>
                         <form class="search-form">
                             <ul class="search-tabs">
                                 <li class="active">In-person</li>
@@ -169,7 +169,7 @@
                                 <img src="{{asset('front/assets/images/icon-3.png')}}" alt="">
                             </span>
                             <h3>Manage Your Lessons</h3>
-                            <p>Manage your lessons through Tutuition using our simple scheduler</p>
+                            <p>Manage your lessons through {{ config('constants.SITE.TITLE') }} using our simple scheduler</p>
                         </div>
                     </div>
                 </div>
@@ -187,7 +187,7 @@
                     </div>
                     <div class="col-lg-5 py-100">
                         <h2 class="section-heading">Search for Online Tutors</h2>
-                        <p>At Tutuition, we understand finding a tutor is not always an easy task. Whether searching for primary, GCSE, A-Level, or an adult learner, we strive to make the process as simple as possible—listing all personal and private tutors closest to you.</p>
+                        <p>At {{ config('constants.SITE.TITLE') }}, we understand finding a tutor is not always an easy task. Whether searching for primary, GCSE, A-Level, or an adult learner, we strive to make the process as simple as possible—listing all personal and private tutors closest to you.</p>
                         <div class="button-group">
                             <a href="#" class="btn btn-green">Find a Tutor</a>
                             <a href="#" class="btn btn-yellow">Become a Tutor</a>
@@ -246,7 +246,7 @@
                         </div>
                     </div>
                     <div class="col listing-block">
-                        <h2 class="section-heading">Explore Your City</h2>
+                        <h2 class="section-heading">Explore Your Citzsfy</h2>
                         <ul class="city-list">
                             <li>Liverpool
                                 <ul>
@@ -341,7 +341,7 @@
             <div class="container small-container">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="section-heading">The Tutuition Difference</h2>
+                        <h2 class="section-heading">The {{ config('constants.SITE.TITLE') }} Difference</h2>
                     </div>
                 </div>
                 <div class="row">
@@ -391,7 +391,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 text-center text-white">
-                        <h2 class="section-heading">Explore Tutuition</h2>
+                        <h2 class="section-heading">Explore {{ config('constants.SITE.TITLE') }}</h2>
                     </div>
                 </div>
                 <div class="row justify-content-center">

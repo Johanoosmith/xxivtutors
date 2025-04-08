@@ -6,7 +6,7 @@
 <main>
 	<section class="page-banner text-center text-white register-page-banner">
 		<div class="banner-img">
-			<img src="http://192.168.9.32:8000/storage/tutors/tutor-details-bg.jpg" alt="">
+			<img src="{{ asset('/storage/tutors/tutor-details-bg.jpg') }}" alt="">
 		</div>
 		<div class="container">
 			<div class="row">
@@ -17,9 +17,9 @@
 			@endif
 				<div class="col-12">
 					<h1>Login</h1>
-					<p>If you are a tutor or student looking to make full use of Tutuition please fill in the form below. <br>
+					<p>If you are a tutor or student looking to make full use of {{ config('constants.SITE.TITLE') }} please fill in the form below. <br>
 						If any student / tutor viewing this site searches for your criteria, we will give them the opportunity to contact you.
-						</p>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -34,8 +34,9 @@
 			<div class="row">
 				<x-auth-session-status class="mb-4" :status="session('status')" />
 				<div class="col-12">
-					<div class="register-form bg-lightgrey">
-						<form method="post" id="loginForm" action="{{ route('login')}}">
+					<div class="login-form-page bg-lightgrey">
+						@include('elements.alert_message')
+						<form method="post" id="loginForm" class="mt-3 mt-sm-5" action="{{ route('login') }}">
 							@csrf
 							<div class="row">
 								<div class="col-md-12 form-field">
@@ -52,20 +53,20 @@
 									<input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
 									<label for="remember">Remember Me</label>
 								</div>
-								<div class="col-12 step-submit">
+								<div class="col-12 step-submit d-flex justify-content-between align-items-center mt-3">
 									<button type="submit" class="btn btn-green next-btn">Login</button>
+									<div class="actionBtn">
+										@if (Route::has('password.request'))
+										<a class="text-link"
+											href="{{ route('password.request') }}">
+											{{ __('Forgot your password?') }}
+										</a>
+										@endif
+									</div>
 								</div>
 							</div>
+							<p class="mt-5 pt-4 text-center border-top">Don't have an account yet? <a class="text-link" href="{{url('/user/register/1')}}" class="signup_link">Sign up</a></p>
 						</form>
-						<div class="actionBtn">
-							@if (Route::has('password.request'))
-							<a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-								href="{{ route('password.request') }}">
-								{{ __('Forgot your password?') }}
-							</a>
-							@endif
-						</div>
-						<p class="signup-info mt-5">Don't have an account yet? <a href="{{ route('register') }}" class="signup_link">Sign up</a></p>
 					</div>
 				</div>
 			</div>

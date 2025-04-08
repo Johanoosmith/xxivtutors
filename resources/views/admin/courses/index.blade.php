@@ -25,11 +25,11 @@
                             </div>
                             <div class="col-md-3">
                                 <!-- Add the Level Filter -->
-                                <select name="level" class="form-control">
+                                <select name="level_id" class="form-control">
                                 <option value="">All Levels</option>
-                                <option value="beginner" {{ request('level') == 'beginner' ? 'selected' : '' }}>Beginner</option>
-                                <option value="intermediate" {{ request('level') == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
-                                <option value="expert" {{ request('level') == 'expert' ? 'selected' : '' }}>Expert</option>
+									@foreach($levels as $level_id => $level_title)
+										<option value="{{ $level_id }}" {{ request('level_id') == $level_id ? 'selected' : '' }}> {{ $level_title }} </option>
+									@endforeach
                                 </select>
                             </div>
                             <div class="col-md-3 fiter-btn-pd">
@@ -70,18 +70,19 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>City</th>
-                            <th>Level</th>
                             <th>Updated</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($courses as $course)
-                        <tr>
-                            <td>{{ $course->id }}</td>
+                        @php
+							$sNo = ($courses->currentPage() - 1) * $courses->perPage() + 1;  /* Increasing Serial Number */
+						@endphp
+						@foreach($courses as $course)
+						<tr>
+                            <td>{{ $sNo++ }}</td>
                             <td>{{ $course->title }}</td>
                             <td>{{ $course->cities }}</td>
-                            <td>{{ ucfirst($course->level) }}</td>
                             <td>{{ $course->updated_at }}</td>
                             <td class="noselect text-right">	
                                 <div class="action-tools">
@@ -105,6 +106,11 @@
                         @endforeach
                     </tbody>
                 </table>
+				
+					@if (count($courses))
+						{!! $courses->withQueryString()->links('pagination::bootstrap-5') !!}
+					@endif
+				
                 @endif
                 </div>
                 </div>
@@ -118,7 +124,7 @@
 </form> -->
 
 
-{{ $courses->links() }}
+
 @endsection
 
 @section('inline-js')

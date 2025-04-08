@@ -11,7 +11,8 @@ class Student extends Model
     protected $table = 'students'; // Optional if table name matches the plural of the model name
 
     protected $fillable = [
-        'user_id', 'title', 'town', 'county', 'country', 'experience', 'rating', 'dob_year', 'dob_month', 'dob_day', 'language', 'distance', 'bio'
+        'user_id', 'title', 'town', 'county', 'country', 'experience', 'rating', 'dob_year', 'dob_month', 'dob_day', 'language', 'distance', 'bio', 'comments_about_tuition'
+        , 'availability'
     ];
 
     // You can also add mutators for password encryption

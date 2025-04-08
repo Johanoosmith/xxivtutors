@@ -33,5 +33,16 @@ class Page extends Model
     {
         return $this->hasMany(Pagemeta::class);
     }
+	
+	public static function getPage($id_or_slug){
+		$query = self::query();
+		if(is_numeric($id_or_slug)){
+			$query->where('id',$id_or_slug);
+		}else{
+			$query->where('page_url',$id_or_slug);
+		}
+		
+		return $query->first();
+	}
     
 }

@@ -8,7 +8,7 @@
 <section class="page-banner text-center text-white with-search">
             <div class="banner-img">
                 
-                <img src="http://192.168.9.32:18212/storage/tutors/tutor-details-bg.jpg" alt="">
+                <img src="{{ asset('/storage/tutors/tutor-details-bg.jpg') }}" alt="">
             </div>
             <div class="container">
                 <div class="row">

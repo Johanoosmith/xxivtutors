@@ -131,6 +131,11 @@ return [
             'path' => storage_path('logs/cron.log'),
             'days' => 14,
         ],
+		'booking' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/booking.log'),
+            'days' => 60,
+        ],
     ],
 
 ];

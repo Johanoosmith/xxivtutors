@@ -11,8 +11,11 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use  SoftDeletes;
+    use SoftDeletes;
     use HasApiTokens, HasFactory, Notifiable;
+
+	protected $appends = ['full_name', 'name_email'];
+	
 
     /**
      * The attributes that are mass assignable.
@@ -61,8 +64,50 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Course::class, 'tutor_specializations', 'tutor_id', 'course_id');
     }
+    public function enquiries()
+    {
+        return $this->hasMany(Enquiry::class, 'sender_id','receiver_id  ');
+    }
     public function courses()
     {
         return $this->belongsToMany(Course::class, 'tutor_specializations', 'tutor_id', 'course_id');
     }
+	
+	public function getFullNameAttribute()
+    {
+        return trim("{$this->firstname} {$this->lastname}");
+    }
+	
+	public function getNameEmailAttribute()
+    {
+        return trim("{$this->firstname} {$this->lastname} - {$this->email}");
+    }
+	
+	public static function getStudentList($field = 'full_name'){
+		$users = self::where('role_id',config('constants.ROLE.STUDENT'))
+						->where('status',1)
+						->orderBy('firstname','ASC')
+						->get();
+		
+		if($field = 'name_email'){
+			$list = $users->pluck('name_email','id');
+		}else{
+			$list = $users->pluck('full_name','id');
+		}
+		
+		return $list;
+	}
+	//http://192.168.9.32:8001/reset-password/8518d5c3e1084c882840a2764095c2a5557f9656779b8354be2e067a09c6749a?email=khelesh.mehra%40dotsquares.com
+	
+	public function sendPasswordResetNotification($token)
+	{
+		$data = [
+			'reset_link'=> url('/reset-password/'.$token.'?email='.$this->email),
+			'firstname'	=> $this->firstname,
+		];
+		
+		
+		sendMail($this->email, $data, 'FORGOT_PASSWORD');
+	} 
+	
 }

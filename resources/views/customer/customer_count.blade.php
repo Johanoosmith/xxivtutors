@@ -3,7 +3,7 @@
 <main>
     <section class="page-banner text-center text-white">
         <div class="banner-img">
-            <img src="assets/images/banner.jpg" alt="">
+            <img src="{{ asset('/storage/tutors/tutor-details-bg.jpg') }}" alt="">
         </div>
         <div class="container">
             <div class="row">

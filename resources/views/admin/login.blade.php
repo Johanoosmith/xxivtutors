@@ -10,7 +10,6 @@
       <div class="row align-items-center text-center">
         <div class="col-md-12">
           <div class="card-body">            
-            <h2 class="h4 f-w-900 pb-2"> Travel</h2>
             <h4 class="mb-3 f-w-400">Admin Login</h4>
             @php
             $formUrl = route('admin.loginprocess');

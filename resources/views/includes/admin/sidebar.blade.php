@@ -60,33 +60,97 @@
                         <span class="pc-mtext">User Management</span>
                         <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
                     </a>
-                <ul class="pc-submenu ">
-                <li class=" nav-item {{ ($currentRoute === 'admin.student.index' || $currentRoute === 'admin.student.edit' || $currentRoute === 'admin.student.create') ? 'active' : '' }} ">
-                    <a class="pc-link" href="{{route('admin.student.index')}}">                    
-                    <span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
-                        <span class="pc-mtext">Student</span>
-                     </a>
-                </li>    
-                <li class=" nav-item {{ ($currentRoute === 'admin.tutors.index' || $currentRoute === 'admin.tutors.edit' || $currentRoute === 'admin.tutors.create') ? 'active' : '' }} ">
-                    <a class="pc-link" href="{{route('admin.tutors.index')}}">                    
-                    <span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
-                        <span class="pc-mtext">Tutors</span>
-                     </a>
-                </li>
-                </ul>
+					<ul class="pc-submenu ">
+						<li class=" nav-item {{ ($currentRoute === 'admin.student.index' || $currentRoute === 'admin.student.edit' || $currentRoute === 'admin.student.create') ? 'active' : '' }} ">
+							<a class="pc-link" href="{{route('admin.student.index')}}">                    
+							<span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
+								<span class="pc-mtext">Student</span>
+							 </a>
+						</li>    
+						<li class=" nav-item {{ ($currentRoute === 'admin.tutors.index' || $currentRoute === 'admin.tutors.edit' || $currentRoute === 'admin.tutors.create') ? 'active' : '' }} ">
+							<a class="pc-link" href="{{route('admin.tutors.index')}}">                    
+							<span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
+								<span class="pc-mtext">Tutors</span>
+							 </a>
+						</li>
+					</ul>
                 </li>  
                 <li class=" nav-item {{ ($currentRoute === 'admin.category.index' || $currentRoute === 'admin.category.edit' || $currentRoute === 'admin.category.create') ? 'active' : '' }} ">
                     <a class="pc-link" href="{{route('admin.category.index')}}">                    
                     <span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
                         <span class="pc-mtext">Manage Category</span>
                      </a>
-                </li>            
-                <li class=" nav-item {{ ($currentRoute === 'admin.course.index' || $currentRoute === 'admin.course.edit' || $currentRoute === 'admin.course.create') ? 'active' : '' }} ">
-                    <a class="pc-link" href="{{route('admin.course.index')}}">                    
-                    <span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
-                        <span class="pc-mtext">Manage Course</span>
-                     </a>
                 </li> 
+
+				@php
+				
+					$course_setting_routes = [
+									'admin.course.index',
+									'admin.course.edit',
+									'admin.course.create',
+									
+									'admin.subjects.index',
+									'admin.subjects.edit',
+									'admin.subjects.create',
+									
+									'admin.levels.index',
+									'admin.levels.edit',
+									'admin.levels.create',
+								];
+								
+					$course_routes = [
+									'admin.course.index',
+									'admin.course.edit',
+									'admin.course.create',
+								];
+								
+					$subject_routes = [
+									'admin.subjects.index',
+									'admin.subjects.edit',
+									'admin.subjects.create',
+								];
+								
+					$level_routes = [
+									'admin.levels.index',
+									'admin.levels.edit',
+									'admin.levels.create',
+								];
+					
+				
+				@endphp
+				
+                <li class="pc-item pc-hasmenu {{ in_array($currentRoute,$course_setting_routes) ? 'active pc-trigger' : '' }}">
+                   <a href="javascript:void(0);" class="pc-link ">
+                        <span class="pc-micon"><i class="material-icons-two-tone">settings</i></span>
+                        <span class="pc-mtext">Manage Course</span>
+                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                    </a>
+					<ul class="pc-submenu ">
+						<li class=" nav-item {{ in_array($currentRoute,$course_routes) ? 'active' : '' }} ">
+							<a class="pc-link" href="{{route('admin.course.index')}}">                    
+							<span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
+								<span class="pc-mtext">Course</span>
+							 </a>
+						</li>    
+						<li class=" nav-item {{ in_array($currentRoute,$subject_routes) ? 'active' : '' }} ">
+							<a class="pc-link" href="{{route('admin.subjects.index')}}">                    
+							<span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
+								<span class="pc-mtext">Subject</span>
+							 </a>
+						</li>
+						
+						<li class=" nav-item {{ in_array($currentRoute,$level_routes) ? 'active' : '' }} ">
+							<a class="pc-link" href="{{route('admin.levels.index')}}">                    
+							<span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
+								<span class="pc-mtext">Level</span>
+							 </a>
+						</li>
+						
+					</ul>	
+					 
+					 
+                </li>
+				
                 <li class=" nav-item {{ ($currentRoute === 'admin.cities.index' || $currentRoute === 'admin.cities.edit' || $currentRoute === 'admin.cities.create') ? 'active' : '' }} ">
                     <a class="pc-link" href="{{route('admin.cities.index')}}">                    
                     <span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>

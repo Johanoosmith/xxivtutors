@@ -3,7 +3,7 @@
 
 <section class="page-banner text-center text-white">
             <div class="banner-img">
-                <img src="assets/images/banner.jpg" alt="">
+                <img src="{{ asset('/storage/tutors/tutor-details-bg.jpg') }}" alt="">
             </div>
             <div class="container">
                 <div class="row">
@@ -15,6 +15,7 @@
         </section>
         <section class="tutor-full-details">
             <div class="container">
+                @include('elements.alert_message')
                 <div class="row">
                     <div class="col col-tutor-info">
                         <div class="tutor-profile">
@@ -23,7 +24,7 @@
                                 @if($user->profile_image)
                                     <img src="{{ Storage::url($user->profile_image) }}" alt="Profile Image" class="profile-image">
                                 @else
-                                    <img src="{{ asset('default-avatar.png') }}" alt="Default Avatar" class="profile-image">
+                                    <img src="{{ asset('storage/profile_images/default.png') }}" alt="Default Avatar" class="profile-image">
                                 @endif
                                 </div>
                             </div>
@@ -44,6 +45,10 @@
                                 <p><strong>Last Login: </strong> {{ $user->last_login ? $user->last_login->diffForHumans() : 'Never logged in' }}</p>
                                 <p><strong>Home Town: </strong>{{ $student->town }}</p>
                             </div>
+
+                           
+
+                            @if (Auth::check() && Auth::user()->id == $user->id)
                             <div class="student-editprofile">
                                 <a href="{{ route('customer.personalinfo')}}" class="user-btn">
                                 Edit Your Profile
@@ -64,120 +69,82 @@
                                     </span>
                                 </a>
                             </div>
+                            @endif
+                            
+                            <div class="student-updatepro">
+                                @php
+                                    $tagged = false;
+                                    if (Auth::check()) {
+                                        $tagged = getUserTagged(Auth::user()->id, $user->id);
+                                    }
+                                @endphp
+
+                                @if($tagged)
+                                    <a href="#" class="user-btn">
+                                        Student Tagged
+                                        <span class="svg-wrapper">
+                                            <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.787 6.02812C16.071 5.73644 16.071 5.26355 15.787 4.97187L11.1586 0.218756C10.8746 -0.0729186 10.4142 -0.0729186 10.1301 0.218756C9.84612 0.510433 9.84612 0.983328 10.1301 1.27501L14.2442 5.49999L10.1301 9.72502C9.84612 10.0167 9.84612 10.4895 10.1301 10.7813C10.4142 11.0729 10.8746 11.0729 11.1586 10.7813L15.787 6.02812ZM0 6.24687H15.2727V4.75311H0V6.24687Z" fill="currentColor"/>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                @else
+                                    <a href="{{ route('tutor.tag.create', $user->id)}}" class="user-btn">
+                                        Tag this Student
+                                        <span class="svg-wrapper">
+                                            <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.787 6.02812C16.071 5.73644 16.071 5.26355 15.787 4.97187L11.1586 0.218756C10.8746 -0.0729186 10.4142 -0.0729186 10.1301 0.218756C9.84612 0.510433 9.84612 0.983328 10.1301 1.27501L14.2442 5.49999L10.1301 9.72502C9.84612 10.0167 9.84612 10.4895 10.1301 10.7813C10.4142 11.0729 10.8746 11.0729 11.1586 10.7813L15.787 6.02812ZM0 6.24687H15.2727V4.75311H0V6.24687Z" fill="currentColor"/>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                @endif
+                            </div>
+                            
                         </div>
                     </div>
                     <div class="col col-tutor-description">
                         
-                    <div class="profileleftside" style="clear: left;"> 
-                        <div id="profilesubjectheader">
-                        <div id="subjecttabonetoone" class="subjecttabitem subjecttabitemselected">
-                        <a href="javascript:searchboxshow('subjecttab' ,'onetoone')">Subjects</a>
-                        </div>
-                        </div>
-                        <div class="card">
-                        <div>
-                        <span class="mobno" style="display:block;padding-top:7px;padding-right:15px; float:right;">
-                        <a href="/members/my-subjects.asp">Edit Subject</a>
-                        </span>
-                        <div id="subjectdefault" style="display:block;">
-                        <div>
-                        <input type="hidden" value="0" id="subjecttag1" name="subjecttag1">
-                        <input type="hidden" value="0" id="subjecttag2" name="subjecttag2"> 
-                        <div class="cardtable tablewrap"> 
-                        <table class="table profilesubjectstattable">
-                        <tbody>
-                        <tr>
-                        <td class="marksub" style="width:193px;background:#fff;"></td>
-                        <td class="mobno"><strong>Primary</strong></td>
-                        <td class="mobno"><strong>KS3</strong></td>
-                        <td class="mobno"><strong>GCSE</strong></td>
-                        <td class="mobno"><strong>A-Level</strong></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        </tr><tr>
-                        <td class="marksub" width="193px">
-                        <a class="subjecttag" onclick="showcontent('',2)">Maths</a>
-                        </td>
-                        <td class="mobno fadedrate">-</td>
-                        <td><img src="/images/tick.png" style="width: 15px;"></td>
-                        <td class="mobno fadedrate">-</td>
-                        <td class="mobno fadedrate">-</td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        <td style="display:none"></td>
-                        </tr>
-                        <tr class="mobno subjectdata" id="targetrow2" style="display:none"><td colspan="5" height="0"><div id="target2"><p>See more: <a href="/maths.asp">Maths Tutors</a>, <a href="/subjects/maths/levels/key-stage-3/">KS3 Maths Tutors</a></p></div></td><td></td></tr></tbody></table></div></div><div class="mobyes"><p style="margin-top: 30px;">Related Links: <a href="/maths.asp">Maths Tutors</a>, <a href="/subjects/maths/levels/key-stage-3/">KS3 Maths Tutors</a></p></div></div></div><div id="subjectonline" style="display:none;"></div></div><div id="subjectlessons" style="display:none"></div><div class="card"> <div class="cardheader">
-                                    <h2 class="cardtitle">Information about Dave&nbsp;&nbsp;[<a href="/members/edit-info.asp">edit</a>] </h2> </div><div class="cardcontent"> <p><strong style="color: #7aa3e6;">Willing to travel: </strong>10 miles</p>Contact this  Student<a class="btn btnsuccess  mobno tabno" rel="nofollow" href="/enquiry.asp?to=6498512862901">Contact this  Student</a>
+                        <div class="studnet-info">
+                            <h2>Information about {{ $user->firstname }} {{ $user->lastname }} </h2>
+                            <p><strong>Willing to travel:</strong> {{ $student->distance }} miles</p>
 
+                            <h5>Subjects</h5>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped default-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Subject</th>
+                                            @foreach ($levels as $level)
+                                                <th>{{ $level }}</th> <!-- Dynamically adding table headers -->
+                                            @endforeach
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($groupedSubjects as $subject)
+                                            <tr>
+                                                <td>{{ $subject['title'] }}</td>
+                                                @foreach ($levels as $level)
+                                                    <td>{{ $subject[$level] }}</td> <!-- Display checkmark or '-' dynamically -->
+                                                @endforeach
+                                            </tr>
+                                            @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!--<p><strong>Contact this Student:</strong></p>-->
+                            
                         </div>
-
-                        <div style="clear:both;"> <a href="/members/edit-info.asp" class="btn green small" style="margin-top: 10px;">Edit Your Profile </a></div><br>
-                        
-                        <div id="fixedminiprofile" style="top: 0px;">
-                        <div class="container">
-                        <div class="fixedminiprofileimage"> <img alt="Dave" class="profileimage" style="float:left; width:60px  !important;" src="/images/no-image-medium2.png"></div> <div class="fixedminiprofilename"><strong>Dave</strong><br></div><div class="fixedminiprofilebutton"><div class="profileoptions " style="border: 0; padding: 0; width: 100%;"><a class="btn btnsuccess  " rel="nofollow" style="display: inline-block; !important; margin: 0 auto;" href="/enquiry.asp?to=6498512862901">Contact<span class="mobno"> this</span> Student</a></div>
+                        <!--
+                        <div class="contact-student card card-body">
+                            <div class="button-group">
+                                <a href="{{route('customer.personalinfo')}}" class="btn btn-yellow">Edit Your Profile</a>
+                                <a href="{{route('customer.noaccess')}}" class="btn btn-green">Contact This Student</a></h3>
+                                <a href="{{ route('customer.tag.create', $user->id)}}" class="btn btn-yellow">Tag This Student</a>
+                                <a href="" class="btn btn-pink">Report Inappropriate Content </a>
+                            </div>                            
                         </div>
-                        <div class="fixedminiprofilelogo mobno"><img src="/images/logo.png" style="height: 40px;"></div>
-                        </div>
-                        </div>
-
-                        <h3 style="color: #555;">Nearby Locations</h3><span class="linktag"><a href="/locations/stockport/">Stockport</a></span><span class="linktag"><a href="/locations/oldham/">Oldham</a></span><span class="linktag"><a href="/locations/manchester/">Manchester</a></span><span class="linktag"><a href="/locations/rochdale/">Rochdale</a></span><span class="linktag"><a href="/subjects/maths/locations/manchester/">Manchester Maths Tutors</a></span><span class="linktag"><a href="/subjects/maths/locations/huddersfield/">Huddersfield Maths Tutors</a></span><span class="linktag"><a href="/subjects/maths/locations/sale/">Sale Maths Tutors</a></span><span class="linktag"><a href="/subjects/maths/locations/rochdale/">Rochdale Maths Tutors</a></span><span class="linktag"><a href="/subjects/maths/locations/stockport/">Stockport Maths Tutors</a></span><span class="linktag"><a href="/subjects/maths/locations/salford/">Salford Maths Tutors</a></span><span class="linktag"><a href="/subjects/maths/locations/oldham/">Oldham Maths Tutors</a></span><span class="linktag"><a href="/subjects/maths/locations/halifax/">Halifax Maths Tutors</a></span>	
-                    </div> 
-
-
-
-<div style="clear:both;"></div> </div>
-                        <ul class="subject-list">
-                            <li class="subject-item">
-                                <a href="#" class="item-link">
-                                    <span class="item-icon">
-                                        <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M23.0767 0.923096H16.8244C14.7321 0.923096 12.8982 2.31386 12.3321 4.32002L8.63977 17.4031C8.34439 18.4369 6.90439 18.4862 6.53516 17.4769L4.09824 10.6954C3.59362 9.28002 2.38747 8.23387 0.922852 7.92617" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M17.4766 10.6216L23.0766 18.2277" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M23.0766 10.6216L17.4766 18.2277" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </span>
-                                    <span>All Levels</span>
-                                </a>
-                            </li>
-                            <li class="subject-item">
-                                <a href="#" class="item-link">
-                                    <span class="item-icon">
-                                        <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M23.0767 0.923096H16.8244C14.7321 0.923096 12.8982 2.31386 12.3321 4.32002L8.63977 17.4031C8.34439 18.4369 6.90439 18.4862 6.53516 17.4769L4.09824 10.6954C3.59362 9.28002 2.38747 8.23387 0.922852 7.92617" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M17.4766 10.6216L23.0766 18.2277" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M23.0766 10.6216L17.4766 18.2277" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </span>
-                                    <span>Maths</span>
-                                </a>
-                            </li>
-                        </ul>
+                        -->                        
                     </div>
                 </div>
             </div>

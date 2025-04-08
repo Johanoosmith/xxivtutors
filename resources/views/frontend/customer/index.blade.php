@@ -263,7 +263,7 @@
                             <svg class="icon">
                                 <use xlink:href="#study"></use>
                             </svg>
-                            My Suggested Students</a></li>
+                            My Suggested Tutors</a></li>
                         <li><a href="#">
                             <svg class="icon">
                                 <use xlink:href="#camera"></use>

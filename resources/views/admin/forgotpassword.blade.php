@@ -9,13 +9,11 @@
 			<div class="row align-items-center text-center">
 				<div class="col-md-12">
 					<div class="card-body">
-						<h2 class="h4 f-w-900 pb-2"> Travel</h2>
 						<h4 class="mb-3 f-w-400">Forgot Your Password?</h4>
 						<p class="mb-4">We get it, stuff happens. Just enter your email address below
 							and we'll send you a link to reset your password!</p>
 						
 						<form id="forgetpassform" class="user" method="POST" action="{{ route('password.email') }}">
-							@csrf
 							@csrf
 							<div class="input-group mb-3">
 								<span class="input-group-text"><i data-feather="mail"></i></span>

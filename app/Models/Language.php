@@ -18,4 +18,10 @@ class Language extends Model
      * @var array
      */
     protected $guarded = ['id'];
+
+    public function tutors()
+    {
+        return $this->hasMany(Tutor::class, 'language');
+    }
+
 }

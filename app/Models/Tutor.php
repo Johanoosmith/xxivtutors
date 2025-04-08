@@ -24,4 +24,13 @@ class Tutor extends Authenticatable
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function language()
+    {
+        return $this->belongsTo(Language::class, 'name');
+    }
+
+    public function subject_tutors()
+    {
+        return $this->belongsToMany(Subject::class, 'subject_tutors', 'user_id', 'subject_id');
+    }
 }

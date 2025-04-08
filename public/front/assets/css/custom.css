@@ -1,0 +1,175 @@
+.chat-container {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.chat-box {
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+}
+
+.message-container {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.message {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.message.left {
+    justify-content: flex-start;
+}
+
+.message.right {
+    justify-content: flex-end;
+}
+
+.message-content {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    position: relative;
+}
+
+.message.left .message-content {
+    background: #e6e6e6;
+    color: #333;
+    border-top-left-radius: 0;
+}
+
+.message.right .message-content {
+    background: #4BB4EF;
+    color: white;
+    border-top-right-radius: 0;
+}
+
+.timestamp {
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+    opacity: 0.6;
+    text-align: right;
+}
+
+.input-container {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background: #fff;
+}
+
+.input-container input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    border-radius: 5px;
+    background: #f0f2f5;
+}
+
+.input-container button {
+    background: #007bff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    color: white;
+    margin-left: 10px;
+}
+
+.input-container button:hover {
+    background: #0056b3;
+}
+
+input[readonly] {
+    background-color: #f0f0f0; /* Light gray background */
+    color: #333; /* Darker text color */
+    border: 1px solid #ccc; /* Light gray border */
+    cursor: not-allowed; /* Show disabled cursor */
+}
+
+.btn.btn-danger{
+    background: #dc3545;
+    color:#fff;
+}
+.btn.btn-info{
+    background: #0dcaf0;
+    color:#000;
+}
+
+
+
+/* Full Calender JS Start */
+.fc-toolbar .fc-center{
+    vertical-align: middle;
+  }
+  .fc-toolbar{
+    margin-bottom: 10px;
+  }
+  .fc-toolbar button{
+    background: #0471AE;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 40px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.4s;
+    padding: 0;
+  }
+  .fc-toolbar button.fc-prev-button{
+    margin-right: 7px;
+  }
+  .fc-icon-left-single-arrow:after, .fc-icon-right-single-arrow:after{
+    top: 0;
+  }
+  .full-calender .dashboard-content .fc-view-container a:not(.btn){
+    color: #fff;
+  }
+  .full-calender .dashboard-content .fc-event{
+    background: #4BB4EF;
+    padding: 5px;
+  }
+  .fc th{
+    background: #4BB4EF;
+    color: #fff;
+    padding: 4px;
+  }
+  .fc-basic-view .fc-day-number{
+    text-align: right;
+    padding: 5px;
+  }
+  .fc-col-header-cell-cushion{
+    color:#fff;
+  }
+/* Full Calender JS END */
+
+.fc .fc-header-toolbar .fc-button-primary{
+    padding: 0;
+}
+.fc-day .bg-secondary{
+    background: var(--primary-color) !important;
+}
+.fc-day .fc-daygrid-event-dot{
+    border-color: #fff !important;
+}
+.fc .fc-daygrid-week-number{
+    background: var(--primary-color) !important;
+}
+.dashboard-content a.fc-col-header-cell-cushion{
+    color: var(--color-1);
+}
+.dashboard-content .fc .fc-daygrid-week-number{
+    background: var(--primary-color) !important;
+    color: var(--color-1);
+}

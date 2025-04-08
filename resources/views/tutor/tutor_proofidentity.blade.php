@@ -9,14 +9,14 @@
                     <p>To become verfied you must upload proof of identification. This must be a clear photo of your passport with all 4 corners visible. 
                         Your data will be encrypted and held securely, and they will only be viewed by our admin team. We are registered with the Information
                          Commissioner`s Office.</p>
-                            <!-- @if(session('success'))
+                           @if(session('success'))
                             <p style="color: green;">{{ session('success') }}</p>
                             @else(session('error'))
                             <p style="color: red;">{{ session('error') }}</p>
-                            @endif -->
+                            @endif
                             <form class="edit-form" action="{{ route('verification.submit') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @include('elements.user.alert_message')
+                                <!-- @include('elements.user.alert_message') -->
                                 <div class="row">
                                     <!-- Identification Type -->
                                     <div class="col-md-6 form-field">

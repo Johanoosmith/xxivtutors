@@ -6,7 +6,7 @@
 <main>
 	<section class="page-banner text-center text-white register-page-banner">
 		<div class="banner-img">
-			<img src="assets/images/banner.jpg" alt="">
+			<img src="{{ asset('/storage/tutors/tutor-details-bg.jpg') }}" alt="">
 		</div>
 		<div class="container">
 			<div class="row">
@@ -30,13 +30,13 @@
 	<section class="section pt-0">
 		<div class="container">
 			<div class="row">
-				<x-auth-session-status class="mb-4" :status="session('status')" />
+				<!--<x-auth-session-status class="mb-4" :status="session('status')" />-->
 				<div class="col-12">
-					<div class="register-form bg-lightgrey">
-					<x-auth-session-status class="mb-4 successMsg" :status="session('status')" />
-					    <form method="POST" id="forgotForm" action="{{ route('password.email') }}">
+					<div class="login-form-page bg-lightgrey">
+					<!--<x-auth-session-status class="mb-4 successMsg" :status="session('status')" />-->
+						@include('elements.alert_message')
+					    <form method="POST" id="forgotForm" class="mt-3 mt-sm-5" action="{{ route('password.email') }}">
 							@csrf
-							<br/>
 							<div class="row">
 								<div class="col-md-12 form-field">
 									<label class="form-label" for="email">Username / Email</label>
@@ -51,8 +51,9 @@
 								    <button type="submit" class="btn btn-green next-btn greenBtn"> {{ __('Email Password Reset Link') }}</button>
 								</div>
 							</div>
+							<p class="mt-5 pt-4 text-center border-top">Don't have an account yet? <a href="{{url('/user/register/1')}}" class="text-link">Sign up</a></p>
 						</form>
-						<p class="signup-info mt-5">Don't have an account yet? <a href="{{ route('register') }}" class="signup_link">Sign up</a></p>
+						
 					</div>
 				</div>
 			</div>
@@ -64,32 +65,5 @@
 @endsection
 @section('inline-js')
 
-<style>
-.signup-info {
-	background: rgb(12 20 35 / 87%);
-	padding: 7px;
-	color: #fff;
-	text-align: center;
-}
-.signup_link {
-	color: #53AE12;
-	text-decoration: underline;
-	font-weight: bold;
-}
-.signup_link:hover {
-	color: #fff;
-}
-</style>
-<script>
-	$(document).ready(function () {
-		$("#forgotForm").validate({			
-			rules: {
-				email: {
-					required: true,
-					email: true
-				}				
-			},
-		});
-	});
-</script>
+
 @endsection

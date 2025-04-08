@@ -12,6 +12,8 @@
     <script type="text/javascript">
         var APP_URL = {!! json_encode(url('/')) !!};
         var MEDIA_URL = {!! json_encode(url('public/')) !!};
-    </script>
+		let SITE_CURRENCY = "{{ config('constants.CURRENCY_SYMBOL') }}";
+		let STUDENT_RATE_PERCENT = "{{ config('constants.SITE.STUDENT_RATE') }}";
+	</script>
 
     

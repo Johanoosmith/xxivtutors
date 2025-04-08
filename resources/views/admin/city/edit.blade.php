@@ -7,15 +7,13 @@
 			<h5>Edit City</h5>
 		</div>
        <div class="card-body">
-            {{ html()->modelForm($city,'PATCH',route('admin.cities.update',$city->id))->class('validatedForm')->open() }}
-            {{ csrf_field() }}
-                <div class="form-group row">
+            <form action="{{ route('admin.cities.update', $city->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+               <div class="form-group row">
                     <div class="col-sm-6">
                         <label class="form-label">City <span class="required" aria-required="true">*</span></label>
-                        {{ html()->text('name')->class('form-control form-control-user required') }}
-                        @if ($errors->has('name'))
-                            <span class="error" role="alert">{{ $errors->first('name') }}</span>
-                        @endif
+                        <input type="text" class="form-control" name="name" value="{{ old('name', $city->name) }}" required>
                     </div>
                 </div>               
                 <div class="form-group row">

@@ -20,6 +20,18 @@ class UserView extends Model
         'view',
         'date',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function viewer()
+    {
+        return $this->belongsTo(User::class, 'viewer_id');
+    }
+
+
     public function setViewCount($user_id)
     {
         $authUser = Auth::user();

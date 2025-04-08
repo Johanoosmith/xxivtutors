@@ -20,7 +20,7 @@ class SubscriptionController extends Controller
         $existingSubscriber = Subscription::where('email', $request->email)->first();
         if ($existingSubscriber) {
             // Email already registered, redirect back with an error message
-            return redirect()->back()->with('error', 'This email address is already registered.');
+            return redirect()->back()->with('s_error', 'This email address is already registered.');
         }
     
         // If email doesn't exist, proceed with saving the new subscriber
@@ -32,7 +32,7 @@ class SubscriptionController extends Controller
     
         // Redirect back to the same page with a success message and retain the form inputs
         return redirect()->back()
-                         ->with('success', 'Thank you for subscribing!')
+                         ->with('s_success', 'Thank you for subscribing!')
                          ->withInput();  // This will retain the form values
     }
     

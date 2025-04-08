@@ -17,7 +17,9 @@
          
         <!-- Content Wrapper. Contains page content -->
         <div class="pc-container">
+			
             <div class="pcoded-content">              
+				@include('admin.elements.alert_message')
                 @yield('content')        
             </div>
         </div>
