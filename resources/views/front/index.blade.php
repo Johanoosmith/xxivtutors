@@ -158,7 +158,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col map-block">
-                        <div class="map-wrapper">
+                        <div class="map-wrapper kk">
                             <img class="img-fluid" src="{{asset('front/assets/images/map.png')}}" alt="map">
                         </div>
                     </div>
