@@ -2,15 +2,7 @@
 
 @extends('layouts.admin')
 @section('content')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+ 
     <div class="card">
         <div class="card-header">
             <h5>Edit Tutor</h5>
@@ -79,6 +71,7 @@
                     @endif
                 </div>
             </div>
+           
             <div class="form-group row">
                 <div class="col-sm-4">
                     <label class="form-label">Contact<span class="required">*</span></label>
@@ -103,7 +96,7 @@
                 <div class="form-group row">
                 <div class="col-sm-4">
                     <label for="rating">Rating</label>
-                    {{ html()->number('rating')->class('form-control')->attribute('step', '0.1')->value($tutor->rating ?? '')->placeholder('e.g., 4.5') }}
+                    {{ html()->number('rating')->class('form-control')->attribute('step', '0.1')->value($tutor->tutor->rating ?? '')->placeholder('e.g., 4.5') }}
                 </div>
             </div>
         </div>

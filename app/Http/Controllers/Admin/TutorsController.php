@@ -136,7 +136,6 @@ class TutorsController extends Controller
             'rating' => $validatedData['rating'],
             'user_id' => $user->id,
         ]);
-    
         // if ($request->has('specialization')) {
         //     $tutor->specialization()->sync($validatedData['specialization']);
         // }
