@@ -75,7 +75,7 @@ Route::group(['middleware' => ['admin']], function () {
 	//users category
 	Route::resource('category', 'App\Http\Controllers\Admin\CategoryController');
 	Route::resource('categories', 'App\Http\Controllers\Admin\CategoryController');
-	Route::any('delete-tutors/{id}', 'App\Http\Controllers\Admin\CategoryController@destroy')->name('delete-tutors');
+	Route::any('delete-cate/{id}', 'App\Http\Controllers\Admin\CategoryController@destroy')->name('delete-cat');
 
 	//manage course
 	Route::resource('course', 'App\Http\Controllers\Admin\CourseController');

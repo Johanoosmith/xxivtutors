@@ -33,8 +33,8 @@
                                 <!-- Add the Status Filter -->
                                 <select name="status" class="form-control">
                                     <option value="">Select Status</option>
-                                    <option value="active" {{ request()->status == 'active' ? 'selected' : '' }}>Active</option>
-                                    <option value="inactive" {{ request()->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                    <option value="1" {{ request()->status == '1' ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ request()->status == '0' ? 'selected' : '' }}>Inactive</option>
                                 </select>
                             </div>
                             <div class="col-md-3 fiter-btn-pd">
@@ -77,7 +77,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Contact</th>
-                <th>Specialization</th>
+                {{-- <th>Specialization</th> --}}
                 <th>Status</th>
                 <th class="text-right">Action</th>
             </tr>
@@ -89,15 +89,15 @@
                     <td>{{ $tutor->firstname }} {{ $tutor->lastname }}</td>
                     <td>{{ $tutor->email }}</td>
                     <td>{{ $tutor->mobile}}</td>
-					<td>
-                        @if($tutor->specialization->isNotEmpty())
-                            @foreach($tutor->specialization as $course)
-                                <span>{{ $course->title }}</span>@if(!$loop->last), @endif
-                            @endforeach
-                        @else
-                            <span>No Courses Assigned</span>
-                        @endif
-                    </td>
+					{{-- <td>
+                        @if ($tutor->tutor->specialization)
+                        @foreach ($tutor->tutor->specialization as $course)
+                            <span class="badge bg-primary">{{ $course->title }}</span>
+                        @endforeach
+                    @else
+                        <span class="text-muted">No Specializations</span>
+                    @endif
+                    </td> --}}
                     <td>
                         @if($tutor->status == 1)
                             <label class="badge bg-light-success">{{ ucfirst('active') }}</label>  <!-- Green badge for active status -->

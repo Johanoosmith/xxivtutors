@@ -39,18 +39,24 @@
                 
             </div>
             <div class="form-group row">
-                    <div class="col-sm-4">                    
-                            <label class="form-label" for="address_section_address_img14">Profile Image</label>
-                            <input type="file" name="profile_image" id="profile_image" class="form-control">
-                            <?php /*<input type="file" name="pagemeta[address_section_address_img14]" id="address_section_address_img14" class="form-control" accept="image/*"> */ ?>
-                    </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="profile_image">Profile Image</label>
+                    <input type="file" name="profile_image" id="profile_image" class="form-control">
+                
+                    @if(!empty($tutor->profile_image) && isset($tutor->profile_image))
+                        <div class="mt-2">
+                            <img src="{{ asset('storage/' . $tutor->profile_image ?? '') }}" alt="Profile Image" width="120" class="img-thumbnail">
+                        </div>
+                    @endif
+                </div>
+                
                     <div class="col-sm-4">
                         <label class="form-label">Email<span class="required">*</span></label>   
                         {{ html()->text('email')->class('form-control form-control-user required') }}  
                     </div>
                     
                     <div class="col-sm-2 mt-3">
-                            @if ($tutor->tutor->profile_image)
+                            @if (!empty($tutor->tutor->profile_image)&& isset($tutor->profile_image))
                                 <img src="{{ asset('storage/' . $tutor->tutor->profile_image) }}" alt="Profile Image" width="50px">
                             @endif
                     </div>
@@ -101,7 +107,7 @@
                 </div>
             </div>
         </div>
-            <div class="qualification">
+            {{-- <div class="qualification">
                 <h5 class="mt-5">Qualifications Section</h5>
                 <hr> 
                 <div class="form-group row">
@@ -124,7 +130,7 @@
                         {{ html()->text('tutor[qualification_4]')->class('form-control form-control-user required') }} 
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="other-info">
             <h5 class="mt-5">Other Information</h5>
             <hr>
@@ -133,12 +139,12 @@
                         <label class="form-label">Experience<span class="required">*</span></label>
                         {{ html()->text('tutor[experience]')->class('form-control form-control-user required') }} 
                     </div>
-                    <div class="col-sm-4">
+                    {{-- <div class="col-sm-4">
                         <label class="form-label">Rate<span class="required">*</span><h8>(hr)</h8></label>   
                         {{ html()->text('tutor[rate]')->class('form-control form-control-user required') }} 
-                    </div>
+                    </div> --}}
             </div>
-            <div class="form-group row">
+            {{-- <div class="form-group row">
                     <label for="specialization" class="form-label">Select Specializations (Courses):</label>
 
                             @php
@@ -179,7 +185,7 @@
                                     </div>
                                 </div>
                             @endforeach
-            </div>
+            </div> --}}
             <div class="form-group row">
             <div class="col-sm-4">
                 <label for="status" class="form-label">Status</label>

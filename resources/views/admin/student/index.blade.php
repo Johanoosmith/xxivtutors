@@ -33,8 +33,8 @@
                                 <!-- Add the Status Filter -->
                                 <select name="status" class="form-control">
                                     <option value="">Select Status</option>
-                                    <option value="active" {{ request()->status == 'active' ? 'selected' : '' }}>Active</option>
-                                    <option value="inactive" {{ request()->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                    <option value="1" {{ request()->status == '1' ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ request()->status == '0' ? 'selected' : '' }}>Inactive</option>
                                 </select>
                             </div>
                         
@@ -75,8 +75,9 @@
                         <th>Full Name</th>
                         <th>Email</th>
                         <th>Contact</th>
-                        <th>Course</th>
+                        {{-- <th>Course</th> --}}
                         <!-- <th>Status</th> -->
+                        <th>Status</th>
                         <th class="text-right">Action</th>
                     </tr>
                 </thead>
@@ -84,19 +85,20 @@
             @foreach ($students as $student)
                 <tr>
                     <td>{{ $student->id }}</td>
-                    <td>{{ $student->fullname }}</td>
-                    <td>{{ $student->email }}</td>
-                    <td>{{ $student->contact}}</td>
-					<!-- <td>{{ $student->course}}</td> -->
+                    <td> {{ $student->user->fullname  ?? ''}}</td>
+                    <td>{{ $student->user->email ?? '' }}</td>
+                    <td>{{ $student->user->mobile ?? ' '}}</td>
                     <td>
-                    @if($student->status == '1')
+                    @if(!empty($student->user ))
+                    @if($student->user->status == '1')
                         <label class="badge bg-light-success">Active</label>  <!-- Green badge for active status -->
-                    @elseif($student->status == '0')
-                        <label class="badge bg-light-warning">Deactive</label>  <!-- Red badge for inactive status -->
+                    @elseif($student->user->status == '0')
+                        <label class="badge bg-light-danger">Deactive</label>  <!-- Red badge for inactive status -->
                     @else
-                        <label class="badge bg-light-warning">{{ ucfirst($student->status) }}</label>  <!-- Yellow badge for any other status -->
+                        <label class="badge bg-light-warning">{{ ucfirst($student->user->status ?? '') }}</label>  <!-- Yellow badge for any other status -->
                     @endif
 					</td>
+                    @endif
                     <td class="noselect text-right">	
                     <div class="action-tools">
 						<a href="{{ route('admin.student.edit', $student->id) }}" class="btn btn-info btn-sm action-btn edit" data-toggle="tooltip" title="" data-original-title="Edit">

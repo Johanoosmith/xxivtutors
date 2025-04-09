@@ -17,9 +17,9 @@ class Tutor extends Authenticatable
         'experience', 'rate', 'status','tutor_specializations', 'user_id', 'user_id', 'title', 'town', 'county', 'country'
     ];
     public function specialization()
-        {
-            return $this->belongsToMany(Course::class, 'tutor_specializations', 'tutor_id', 'course_id');
-        }
+    {
+        return $this->belongsToMany(Course::class, 'tutor_specializations', 'tutor_id', 'course_id');
+    }
     public function users()
     {
         return $this->belongsTo(User::class, 'user_id');
