@@ -2,11 +2,7 @@
 
 @section('content')
 
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            {{ $message }}
-        </div>
-    @endif
+   
     <div class="row">
 		<div class="col-md-12">
 			<div class="card">
@@ -69,52 +65,56 @@
 
                 <div class="table-responsive">
                 <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Full Name</th>
-                        <th>Email</th>
-                        <th>Contact</th>
-                        {{-- <th>Course</th> --}}
-                        <!-- <th>Status</th> -->
-                        <th>Status</th>
-                        <th class="text-right">Action</th>
-                    </tr>
-                </thead>
-        <tbody class="list" id="pages">
-            @foreach ($students as $student)
-                <tr>
-                    <td>{{ $student->id }}</td>
-                    <td> {{ $student->user->fullname  ?? ''}}</td>
-                    <td>{{ $student->user->email ?? '' }}</td>
-                    <td>{{ $student->user->mobile ?? ' '}}</td>
-                    <td>
-                    @if(!empty($student->user ))
-                    @if($student->user->status == '1')
-                        <label class="badge bg-light-success">Active</label>  <!-- Green badge for active status -->
-                    @elseif($student->user->status == '0')
-                        <label class="badge bg-light-danger">Deactive</label>  <!-- Red badge for inactive status -->
-                    @else
-                        <label class="badge bg-light-warning">{{ ucfirst($student->user->status ?? '') }}</label>  <!-- Yellow badge for any other status -->
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Contact</th>
+                                {{-- <th>Course</th> --}}
+                                <!-- <th>Status</th> -->
+                                <th>Status</th>
+                                <th class="text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="list" id="pages">
+                            @foreach ($students as $student)
+                                <tr>
+                                    <td>{{ $student->id }}</td>
+                                    <td> {{ $student->user->fullname  ?? ''}}</td>
+                                    <td>{{ $student->user->email ?? '' }}</td>
+                                    <td>{{ $student->user->mobile ?? ' '}}</td>
+                                    <td>
+                                    @if(!empty($student->user ))
+                                    @if($student->user->status == '1')
+                                        <label class="badge bg-light-success">Active</label>  <!-- Green badge for active status -->
+                                    @elseif($student->user->status == '0')
+                                        <label class="badge bg-light-danger">Deactive</label>  <!-- Red badge for inactive status -->
+                                    @else
+                                        <label class="badge bg-light-warning">{{ ucfirst($student->user->status ?? '') }}</label>  <!-- Yellow badge for any other status -->
+                                    @endif
+                                    </td>
+                                    @endif
+                                    <td class="noselect text-right">	
+                                    <div class="action-tools">
+                                        <a href="{{ route('admin.student.edit', $student->id) }}" class="btn btn-info btn-sm action-btn edit" data-toggle="tooltip" title="" data-original-title="Edit">
+                                            <i class="far fa-edit"> Edit</i>
+                                        </a>	
+                                        <a href="{{ Route('admin.delete-student', $student->id ) }}" onclick="confirmation(event)" class="btn btn-danger btn-sm action-btn delete" data-toggle="tooltip" title="Delete">
+                                            <i class="far fa-trash-alt"></i> Delete
+                                        </a> 								
+                                                
+                                    </div>
+                                                        
+                                    </td> 
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                    @if (count($students))
+                    {!! $students->withQueryString()->links('pagination::bootstrap-5') !!}
                     @endif
-					</td>
-                    @endif
-                    <td class="noselect text-right">	
-                    <div class="action-tools">
-						<a href="{{ route('admin.student.edit', $student->id) }}" class="btn btn-info btn-sm action-btn edit" data-toggle="tooltip" title="" data-original-title="Edit">
-							<i class="far fa-edit"> Edit</i>
-						</a>	
-                        <a href="{{ Route('admin.delete-student', $student->id ) }}" onclick="confirmation(event)" class="btn btn-danger btn-sm action-btn delete" data-toggle="tooltip" title="Delete">
-                            <i class="far fa-trash-alt"></i> Delete
-                        </a> 								
-								
-					</div>
-                       					
-					</td> 
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
                 </div>
                 </div>
             </div>

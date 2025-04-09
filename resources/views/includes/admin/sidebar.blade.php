@@ -169,6 +169,33 @@
                         <span class="pc-mtext">Manage Subscriber</span>
                      </a>
                 </li> 
+                <li class="nav-item {{ ($currentRoute === 'admin.article.index' || $currentRoute === 'admin.article.create') ? 'active' : '' }}">
+                    <a class="pc-link" href="{{ route('admin.article.index') }}">                    
+                        <span class="pc-micon"><i class="material-icons-two-tone">description</i></span>
+                        <span class="pc-mtext">Manage Articles</span>
+                    </a>
+                </li>
+                <li class="nav-item {{ ($currentRoute === 'admin.verification.index') ? 'active' : '' }}">
+                    <a class="pc-link" href="{{ route('admin.verification.index') }}">                    
+                        <span class="pc-micon"><i class="material-icons-two-tone">verified_user</i></span>
+                        <span class="pc-mtext">Manage Verifications</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item {{ ($currentRoute === 'admin.booking.index') ? 'active' : '' }}">
+                    <a class="pc-link" href="{{ route('admin.booking.index') }}">                    
+                        <span class="pc-micon"><i class="material-icons-two-tone">event_note</i></span>
+                        <span class="pc-mtext">Manage Bookings</span>
+                    </a>
+                </li>
+                <li class="nav-item {{ in_array($currentRoute, ['admin.notification-templates.index', 'admin.notification-templates.create', 'admin.notification-templates.edit']) ? 'active' : '' }}">
+                    <a class="pc-link" href="{{ route('admin.notification-templates.index') }}">
+                        <span class="pc-micon"><i class="material-icons-two-tone">notifications</i></span>
+                        <span class="pc-mtext">Manage Notifications Templates</span>
+                    </a>
+                </li>
+                
+                
             </ul>
         </div>
     </div>

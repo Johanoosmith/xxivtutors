@@ -20,14 +20,20 @@ class ManageUserController extends Controller
     public function index(Request $request)
     {
         $query = Student::query();
-        // Apply filters
 
         if ($request->filled('search')) {
             $searchTerm = $request->input('search');
-            $query->whereHas('user', function ($q) use ($searchTerm) {
-                $q->where('firstname', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('lastname', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('email', 'like', '%' . $searchTerm . '%');
+            $search_parts = explode(' ', $searchTerm);
+         
+            $query->whereHas('user', function ($q) use ($searchTerm, $search_parts) {
+                if (count($search_parts) >= 2) {
+                    $q->where('firstname', 'like', '%' . $search_parts[0] . '%')
+                      ->where('lastname', 'like', '%' . $search_parts[1] . '%');
+                } else {
+                    $q->where('firstname', 'like', '%' . $searchTerm . '%')
+                      ->orWhere('lastname', 'like', '%' . $searchTerm . '%')
+                      ->orWhere('email', 'like', '%' . $searchTerm . '%');
+                }
             });
         }
 
@@ -120,7 +126,7 @@ class ManageUserController extends Controller
         // Validate the form data
         $validatedData = $request->validate([
             'fullname' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $student->user_id, // assumes user_id == student id
+            'email' => 'required|email|unique:users,email,' . $student->user_id, 
             'contact' => 'required|string|max:15',
             'status' => 'required|string',
             'password' => 'nullable|string|min:8', 
@@ -154,7 +160,6 @@ class ManageUserController extends Controller
                 $student->save();
             }
 
-        // Redirect to the tutor list page or show success message
         return redirect()->route('admin.student.index')->with('success', 'User updated successfully!');
     }
 

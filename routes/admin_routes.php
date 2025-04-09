@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\SubjectController; 
 use App\Http\Controllers\Admin\LevelController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\VerificationController;
+use Mockery\VerificationDirector;
 
 Route::get('/', 'App\Http\Controllers\Admin\AdminController@login')->name('adlogin');
 #Route::get('/admin', 'App\Http\Controllers\Admin\AdminController@login')->name('login');
@@ -36,7 +40,7 @@ Route::group(['middleware' => ['admin']], function () {
 	//user panel route
 	Route::resource('users', 'App\Http\Controllers\Admin\UserController');
 	Route::any('delete-user/{id}', 'App\Http\Controllers\Admin\UserController@destroy')->name('delete-user');
-
+	
 
 	/** Manage email templates */
 	Route::resource('emailtemplates', 'App\Http\Controllers\Admin\EmailtemplateController');
@@ -99,4 +103,21 @@ Route::group(['middleware' => ['admin']], function () {
 	//Manage Subscriber
 	Route::resource('subscriber', 'App\Http\Controllers\Admin\SubscriberController');
 	Route::any('subscriber-destroy/{id}', 'App\Http\Controllers\Admin\SubscriberController@destroy')->name('subscriber-destroy');
+	//article 
+	Route::prefix('article')->name('article.')->group(function () {
+		Route::resource('/', \App\Http\Controllers\Admin\ArticleController::class)->parameters(['' => 'article']);
+		Route::post('approve', [\App\Http\Controllers\Admin\ArticleController::class, 'approve'])->name('approve');
+		Route::post('reject', [\App\Http\Controllers\Admin\ArticleController::class, 'reject'])->name('reject');
+	});
+	//verification
+	Route::resource('verification', VerificationController::class);
+	//booking
+	Route::resource('booking', BookingController::class);
+
+	//notificationtemplates
+	Route::resource('notification-templates', NotificationController::class);
+
+	Route::any('delete-notification/{id}', 'App\Http\Controllers\Admin\NotificationController@destroy')->name('delete-notification');
+
+
 });
