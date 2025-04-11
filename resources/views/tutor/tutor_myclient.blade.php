@@ -5,7 +5,7 @@
             <div class="row"> 
                 @include('layouts.tutor_tabs')
                 <div class="col dashboard-content">
-                    <h2>Your Personal Information</h2>
+                    <h2>Your Personal Information</h2> 
                     <div class="profile-tabs">
                         <ul>
                             <li class="{{ Request::routeIs('tutor.personalinfo') ? 'active' : '' }}"><a href="{{ route('tutor.personalinfo') }}">Personal Info</a></li>

@@ -115,7 +115,7 @@ Route::middleware(['auth'])->prefix('tutor')->group(function () {
 			Route::match(['get','post'], '/booking/online_lesson', [BookingController::class, 'online_lesson'])->name('booking.online_lesson');
 			
 			Route::resource('booking', BookingController::class);
-
+ 
 			/* Tags */
 			Route::get('/tags', [TagController::class, 'index'])->name('tag.index');
 			Route::post('/tags/delete/{user_id}', [TagController::class, 'delete'])->name('tag.delete');

@@ -25,7 +25,7 @@
                                     compliance checks with students introduced to me to ensure all lessons are booked
                                     through {{ config('constants.SITE.TITLE') }}.
                                 </div>
-
+ 
                                 <div id="declaration-2" class="declare mb-2">
                                     I understand that, Lauren (Miss) has agreed to pay an <strong>hourly rate of
                                         {{ getAmount($booking->hourly_rate) }}</strong> which includes {{ config('constants.SITE.TITLE') }}'s commission.

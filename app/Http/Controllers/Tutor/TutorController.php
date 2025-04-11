@@ -575,7 +575,7 @@ class TutorController extends Controller
     { 
         $courses_list = $this->getCourses();
         $courses_list_level = $this->getCoursesLevel();
-        return view('tutor.tutor_privacy', compact('courses_list'));
+        return view('tutor.tutor_privacy', compact('courses_list')); 
     }
     public function verification()
     {   
