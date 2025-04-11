@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Booking;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -33,11 +33,15 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $arr = array();
-       
-       return view('admin.dashboard.index');
+        $data = [];
+    
+        $data['students'] = User::where('role_id', config('constants.ROLE.STUDENT'))->count();
+        $data['tutors'] = User::where('role_id', config('constants.ROLE.TUTOR'))->count();
+        $data['confirmed_bookings'] = Booking::where('status', 2)->count(); // Confirmed
+        $data['pending_bookings'] = Booking::where('status', 1)->count();   // Pending
+    
+        return view('admin.dashboard.index', compact('data'));
     }
-
     /**
      * Show the profile.
      *

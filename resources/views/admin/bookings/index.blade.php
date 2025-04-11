@@ -65,7 +65,7 @@
 								<td>{{ $booking->start_date }} {{ $booking->start_time }}</td>
 								<td>£{{ number_format($booking->hourly_rate, 2) }}</td>
 								<td>£{{ number_format($booking->student_rate, 2) }}</td>
-								<td>£{{ number_format($booking->student_rate - $booking->hourly_rate, 2) }}</td>
+								<td>£{{ $booking->student_rate_difference }}</td>
 								<td>
 									@switch($booking->status)
 										@case(1) <span class="badge bg-warning">Pending</span> @break
