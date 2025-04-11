@@ -81,7 +81,7 @@
                                                 </button>
                                             @endif
                                         </td>
-                                        <td>{{ $article->created_at->format('Y-m-d') }}</td>
+                                        <td>{{ $article->created_at->format(config('constants.SITE.DATE_FORMAT')) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -77,7 +77,7 @@
 												<td>{{ ++$i }}</td>
 												<td>{{ $template->name }}</td>
 												<td>{{ $template->subject }}</td>
-												<td>{{ \Carbon\Carbon::parse($template->created_at)->format('d M Y h:i A') }}</td>
+												<td>{{ $template->created_at->format(config('constants.SITE.DATE_FORMAT')) }}</td>
 												<td class="text-end">
 													<a href="{{ route('admin.notification-templates.edit', $template->id) }}"
 													   class="btn btn-info btn-sm" data-toggle="tooltip" title="Edit">
