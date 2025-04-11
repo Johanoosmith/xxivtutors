@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingController;
-use App\Http\Controllers\Admin\SubjectController; 
+use App\Http\Controllers\Admin\FeedbackController;
+use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\LevelController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\VerificationController;
@@ -10,10 +11,10 @@ use Mockery\VerificationDirector;
 Route::get('/', 'App\Http\Controllers\Admin\AdminController@login')->name('adlogin');
 #Route::get('/admin', 'App\Http\Controllers\Admin\AdminController@login')->name('login');
 Route::get('/login', 'App\Http\Controllers\Admin\AdminController@login')->name('login');
-Route::post('/loginProcess', 'App\Http\Controllers\Admin\AdminController@loginProcess')->name('loginprocess');	
+Route::post('/loginProcess', 'App\Http\Controllers\Admin\AdminController@loginProcess')->name('loginprocess');
 Route::get('/forgot-password', 'App\Http\Controllers\Admin\AdminController@forgotPassword')->name('forgotpassword');
 Route::get('/logout', 'App\Http\Controllers\Admin\AdminController@logout')->name('logout');
-	
+
 Route::group(['middleware' => ['admin']], function () {
 
 	// dashboard route
@@ -40,7 +41,7 @@ Route::group(['middleware' => ['admin']], function () {
 	//user panel route
 	Route::resource('users', 'App\Http\Controllers\Admin\UserController');
 	Route::any('delete-user/{id}', 'App\Http\Controllers\Admin\UserController@destroy')->name('delete-user');
-	
+
 
 	/** Manage email templates */
 	Route::resource('emailtemplates', 'App\Http\Controllers\Admin\EmailtemplateController');
@@ -54,12 +55,12 @@ Route::group(['middleware' => ['admin']], function () {
 
 	//Route::resource('footer', 'App\Http\Controllers\Admin\FooterController@index')->name('admin.footer.index');
 	Route::any('footer', 'App\Http\Controllers\Admin\FooterController@index')->name('admin.footer.store');
-	
+
 	/* Media routes*/
-	Route::resource('media', 'App\Http\Controllers\Admin\MediaController');		
+	Route::resource('media', 'App\Http\Controllers\Admin\MediaController');
 	Route::any('delete-media-image/{id}', 'App\Http\Controllers\Admin\MediaController@destroyImage')->name('delete-media-image');
 	Route::any('media/upload',  'App\Http\Controllers\Admin\MediaController@Upload2')->name('upload');
-	
+
 	//pages route
 	Route::resource('pages', 'App\Http\Controllers\Admin\PageController');
 	Route::any('/get-page-form', 'App\Http\Controllers\Admin\PageController@getForm')->name('pages.getform');
@@ -89,7 +90,7 @@ Route::group(['middleware' => ['admin']], function () {
 
 	//manage subjects
 	Route::resource('subjects', SubjectController::class);
-	
+
 	//manage levels
 	Route::resource('levels', LevelController::class);
 
@@ -111,13 +112,19 @@ Route::group(['middleware' => ['admin']], function () {
 	});
 	//verification
 	Route::resource('verification', VerificationController::class);
+	Route::post('/admin/verification/{id}/approve', [VerificationController::class, 'approve'])->name('verification.approve');
+	Route::post('/admin/verification/{id}/reject', [VerificationController::class, 'reject'])->name('verification.reject');
+
 	//booking
 	Route::resource('booking', BookingController::class);
 
 	//notificationtemplates
 	Route::resource('notification-templates', NotificationController::class);
-
 	Route::any('delete-notification/{id}', 'App\Http\Controllers\Admin\NotificationController@destroy')->name('delete-notification');
 
 
+	//feedback
+	Route::resource('feedback', FeedbackController::class);
+	Route::post('/feedback/approve', [FeedbackController::class, 'approve'])->name('feedback.approve');
+	Route::post('/feedback/reject', [FeedbackController::class, 'reject'])->name('feedback.reject');
 });

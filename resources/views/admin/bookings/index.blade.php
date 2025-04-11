@@ -47,7 +47,6 @@
 								<th>Tutor</th>
 								<th>Student</th>
 								<th>Subject</th>
-								<th>Tutor Subject</th>
 								<th>Start Date & Time</th>
 								<th>Hourly Rate</th>
 								<th>Student Rate</th>
@@ -62,12 +61,11 @@
 								<td>{{ $index + 1 }}</td>
 								<td>{{ $booking->tutor->fullname ?? '-' }}</td>
 								<td>{{ $booking->student->fullname ?? '-' }}</td>
-								<td>{{ $booking->subject_tutor?->subject?->title ?? '' }}</td>
 								<td>{{ $booking->subject->title ?? '-' }}</td>
 								<td>{{ $booking->start_date }} {{ $booking->start_time }}</td>
 								<td>£{{ number_format($booking->hourly_rate, 2) }}</td>
 								<td>£{{ number_format($booking->student_rate, 2) }}</td>
-								<td>£{{ number_format($booking->hourly_rate - $booking->student_rate, 2) }}</td>
+								<td>£{{ number_format($booking->student_rate - $booking->hourly_rate, 2) }}</td>
 								<td>
 									@switch($booking->status)
 										@case(1) <span class="badge bg-warning">Pending</span> @break
@@ -75,7 +73,7 @@
 										@case(3) <span class="badge bg-danger">Cancelled</span> @break
 									@endswitch
 								</td>
-								<td>{{ $booking->created_at->format('Y-m-d') }}</td>
+							    <td>{{ $booking->created_at->format(config('constants.SITE.DATE_FORMAT')) }}</td>
 							</tr>
 							@endforeach
 						</tbody>

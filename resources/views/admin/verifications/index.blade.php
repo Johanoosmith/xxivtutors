@@ -94,7 +94,14 @@
                                                     {{ $statusLabels[$v->status] ?? 'Unknown' }}
                                                 </span>
                                             </td>
-                                            <td>{{ $v->created_at->format('Y-m-d') }}</td>
+                                            <td>{{ $v->created_at->format(config('constants.SITE.DATE_FORMAT')) }}</td>
+                                            <td>
+                                                	<a href="{{ route('admin.verification.show' , $v->id) }}"
+                                                class="btn btn-info btn-sm action-btn edit" data-toggle="tooltip" title=""
+                                                data-original-title="{{trans('admin.EDIT')}}">
+                                                <i class="far fa-edit"></i> View
+                                                </a> 
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
