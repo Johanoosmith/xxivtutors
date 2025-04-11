@@ -5,7 +5,7 @@
             <div class="row"> 
                 @include('layouts.tutor_tabs')
                 <div class="col dashboard-content">
-                    <h2>Your Personal Information</h2>
+                    <h2>Your Personal Information</h2> 
                     <div class="profile-tabs">
                         <ul>
                             <li class="{{ Request::routeIs('tutor.personalinfo') ? 'active' : '' }}"><a href="{{ route('tutor.personalinfo') }}">Personal Info</a></li>
@@ -26,20 +26,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($enquiries as $enquiry)
+                                @foreach($paidBookings as $paidBooking)
                                 <tr>
-                                    <td class="col-qualification"><a href="#">{{ $enquiry->receiver->username }}</a></td>
+                                    <td class="col-qualification"><a href="#">{{ $paidBooking->student->full_name }}</a></td>
                                     <td class="col-institute">
-                                        {{ $enquiry->updated_at->format(config('constants.SITE.DATE_FORMAT')) }}
+                                        {{ $paidBooking->created_at->format(config('constants.SITE.DATE_FORMAT')) }}
                                     </td>
                                     <td class="col-status">
                                         <span class="infookay">Connected</span>
                                         &nbsp;&nbsp;
                                         
-                                            <a href="{{ route('tutor.enquiries.chat', $enquiry->id) }}">view contact details </a>
+                                        <a href="{{ route('tutor.enquiries.chat', @$paidBooking->booking_enquiry->enquiry_id) }}">View contact details </a>
                                             &nbsp;&nbsp;|&nbsp;&nbsp;
-                                            <a href="{{ route('tutor.contract') }}">view contract </a>
-                                        
+                                        <a href="{{ route('tutor.contract', @$paidBooking->id) }}">View contract </a>
                                     </td>
                                 </tr>
                                 @endforeach

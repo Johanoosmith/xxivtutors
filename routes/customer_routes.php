@@ -115,7 +115,7 @@ Route::middleware(['auth'])->prefix('tutor')->group(function () {
 			Route::match(['get','post'], '/booking/online_lesson', [BookingController::class, 'online_lesson'])->name('booking.online_lesson');
 			
 			Route::resource('booking', BookingController::class);
-
+ 
 			/* Tags */
 			Route::get('/tags', [TagController::class, 'index'])->name('tag.index');
 			Route::post('/tags/delete/{user_id}', [TagController::class, 'delete'])->name('tag.delete');
@@ -124,8 +124,8 @@ Route::middleware(['auth'])->prefix('tutor')->group(function () {
 		Route::get('/addsubject', [TutorController::class, 'addsubject'])->name('tutor.student_add_subject');
 		Route::get('/personalinfo', [TutorController::class, 'personalinfo'])->name('tutor.personalinfo');
 		Route::get('/password', [TutorController::class, 'studpassword'])->name('tutor.password');
-		Route::get('/myclients', [TutorController::class, 'tutordmyclients'])->name('tutor.myclients');
-		Route::get('/turorcontract', [TutorController::class, 'turorcontract'])->name('tutor.contract');
+		Route::get('/myclients', [TutorController::class, 'tutorMyClients'])->name('tutor.myclients');
+		Route::get('/turorcontract/{id}', [TutorController::class, 'turorContract'])->name('tutor.contract');
 		Route::get('/privacy', [TutorController::class, 'tutorprivacy'])->name('tutor.privacy');
 		Route::post('/update-personalinfo', [TutorController::class, 'personalinfoupdate'])->name('tutor.personalinfoupdate');
 		Route::put('/update-password', [TutorController::class, 'studpasswordupdate'])->name('tutor.studpasswordupdate');
