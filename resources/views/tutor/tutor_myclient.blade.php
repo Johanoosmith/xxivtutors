@@ -36,10 +36,9 @@
                                         <span class="infookay">Connected</span>
                                         &nbsp;&nbsp;
                                         
-                                            <a href="{{ route('tutor.enquiries.chat', @$paidBooking->booking_enquiry->enquiry_id) }}">View contact details </a>
+                                        <a href="{{ route('tutor.enquiries.chat', @$paidBooking->booking_enquiry->enquiry_id) }}">View contact details </a>
                                             &nbsp;&nbsp;|&nbsp;&nbsp;
-                                            <a href="{{ route('tutor.contract', @$paidBooking->id) }}">view contract </a>
-                                        
+                                        <a href="{{ route('tutor.contract', @$paidBooking->id) }}">View contract </a>
                                     </td>
                                 </tr>
                                 @endforeach

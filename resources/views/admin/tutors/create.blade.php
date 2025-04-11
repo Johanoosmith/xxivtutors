@@ -2,15 +2,7 @@
 
 @extends('layouts.admin')
 @section('content')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+ 
     <div class="card">
         <div class="card-header">
             <h5>Create New Tutor</h5>
@@ -100,7 +92,7 @@
                 </div>
             </div>
         </div>
-            <div class="qualification">
+            {{-- <div class="qualification">
                 <h5 class="mt-5">Qualifications Section</h5>
                 <hr> 
                 <div class="form-group row">
@@ -123,7 +115,7 @@
                         {{ html()->text('qualification_4')->class('form-control form-control-user required') }} 
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="other-info">
             <h5 class="mt-5">Other Information</h5>
             <hr>
@@ -132,13 +124,13 @@
                         <label class="form-label">Experience<span class="required">*</span></label>
                         {{ html()->text('experience')->class('form-control form-control-user required') }} 
                     </div>
-                    <div class="col-sm-4">
+                    {{-- <div class="col-sm-4">
                         <label class="form-label">Rate<span class="required">*</span><h8>(hr)</h8></label>   
                         {{ html()->text('rate')->class('form-control form-control-user required') }} 
-                    </div>
+                    </div> --}}
             </div>
             <div class="form-group row">
-            <div class="col-sm-4">
+            {{-- <div class="col-sm-4">
                     <label for="specialization" class="form-label">Select Specializations (Courses):</label>
                     <div id="specialization">
                         @foreach($courses as $course)
@@ -156,7 +148,7 @@
                             </div>
                         @endforeach
                     </div>
-                </div>
+                </div> --}}
             <div class="col-sm-4">
                 <label for="status" class="form-label">Status</label>
                 <select name="status" class="form-control">

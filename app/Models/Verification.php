@@ -20,4 +20,10 @@ class Verification extends Model
         'status',
         'reject_reason',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

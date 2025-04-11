@@ -40,7 +40,8 @@
 
 
                         <li class="pc-item  {{ $currentRoute === 'admin.emailtemplates.index' ? 'active' : '' }} {{ $currentRoute === 'admin.emailtemplates.edit' ? 'active' : '' }} {{ $currentRoute === 'admin.emailtemplates.create' ? 'active' : '' }}">
-                        <a class="pc-link " href="{{route('admin.emailtemplates.index')}}">Email Templates</a></li>
+                            <a class="pc-link" href="{{ route('admin.notification-templates.index') }}">Notification Templates</a></li>
+
 
 
                         <li class="pc-item d-none {{ $currentRoute === 'admin.emaillogs.index' ? 'active' : '' }} ">
@@ -81,6 +82,7 @@
                         <span class="pc-mtext">Manage Category</span>
                      </a>
                 </li> 
+                
 
 				@php
 				
@@ -169,6 +171,34 @@
                         <span class="pc-mtext">Manage Subscriber</span>
                      </a>
                 </li> 
+                <li class="nav-item {{ ($currentRoute === 'admin.article.index' || $currentRoute === 'admin.article.create') ? 'active' : '' }}">
+                    <a class="pc-link" href="{{ route('admin.article.index') }}">                    
+                        <span class="pc-micon"><i class="material-icons-two-tone">description</i></span>
+                        <span class="pc-mtext">Manage Articles</span>
+                    </a>
+                </li>
+                <li class="nav-item {{ ($currentRoute === 'admin.verification.index') ? 'active' : '' }}">
+                    <a class="pc-link" href="{{ route('admin.verification.index') }}">                    
+                        <span class="pc-micon"><i class="material-icons-two-tone">verified_user</i></span>
+                        <span class="pc-mtext">Manage Verifications</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item {{ ($currentRoute === 'admin.booking.index') ? 'active' : '' }}">
+                    <a class="pc-link" href="{{ route('admin.booking.index') }}">                    
+                        <span class="pc-micon"><i class="material-icons-two-tone">event_note</i></span>
+                        <span class="pc-mtext">Manage Bookings</span>
+                    </a>
+                </li>
+                <li class="nav-item {{ ($currentRoute === 'admin.feedback.index' || $currentRoute === 'admin.feedback.edit' || $currentRoute === 'admin.feedback.create') ? 'active' : '' }}">
+                    <a class="pc-link" href="{{ route('admin.feedback.index') }}">
+                        <span class="pc-micon"><i class="material-icons-two-tone">feedback</i></span>
+                        <span class="pc-mtext">Manage Feedback</span>
+                    </a>
+                </li>
+                
+                
+                
             </ul>
         </div>
     </div>

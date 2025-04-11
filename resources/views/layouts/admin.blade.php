@@ -25,6 +25,7 @@
         </div>
         <!-- /.content-wrapper -->
 
+        
 		@include('includes.admin.footer')    
         @include('includes.admin.footer_script')  
         @include('includes.admin.message')
