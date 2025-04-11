@@ -539,15 +539,16 @@ class TutorController extends Controller
     }
 
 
-    public function tutordmyclients(Request $request)
+    public function tutorMyClients(Request $request)
     { 
-        $courses_list = $this->getCourses();
-        $courses_list_level = $this->getCoursesLevel();
-
-        if (!Auth::check()) {
-            abort(403, 'Unauthorized access');
-        }
         $user = Auth::user();
+        $paidBookings = Booking::where('tutor_id',$user->id)
+                            ->whereHas('payments', function ($query) {
+                                $query->where('status', 'paid');
+                            })->with(['student','booking_enquiry'])->get();
+        
+        
+        /*
         $enquiries = Enquiry::whereIn('id', function ($query) use ($user) {
             $query->selectRaw('MAX(id)')
                   ->from('enquiries')
@@ -557,27 +558,18 @@ class TutorController extends Controller
         ->with(['receiver'])
         ->latest()
         ->get();
+        */
             
-        
-        //dd($enquiries);
-
-        return view('tutor.tutor_myclient', compact('courses_list','enquiries'));
+        return view('tutor.tutor_myclient', compact('paidBookings'));
     }
-    public function turorcontract()
+    public function turorContract($id)
     { 
-        //dd("ter");
-        $courses_list = $this->getCourses();
-        $courses_list_level = $this->getCoursesLevel();
-
-        if (!Auth::check()) {
-            abort(403, 'Unauthorized access');
-        }
         $user = Auth::user();
-        $enquiries = Enquiry::where('receiver_id', $user->id)
-            ->with('sender')
-            ->get();
+        $booking = Booking::where('id', $id)
+            ->with(['tutor'=>['tutor'],'student'])
+            ->first();
 
-        return view('tutor.turor_contract');
+        return view('tutor.turor_contract',compact('booking'));
     }
     public function tutorprivacy()
     { 

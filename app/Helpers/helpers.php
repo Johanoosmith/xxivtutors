@@ -695,3 +695,7 @@ function getTutorByTownStatic(){
 	return $town_subjects;
 	
 }
+
+function getAmount($amount){
+	return config('constants.CURRENCY_SYMBOL').intval($amount);
+}
