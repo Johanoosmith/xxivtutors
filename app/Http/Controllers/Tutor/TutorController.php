@@ -418,6 +418,7 @@ class TutorController extends Controller
     public function studpassword()
     { 
         $studpassword = Auth::user();
+      
         return view('tutor.tutor_password', compact('studpassword'));
     }
     public function studpasswordupdate()

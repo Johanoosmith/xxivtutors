@@ -13,6 +13,7 @@ use App\Models\UserView;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
+use App\Models\Payment;
 use App\Models\Subject;
 use App\Models\Student;
 use App\Services\StripeService;
@@ -429,8 +430,20 @@ class CustomerController extends Controller
     { 
         $courses_list = $this->getCourses();
         $courses_list_level = $this->getCoursesLevel();
-        return view('customer.student_myclient', compact('courses_list'));
+       
+        $payments = Payment::with(['tutor'])
+        ->orderBy('created_at', 'desc')
+        ->get();
+        return view('customer.student_myclient', compact('courses_list' ,'payments'));
     }
+
+    public function showInvoice($paymentId)
+{
+    $payment = Payment::with(['tutor'])->findOrFail($paymentId);
+    
+
+    return view('customer.student_invoice', compact('payment'));
+}
     public function studprivacy()
     { 
         $courses_list = $this->getCourses();

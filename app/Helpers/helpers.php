@@ -36,6 +36,12 @@ function getSiteVariable(){
 	];
 }
 
+if (!function_exists('format_label')) {
+    function format_label($value)
+    {
+        return ucwords(str_replace('_', ' ', $value));
+    }
+}
 
 function getCityCourses($cityid){
 	return Course::where('status',1)->whereRaw('FIND_IN_SET(?, cities)', [$cityid])->get();

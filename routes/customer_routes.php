@@ -177,6 +177,7 @@ Route::middleware(['auth'])->prefix('customer')->group(function () {
 		Route::post('/enquiries/close/{id}', [EnquiryController::class, 'enquiryClose'])->name('student.enquiries.close');
 		Route::match(['get','post'], '/enquiries/report/{id}', [EnquiryController::class, 'enquiryReport'])->name('student.enquiries.report');
 		Route::get('/enquiries/{id}/{booking_id?}', [EnquiryController::class, 'showEnquire'])->name('student.enquiries.chat');
+		Route::get('invoice/{paymentId}', [CustomerController::class, 'showInvoice'])->name('invoice.show');
 
 		Route::name('customer.')->group(function () {
 			//Route::resource('subjects', SubjectController::class);

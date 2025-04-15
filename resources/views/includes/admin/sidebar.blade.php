@@ -197,6 +197,12 @@
                     </a>
                 </li>
                 
+                <li class="nav-item {{ ($currentRoute === 'admin.questions.index' || $currentRoute === 'admin.questions.edit' || $currentRoute === 'admin.questions.create') ? 'active' : '' }}">
+                    <a class="pc-link" href="{{ route('admin.questions.index') }}">
+                        <span class="pc-micon"><i class="material-icons-two-tone">help</i></span>
+                        <span class="pc-mtext">Manage Questions</span>
+                    </a>
+                </li>
                 
                 
             </ul>

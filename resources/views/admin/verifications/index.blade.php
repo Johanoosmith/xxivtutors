@@ -62,6 +62,7 @@
                                         <th>Other Name on Document</th>
                                         <th>Status</th>
                                         <th>Created At</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -81,7 +82,7 @@
                                                 @endphp
                                                 {{ $types[$v->verification_type] ?? 'N/A' }}
                                             </td>
-                                            <td>{{ $v->document_type ?? '-' }}</td>
+                                            <td>{{ format_label( $v->document_type) ?? '-' }}</td>
                                             <td>{{ $v->dbs_number ?? '-' }}</td>
                                             <td>{{ $v->firstname_on_doc }} {{ $v->lastname_on_doc }} </td>
                                             <td>{{ $v->othername_on_doc }} </td>
