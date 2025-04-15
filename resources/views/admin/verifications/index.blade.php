@@ -62,6 +62,7 @@
                                         <th>Other Name on Document</th>
                                         <th>Status</th>
                                         <th>Created At</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>

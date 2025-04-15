@@ -32,6 +32,9 @@ return [
 	'CURRENCY_SYMBOL' =>  '£',
 	'SITE'		  => [
 		'TITLE'=>'MyProTutor',
+        'ADDRESS'=>'Hamilton House, Mabledon Place, London WC1H 9BB ',
+        'EMAIL'=>'info@myprotutor.com',
+        'PHONE'=>'07356216645',
 		'STUDENT_RATE'=>25, // Increase student rate than hourly rate by 25 percent
 		'TUTOR_PAYMENT_HELP_PAGE_ID'=>12,
 		'ONLINE_LESSON_PAGE_ID'=>13,

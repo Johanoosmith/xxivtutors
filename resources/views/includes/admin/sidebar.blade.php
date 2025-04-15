@@ -3,7 +3,7 @@
 <nav class="pc-sidebar ">
     <div class="navbar-wrapper">
         <div class="m-header">
-            <a href="javascript:void(0);" class="b-brand"><span>Test</span></a>
+            <a href="javascript:void(0);" class="b-brand"><span>{{ config('constants.SITE.TITLE') }}</span></a>
         </div>
         <div class="navbar-content">
             <ul class="pc-navbar">               
