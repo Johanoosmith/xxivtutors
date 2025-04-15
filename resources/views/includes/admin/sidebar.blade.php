@@ -3,7 +3,7 @@
 <nav class="pc-sidebar ">
     <div class="navbar-wrapper">
         <div class="m-header">
-            <a href="javascript:void(0);" class="b-brand"><span>{{ config('constants.SITE.TITLE') }}</span></a>
+            <a href="javascript:void(0);" class="b-brand"><span>Test</span></a>
         </div>
         <div class="navbar-content">
             <ul class="pc-navbar">               
@@ -197,6 +197,12 @@
                     </a>
                 </li>
                 
+                <li class="nav-item {{ ($currentRoute === 'admin.questions.index' || $currentRoute === 'admin.questions.edit' || $currentRoute === 'admin.questions.create') ? 'active' : '' }}">
+                    <a class="pc-link" href="{{ route('admin.questions.index') }}">
+                        <span class="pc-micon"><i class="material-icons-two-tone">help</i></span>
+                        <span class="pc-mtext">Manage Questions</span>
+                    </a>
+                </li>
                 
                 
             </ul>
