@@ -418,6 +418,7 @@ class TutorController extends Controller
     public function studpassword()
     { 
         $studpassword = Auth::user();
+      
         return view('tutor.tutor_password', compact('studpassword'));
     }
     public function studpasswordupdate()
@@ -539,16 +540,15 @@ class TutorController extends Controller
     }
 
 
-    public function tutorMyClients(Request $request)
+    public function tutordmyclients(Request $request)
     { 
+        $courses_list = $this->getCourses();
+        $courses_list_level = $this->getCoursesLevel();
+
+        if (!Auth::check()) {
+            abort(403, 'Unauthorized access');
+        }
         $user = Auth::user();
-        $paidBookings = Booking::where('tutor_id',$user->id)
-                            ->whereHas('payments', function ($query) {
-                                $query->where('status', 'paid');
-                            })->with(['student','booking_enquiry'])->get();
-        
-        
-        /*
         $enquiries = Enquiry::whereIn('id', function ($query) use ($user) {
             $query->selectRaw('MAX(id)')
                   ->from('enquiries')
@@ -558,24 +558,33 @@ class TutorController extends Controller
         ->with(['receiver'])
         ->latest()
         ->get();
-        */
             
-        return view('tutor.tutor_myclient', compact('paidBookings'));
-    }
-    public function turorContract($id)
-    { 
-        $user = Auth::user();
-        $booking = Booking::where('id', $id)
-            ->with(['tutor'=>['tutor'],'student'])
-            ->first();
+        
+        //dd($enquiries);
 
-        return view('tutor.turor_contract',compact('booking'));
+        return view('tutor.tutor_myclient', compact('courses_list','enquiries'));
+    }
+    public function turorcontract()
+    { 
+        //dd("ter");
+        $courses_list = $this->getCourses();
+        $courses_list_level = $this->getCoursesLevel();
+
+        if (!Auth::check()) {
+            abort(403, 'Unauthorized access');
+        }
+        $user = Auth::user();
+        $enquiries = Enquiry::where('receiver_id', $user->id)
+            ->with('sender')
+            ->get();
+
+        return view('tutor.turor_contract');
     }
     public function tutorprivacy()
     { 
         $courses_list = $this->getCourses();
         $courses_list_level = $this->getCoursesLevel();
-        return view('tutor.tutor_privacy', compact('courses_list')); 
+        return view('tutor.tutor_privacy', compact('courses_list'));
     }
     public function verification()
     {   

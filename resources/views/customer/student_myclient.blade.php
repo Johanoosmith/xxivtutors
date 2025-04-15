@@ -10,8 +10,8 @@
                         <ul>
                             <li class="{{ Request::routeIs('customer.personalinfo') ? 'active' : '' }}"><a href="{{ route('customer.personalinfo') }}">Personal Info</a></li>
                             <li class="{{ Request::routeIs('customer.password') ? 'active' : '' }}"><a href="{{ route('customer.password') }}">Password</a></li>
-                            <li  class="{{ Request::routeIs('customer.myclients') ? 'active' : '' }}"><a href="{{ route('customer.myclients') }}">My Clients</a></li>
-                            <li  class="{{ Request::routeIs('customer.privacy') ? 'active' : '' }}"><a href="{{ route('customer.privacy') }}">Privacy</a></li>
+                            <li  class="{{ Request::routeIs('customer.myclients') ? 'active' : '' }}"><a href="{{ route('customer.myclients') }}">My purchases </a></li>
+                            {{-- <li  class="{{ Request::routeIs('customer.privacy') ? 'active' : '' }}"><a href="{{ route('customer.privacy') }}">Privacy</a></li> --}}
                         </ul>
                     </div>
                     <p>Here are all the purchases you have made on your account. The tutors contact details will be sent to you automatically once the status is set to "Payment OK". </p>
@@ -27,20 +27,40 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="col-qualification"><a href="#">Rafsan (Mr)</a></td>
-                                    <td class="col-institute">12/09/2024</td>
-                                    <td class="col-grade">£0</td>
-                                    <td class="col-status"><span class="status bg-warning">Payment OK</span></td>
-                                    <td class="col-action">
-                                        <a href="#" class="icon-btn">
-                                            <svg class="icon">
-                                                <use xlink:href="#view"></use>
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
+                                @foreach($payments as $payment)
+                                    <tr>
+                                        <td class="col-qualification">
+                                            <a href="#">
+                                                {{ $payment->tutor->fullname ?? '' }}
+                                            </a>
+                                        </td>
+                                        <td class="col-institute">
+                                            {{ \Carbon\Carbon::parse($payment->created_at)->format('d/m/Y') }}
+                                        </td>
+                                        <td class="col-grade">
+                                            ${{ number_format($payment->charge_amount, 2) }} {{-- assuming amount in cents --}}
+                                        </td>
+                                        <td class="col-status">
+                                            @if($payment->status === 'paid')
+                                                <span class="status bg-success text-light">Payment OK</span>
+                                            @else
+                                                <span class="status bg-warning">
+                                                    {{ ucfirst(str_replace('_', ' ', $payment->status)) }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                        
+                                        <td class="col-action">
+                                            <a href="{{ route('invoice.show', $payment->id) }}" class="icon-btn">
+                                                <svg class="icon">
+                                                    <use xlink:href="#view"></use>
+                                                </svg>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
+                            
                         </table>
                     </div>
                 </div>

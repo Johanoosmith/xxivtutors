@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\LevelController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\VerificationController;
 use Mockery\VerificationDirector;
 
@@ -127,4 +128,9 @@ Route::group(['middleware' => ['admin']], function () {
 	Route::resource('feedback', FeedbackController::class);
 	Route::post('/feedback/approve', [FeedbackController::class, 'approve'])->name('feedback.approve');
 	Route::post('/feedback/reject', [FeedbackController::class, 'reject'])->name('feedback.reject');
+
+	//question
+	Route::get('questions', [QuestionController::class, 'index'])->name('questions.index');
+	Route::post('/questions/accept', [QuestionController::class, 'accept'])->name('questions.accept');
+	Route::post('/questions/reject', [QuestionController::class, 'reject'])->name('questions.reject');
 });
