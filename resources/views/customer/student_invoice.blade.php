@@ -7,14 +7,22 @@
                 <div class="col dashboard-content">
                     <h3>Invoice for Payment #{{ $payment->id }}</h3>
 
+                    <img src="{{ asset(config('settings.', 'uploads/logos/header_log.png')) }}" alt="">
                     <div class="col-md-6">
                         <h5><strong>Invoice To:</strong></h5>
                         <p>
-                            {{ $payment->student->name ?? ' ' }}<br>
+                            {{ $payment->student->fullname ?? ' ' }}<br>
                             {{ $payment->student->address ?? 'Address not available' }}<br>
                             {{ $payment->student->city ?? '' }}<br>
                             {{ $payment->student->state ?? '' }}<br>
                             {{ $payment->student->postcode ?? '' }}<br>
+
+                            <h3>Tutor </h3>
+                            {{ $payment->tutor->fullname ?? ' ' }}<br>
+                            {{ $payment->tutor->address ?? 'Address not available' }}<br>
+                            {{ $payment->tutor->city ?? '' }}<br>
+                            {{ $payment->tutor->state ?? '' }}<br>
+                            {{ $payment->tutor->postcode ?? '' }}<br>
                             <strong>Your Account:</strong> {{ $payment->student->username ?? ' ' }}
                         </p>
                     </div>
@@ -32,7 +40,7 @@
                                 <tr>
                                     <td>Tutor Fee for {{ $payment->tutor->fullname ?? ' ' }}</td>
                                     <td>1</td>
-                                    <td>£{{ number_format($payment->tutor_amount / 100, 2) }}</td>
+                                    <td>{{ getAmount($payment->charge_amount, 2) }}</td>
                                     <!-- Assuming amount in cents -->
                                 </tr>
 
@@ -40,7 +48,7 @@
                                 <tr>
                                     <td>VAT</td>
                                     <td>1</td>
-                                    <td>£{{ number_format($payment->vat_amount / 100, 2) ?? '0.00' }}</td>
+                                    <td>{{ getAmount($payment->vat_amount) ?? '0.00' }}</td>
                                     <!-- Assuming VAT is stored in cents -->
                                 </tr>
 
@@ -48,7 +56,7 @@
                                 <tr>
                                     <td>Total</td>
                                     <td></td>
-                                    <td>${{ number_format($payment->charge_amount, 2) }}</td>
+                                    <td>{{ getAmount($payment->charge_amount) }}</td>
                                     <!-- Assuming total is the charge amount -->
                                 </tr>
                             </tbody>

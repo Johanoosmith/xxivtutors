@@ -14,16 +14,17 @@ use App\Models\ContactUs;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use Illuminate\Support\Facades\Session;
-class PageController extends Controller {
+
+class PageController extends Controller
+{
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-
-    }
-    public function index(Request $request) {
+    public function __construct() {}
+    public function index(Request $request)
+    {
         // Fetch active categories for navigation
         $arr['navigation'] = Category::where('status', 1)
             ->orderBy('order', 'asc')
@@ -33,7 +34,7 @@ class PageController extends Controller {
             ->orderBy('name', 'asc')
             ->get();
         // Fetch the page
-        $page = Page::find(1);    
+        $page = Page::find(1);
         if (empty($page)) {
             return view('errors.404');
         } else {
@@ -48,54 +49,57 @@ class PageController extends Controller {
         }
         $arr['courses_list'] = $this->getCourses();
         $arr['page'] = $page;
-        $arr['levels'] = DB::table('levels')->select('id', 'title')->get();  
+        $arr['levels'] = DB::table('levels')->select('id', 'title')->get();
 
         // Pass all data to the frontend view
         return view('front/index')->with($arr);
     }
     public function show($slug)
-    { 
+    {
         $navigation = Category::where('status', 1)
-        ->orderBy('order', 'asc')
-        ->get();
+            ->orderBy('order', 'asc')
+            ->get();
         // Fetch the CMS page based on slug and status
         $page = Page::where('page_url', $slug)->where('status', 1)->firstOrFail();
 
         // Return the page to the view
-        return view('front.cms', compact('page','navigation'));
+        return view('front.cms', compact('page', 'navigation'));
     }
- 
-    public function display(Request $request,$slug){
-		$arr = array();
-		
+
+    public function display(Request $request, $slug)
+    {
+
+
+        $arr = array();
+
         $arr['navigation'] = Category::where('status', 1)
             ->orderBy('order', 'asc')
             ->get();
-      	$page= Page::where('page_url',$slug)->where('status','1')->first();
+        $page = Page::where('page_url', $slug)->where('status', '1')->first();
 
-       if(empty($page)){
-           return view('errors.404');
-		}else{
-            $pagedata = Pagemeta::where("page_id",$page->id)->where("page_type","page")->get();
-			if($pagedata){
-				foreach($pagedata as $row){
-					$page->{$row->meta_key} = $row->meta_value;
-				}
-			}
-		}
-		$page_templates = $page->template; 
-   
-	
+        if (empty($page)) {
+            return view('errors.404');
+        } else {
+            $pagedata = Pagemeta::where("page_id", $page->id)->where("page_type", "page")->get();
+            if ($pagedata) {
+                foreach ($pagedata as $row) {
+                    $page->{$row->meta_key} = $row->meta_value;
+                }
+            }
+        }
+        $page_templates = $page->template;
+
+
         $arr['cities'] = City::where('status', 1)->orderBy('name', 'asc')->get();
         $arr['courses'] = Course::where('status', 1)->orderBy('title', 'asc')->get();
 
         $arr['tutors'] = User::where('role_id', 2)->get();
-      
-        
+
+
         $navigation = Category::all(); // Replace with your actual navigation fetching logic
-		$arr['page'] = $page;
-        return view('front.'.strtolower($page_templates))->with($arr);
-	}
+        $arr['page'] = $page;
+        return view('front.' . strtolower($page_templates))->with($arr);
+    }
     public function store(Request $request)
     {
         // Validate the form data
@@ -116,20 +120,20 @@ class PageController extends Controller {
     {
 
         $tutor_list = DB::table('tutor_specializations')->where('course_id', $course_id)->get()->pluck('tutor_id');
-        
+
         $tutors = DB::table('users')
-           //->join('tutor_specializations', 'users.id', '=', 'tutor_specializations.tutor_id')
+            //->join('tutor_specializations', 'users.id', '=', 'tutor_specializations.tutor_id')
             //->where('tutor_specializations.course_id', $course_id)
             ->where('users.role_id', 2)
             ->whereIn('users.id', $tutor_list)
             ->select('users.*')
             ->get();
-           
-           
+
+
         $courses = Course::all(); // Fetch all courses for the filter
         $courses_list = $this->getCourses();
         $page = Page::find(1); // Fetch the page
-    
+
         return view('front.tutor', [
             'tutors' => $tutors,
             'courses' => $courses,
@@ -137,116 +141,107 @@ class PageController extends Controller {
             'page' => $page,
         ]);
     }
- 
-    public function tutorFilter(Request $request,$course_id = null)
+    public function tutorFilter(Request $request, $course_id = null)
     {
-        if ($request->has('course_id') && $request->course_id != null) {
-            $course_id = $request->course_id;  
-        }
+        $course_id = $request->course_id ?? $course_id;
         $arr['course_id'] = $course_id;
-        $query = User::where('role_id', 2)->with('tutor');
-        $tutorQuery = Tutor::query(); 
-		
-		if ($request->has('teach_type') && !empty($request->teach_type)) {
-			$subject_tutors = \App\Models\SubjectTutor::query();
-			if(!empty($request->subject_id)){
-				$subject_tutors->where('subject_id',$request->subject_id);
-			}
-			
-			if(!empty($request->level_id)){
-				$subject_tutors->where('level_id',$request->level_id);
-			}
-			
-			$tutor_user_ids = $subject_tutors->get()->pluck('user_id');	
-										
-		}
+
+        $query = User::query();
+        $query->where('role_id', 2)->with('tutor');
+        if ($request->has('sort_by')) {
+            switch ($request->sort_by) {
+                case 'distance':
+                    $query->join('tutors', 'users.id', '=', 'tutors.user_id')
+                          ->orderBy('tutors.distance', 'asc')
+                          ->select('users.*'); 
+                    break;
+            }
+        }
         
-        $user_ids = [];
-        $hasTutorFilter = false;
-        // Tutors only
-        if(!empty($course_id)){         
-            $tutorQuery->whereRaw("FIND_IN_SET(?, tutor_specializations)", [$course_id]);            
-            $hasTutorFilter = true;
+
+        $input = $request->all();
+
+        if ($request->has('keyword') && $request->keyword != '') {
+            $keyword = $request->keyword;
+            $query->where(function($q) use ($keyword) {
+                $q->whereRaw("CONCAT(firstname, ' ', lastname) LIKE ?", ["%$keyword%"])
+                  ->orWhere('firstname', 'like', "%$keyword%")
+                  ->orWhere('lastname', 'like', "%$keyword%");
+            });
         }
-        // Apply price range filter
-        if ($request->filled('min_price') && $request->filled('max_price')) {
-            $tutorQuery->whereBetween('rate', [$request->min_price, $request->max_price]);
-            $hasTutorFilter = true;
+        
+        
+
+        if ($request->slug != null || $request->level != 'All Levels' || $request->subject_title != null || $request->postcode != null) {
+            if ($request->slug != null) {
+                $query->whereHas('tutor.subject_tutors', function ($q) use ($request) {
+                    $q->where('slug', $request->slug);
+                });
+            }
+            if ($request->level != null) {
+                $query->whereHas('tutor.subject_tutors', function ($q) use ($request) {
+                    $q->where('level_id', $request->level);
+                });
+            }
+          
+
+
+            if ($request->postcode != null && $request->subject_id != null || $request->postcode != null && $request->level != 'All Levels') {
+                $query->where('postcode', $request->postcode);
+            }
         }
-        // Apply rating filter
-        if ($request->filled('min_rating') && $request->filled('max_rating')) {
-            $tutorQuery->whereBetween('rating', [$request->min_rating, $request->max_rating]);
-            $hasTutorFilter = true;
+
+
+        if ($request->min_price != null || $request->max_price != null || $request->distance != null ||  $request->min_rating != '0') {
+            $query->whereHas('tutor', function ($q) use ($request) {
+                if ($request->min_price != null && $request->max_price != null) {
+                    $q->whereBetween('tutors.rate', [$request->min_price, $request->max_price]);
+                } elseif ($request->min_price != null) {
+                    $q->where('tutors.rate', '>=', $request->min_price);
+                } elseif ($request->max_price != null) {
+                    $q->where('tutors.rate', '<=', $request->max_price);
+                }
+
+                if ($request->distance != null) {
+                    $q->whereBetween('tutors.distance', [0, $request->distance]);
+                }
+                if ($request->min_rating != '0') {
+                    $q->where('tutors.rating', $request->min_rating);
+                }
+            });
         }
-        // Apply gender filter
-        if ($request->filled('gender')) {
+
+        if ($request->gender != null) {
             $query->where('gender', $request->gender);
         }
-        if ($request->has('postcode') && $request->postcode != null) {
+
+
+        if ($request->postcode != null) {
             $query->where('postcode', $request->postcode);
         }
-        if($hasTutorFilter){
-            $user_ids = $tutorQuery->get()->pluck('id');
-        }
-        $specialization = User::where('role_id', 2)->with('tutor')->get();
-        $specialization_courses  = array();
-        if(!empty($specialization)){
-            foreach($specialization as $row){
-                if(!empty($row->tutor->tutor_specializations)){
-                    $specialization_courses[]  = explode(",",$row->tutor->tutor_specializations);
-                }
-            }
-            $specialization_courses = array_merge(...$specialization_courses);
-        }
-        
-        if(!empty($user_ids)){
-            $query->whereIn('id', $user_ids);    
-        }
-        
-        $arr['tutors']= $query->with('tutor')->paginate(10);
-        // echo $query->toSql();die;
-        // Fetch the page
-        $page = Page::find(1);    
-        if (empty($page)) {
+
+        $arr['tutors'] = $query->paginate(10);
+
+        $page = Page::find(1);
+        if (!$page) {
             return view('errors.404');
-        } else {
-            $pagedata = Pagemeta::where("page_id", $page->id)
-                ->where("page_type", "page")
-                ->get();
-            if ($pagedata) {
-                foreach ($pagedata as $row) {
-                    $page->{$row->meta_key} = $row->meta_value;
-                }
-            }
         }
-        $specialization_courses = array_unique($specialization_courses);
-        
-        $records = DB::table('courses')
-        ->whereIn('id', $specialization_courses)
-        ->get();
-        $arr['records'] = $records;
+
+        $pagedata = Pagemeta::where('page_id', $page->id)
+            ->where('page_type', 'page')->get();
+
+        foreach ($pagedata as $meta) {
+            $page->{$meta->meta_key} = $meta->meta_value;
+        }
+
         $arr['page'] = $page;
-        // Pass all data to the frontend view
-        $arr['navigation'] = Category::where('status', 1)
-        ->orderBy('order', 'asc')
-        ->get();
-        $arr['courses_list'] = $this->getCourses();
-        
-        $arr['courses'] = Course::where('status', 1)->orderBy('title', 'asc')->get();
 
-        $arr['course_level'] = DB::table('levels')
-        ->join('course_levels', 'levels.id', '=', 'course_levels.level_id')
-        ->select('levels.id', 'levels.title', 'course_levels.course_id')
-        ->get();
-
-        //dd($levels);
-
-        $arr['levels'] = DB::table('levels')->select('id', 'title')->get();  
         return view('front.tutor')->with($arr);
     }
+
+
     public function student(Request $request)
     {
         return view('front.customer');
-
     }
 }
