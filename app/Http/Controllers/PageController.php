@@ -10,6 +10,10 @@ use App\Models\City;
 use App\Models\Course;
 use App\Models\User;
 use App\Models\Tutor;
+use App\Models\Subject;
+use App\Models\SubjectTutor;
+use App\Models\SubjectStudent;
+
 use App\Models\ContactUs;
 use Illuminate\Support\Facades\DB;
 use Auth;
@@ -96,6 +100,49 @@ class PageController extends Controller {
 		$arr['page'] = $page;
         return view('front.'.strtolower($page_templates))->with($arr);
 	}
+
+    public function SearchPage()
+    {
+        $arr = [];
+        $arr['navigation'] = Category::where('status', 1)
+            ->orderBy('order', 'asc')
+            ->get();
+            $slug="search";
+    
+        $page = Page::where('page_url', $slug)->where('status', '1')->first();
+    
+        if (empty($page)) {
+            return view('errors.404');
+        } else {
+            $pagedata = Pagemeta::where("page_id", $page->id)
+                ->where("page_type", "page")
+                ->get();
+            if ($pagedata) {
+                foreach ($pagedata as $row) {
+                    $page->{$row->meta_key} = $row->meta_value;
+                }
+            }
+        }
+    
+        $page_templates = $page->template;
+    
+        // ✅ Update these two lines below as per your request
+    
+        $arr['cities'] = Tutor::whereNotNull('town')
+            ->groupBy('town')
+            ->pluck('town');
+    
+        $arr['courses'] = Subject::where('featured', 1)
+            ->where('status', 1)
+            ->orderBy('title', 'asc')
+            ->get();
+    
+        $arr['tutors'] = User::where('role_id', 2)->get();
+        $arr['page'] = $page;
+        return view('front.search')->with($arr);
+    }
+    
+
     public function store(Request $request)
     {
         // Validate the form data
@@ -249,4 +296,5 @@ class PageController extends Controller {
         return view('front.customer');
 
     }
+
 }

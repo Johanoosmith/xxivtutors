@@ -49,8 +49,9 @@ class SubjectController extends Controller
         ]);
 		
 		$data = $request->all();
+        // dd($data);
 		$data['status'] = (!empty($data['status'])) ? 1 : 0;
-		
+        $data['featured'] = (!empty($data['featured'])) ? 1 : 0;
         Subject::create($data);
         return redirect()->route('admin.subjects.index')->with('success', 'Subject created successfully.');
     }
