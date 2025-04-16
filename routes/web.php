@@ -5,6 +5,9 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\TutorDetailsController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\Tutor\SuggestedStudentController;
+
+
 
 /* Student */
 use App\Http\Controllers\Customer\BookingController as BookingStudentController;
@@ -50,6 +53,8 @@ Route::get('/category/{id}', [CategoryController::class, 'show'])->name('categor
 Route::get('/tutors', [PageController::class, 'tutorFilter'])->name('tutors.tutorFilter');
 Route::get('/student', [PageController::class, 'student'])->name('student.student');
 Route::get('/tutors/{id}', [TutorDetailsController::class, 'show'])->name('tutors.show');
+Route::get('/tutor/suggested-students', [SuggestedStudentController::class, 'index'])->name('suggested-students');
+
 
 
 Route::post('contact-us', [PageController::class, 'store'])->name('contact-us.store');
@@ -81,6 +86,7 @@ Route::group(['middleware' => 'disablepreventback'], function () {
 require __DIR__ . '/customer_routes.php';
 
 
+Route::get('/search', [PageController::class, 'SearchPage'])->name('search');
 
 Route::get('/{slug}', [PageController::class, 'display'])
     ->name('display');

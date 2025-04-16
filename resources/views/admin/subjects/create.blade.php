@@ -31,12 +31,20 @@
 				</div>
 				
 				<div class="form-group row">
-					<div class="col-sm-6">
+					<div class="col-sm-3">
 						<label for="subject">Status</label>
 						<input
 							type="checkbox"
 							name="status"
 							@checked(old('status'))
+						/>
+					</div>
+					<div class="col-sm-3">
+						<label for="subject">Featured</label>
+						<input
+							type="checkbox"
+							name="featured"
+							@checked(old('featured'))
 						/>
 					</div>
 				</div>

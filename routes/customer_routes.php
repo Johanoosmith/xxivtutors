@@ -11,6 +11,8 @@ use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\DashboardController;
 use App\Http\Controllers\Customer\PostQuestion;
 use App\Http\Controllers\Customer\SuggestedTutor;
+use App\Http\Controllers\Customer\SuggestedTutorController;
+
 use App\Http\Controllers\Customer\FeedbackController;
 use App\Http\Controllers\Customer\EnquiryController;
 use App\Http\Controllers\Customer\SubjectStudentController;
@@ -128,6 +130,8 @@ Route::middleware(['auth'])->prefix('tutor')->group(function () {
 		Route::get('/myclients', [TutorController::class, 'tutorMyClients'])->name('tutor.myclients');
 		Route::get('/turorcontract/{id}', [TutorController::class, 'turorContract'])->name('tutor.contract');
 		Route::get('/privacy', [TutorController::class, 'tutorprivacy'])->name('tutor.privacy');
+		Route::put('/privacyNotifications/update', [TutorController::class, 'updateNotifications'])->name('tutor.update');
+
 		Route::post('/update-personalinfo', [TutorController::class, 'personalinfoupdate'])->name('tutor.personalinfoupdate');
 		Route::put('/update-password', [TutorController::class, 'studpasswordupdate'])->name('tutor.studpasswordupdate');
 		Route::get('/profile-photo', [TutorController::class, 'showUploadForm'])->name('tutor.photo.upload');
@@ -168,7 +172,7 @@ Route::middleware(['auth'])->prefix('customer')->group(function () {
 		Route::get('/add/myquestion', [PostQuestion::class, 'create'])->name('student.questions.addmyquestion');
 		Route::post('/questions', [PostQuestion::class, 'store'])->name('student.questions.store');
 		Route::delete('/questions/{id}', [PostQuestion::class, 'destroy'])->name('student.questions.destroy');
-		Route::get('/suggested-tutor', [SuggestedTutor::class, 'index'])->name('student.suggested');
+		Route::get('/suggested-tutor', [SuggestedTutorController::class, 'index'])->name('student.suggested');
 		Route::get('/feedbacklist', [FeedbackController::class, 'feedbackList'])->name('student.feedback');
 		Route::get('/create/{tutor_id}', [FeedbackController::class, 'create'])->name('student.feedback.create');
 		Route::post('/feedback/store', [FeedbackController::class, 'store'])->name('student.feedback.store');

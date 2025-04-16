@@ -111,7 +111,7 @@
                     <div class="col col-tutor-listing">
                             @if(!empty($tutors) && count($tutors) > 0)
                                 @foreach($tutors as $tutor)
-                                    @php $tutorcourses = getTutorCourses($tutor->tutor->tutor_specializations); @endphp
+                                    @php $tutorcourses = getTutorCourses(@$tutor->tutor->tutor_specializations); @endphp
                                     <div class="tutor-block">
                                         @if(!empty($tutor->profile_image) && file_exists(public_path('storage/'.$tutor->profile_image)))
                                         <div class="tutor-img">
