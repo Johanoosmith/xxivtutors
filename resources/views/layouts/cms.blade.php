@@ -17,6 +17,13 @@
 		<link rel="stylesheet" href="{{asset('front/assets/css/style.css')}}">
 		<link rel="stylesheet" href="{{asset('front/assets/css/responsive.css')}}">
 		<link rel="stylesheet" href="{{asset('front/assets/css/custom.css')}}">
+		
+
+		<!-- Add this to your <head> section -->
+			<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	
+
+
 		@yield('custom-css')	
         @show      
     </head>   
@@ -29,6 +36,28 @@
         @include('includes.front.footer')
         @include('includes.front.footer_script')
 		@yield('page-js')
+		<script>
+			$(function () {
+				const minPrice = parseInt($('#minPrice').val()) || 0;
+				const maxPrice = parseInt($('#maxPrice').val()) || 500;
+			
+				$("#priceSlider").slider({
+					range: true,
+					min: 0,
+					max: 500,
+					values: [minPrice, maxPrice],
+					slide: function (event, ui) {
+						$("#priceDisplay").text(ui.values[0] + " - " + ui.values[1]);
+						$("#minPrice").val(ui.values[0]);
+						$("#maxPrice").val(ui.values[1]);
+					}
+				});
+			
+				// Set initial text
+				$("#priceDisplay").text($("#priceSlider").slider("values", 0) +
+					" - " + $("#priceSlider").slider("values", 1));
+			});
+			</script>  
 		@yield('custom-js')
         @section('inline-js')
         @show

@@ -35,6 +35,7 @@ class TutorController extends Controller
 {
     public function index()
     {
+        
         $user = Auth::user(); // Get the currently logged-in user
         $userId = $user->id;
         $tutorsdata = DB::table('tutors')->where('user_id', $userId)->get();

@@ -576,6 +576,14 @@ function getHourList(){
     return $hours;
 }
 
+
+if (!function_exists('format_label')) {
+    function format_label($value)
+    {
+        return ucwords(str_replace('_', ' ', $value));
+    }
+}
+
 function getSubjectList(){
 	$subjects = Subject::getSubjectList();
 	return $subjects;

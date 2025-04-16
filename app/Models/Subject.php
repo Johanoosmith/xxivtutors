@@ -40,9 +40,8 @@ class Subject extends Model
     {
         return $this->belongsToMany(Tutor::class, 'subject_tutors', 'subject_id', 'user_id');
     }
-	
 	public static function getSubjectList(){
-		$subjects = Subject::where('status',1)->get()->pluck('title','id');
+		$subjects = Subject::where('status', 1)->get(['id', 'title', 'slug']);
 		return $subjects;
 	}
 	

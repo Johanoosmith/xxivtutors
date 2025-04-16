@@ -27,45 +27,33 @@
                 </svg>
             </div>
         </section>
-        <section class="subject-listing">
-            <div class="container">
-
-                <ul class="subject-list">
-                    @foreach($courses as $course)
-                    <li class="subject-item @if($course->id == $course_id) active @endif">
-                        <a class="item-link" href="{{ route('tutors.filterByCourse', $course->id) }}">
-                            <span class="item-icon">
-                                    <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M23.0767 0.923096H16.8244C14.7321 0.923096 12.8982 2.31386 12.3321 4.32002L8.63977 17.4031C8.34439 18.4369 6.90439 18.4862 6.53516 17.4769L4.09824 10.6954C3.59362 9.28002 2.38747 8.23387 0.922852 7.92617" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M17.4766 10.6216L23.0766 18.2277" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M23.0766 10.6216L17.4766 18.2277" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </span>
-                                <span>{{$course->title }}</span>
-                        </a>
-                    </li>
-                    @endforeach                  
-                </ul>
-            </div>
-        </section>
+      
         <section class="tutor-listing">
             <div class="container">
                 <div class="row">
                 <div class="col-3 py-3 align-self-center">
                         <h4 class="filter-collapsable-link">Filters</h4>
                     </div>
-                    <div class="col-9 py-3 d-flex align-items-center justify-content-end sortby">
-                        <label>Sort By</label>
-                        <div class="select-field">
-                            <select class="select">
-                                <option>Lessons Taught</option>
-                                <option>Lessons Taught</option>
-                            </select>
-                            <svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"></path>
-                            </svg>
+                    <form id="sortForm" method="GET" action="{{ route('tutors.tutorFilter') }}">
+                        <div class="col-9 py-3 d-flex align-items-center justify-content-end sortby">
+                            <label for="sort_by" class="me-2">Sort By</label>
+                            <div class="select-field position-relative">
+                                <select name="sort_by" class="select form-select" onchange="document.getElementById('sortForm').submit();">
+                                    <option value="">Select</option>
+                                    <option value="distance" {{ request('sort_by') == 'distance' ? 'selected' : '' }}>Distance</option>
+                                </select>
+                                <svg class="position-absolute end-0 me-2 top-50 translate-middle-y" width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"></path>
+                                </svg>
+                            </div>
                         </div>
-                    </div>
+                    
+                        {{-- Optional: include other hidden filter inputs if needed --}}
+                        {{-- Example: --}}
+                        {{-- <input type="hidden" name="subject_id" value="{{ request('subject_id') }}"> --}}
+                    </form>
+                    
+                    
                     <div class="col col-filter">
                         <form method="GET" action="{{route('tutors.tutorFilter')}}" id="filterForm">
                             <div class="filter-mobile-heading">
@@ -76,22 +64,33 @@
                                     </svg>
                                 </button>
                             </div>
-                            <label for="price_range">Price Range:</label><br>
-                            <strong id="priceDisplay"></strong>
-                            <div id="priceSlider"></div>
-                            <input type="hidden" id="minPrice" name="min_price" value="{{ request('min_price', 0) }}">
-                            <input type="hidden" id="maxPrice" name="max_price" value="{{ request('max_price', 500) }}">
-                            <label for="rating_range">Tutor Rating:</label><br>
-                            <strong id="ratingDisplay"></strong>
-                            <div id="ratingSlider"></div>
-                            <input type="hidden" id="minRating" name="min_rating" value="{{ request('min_rating', 0) }}">
-                            <input type="hidden" id="maxRating" name="max_rating" value="{{ request('max_rating', 5) }}">
+                            <div class="form-group">
+                                <label for="price_range">Price Range:</label><br>
+                                <strong id="priceDisplay">{{ request('min_price', 0) }} - {{ request('max_price', 500) }}</strong>
+                                <div id="priceSlider" style="margin-top: 10px;"></div>
+                                <input type="hidden" id="minPrice" name="min_price" value="{{ request('min_price', 0) }}">
+                                <input type="hidden" id="maxPrice" name="max_price" value="{{ request('max_price', 500) }}">
+                            </div>
+                            
+                            <div class="form-group">
+                            <label for="ratingSelect">Tutor Rating:</label><br>
+                            <select id="ratingSelect" name="min_rating">
+                                <option value="0" {{ request('min_rating', 0) == 0 ? 'selected' : '' }}>0+</option>
+                                <option value="1" {{ request('min_rating', 0) == 1 ? 'selected' : '' }}>1+</option>
+                                <option value="2" {{ request('min_rating', 0) == 2 ? 'selected' : '' }}>2+</option>
+                                <option value="3" {{ request('min_rating', 0) == 3 ? 'selected' : '' }}>3+</option>
+                                <option value="4" {{ request('min_rating', 0) == 4 ? 'selected' : '' }}>4+</option>
+                                <option value="5" {{ request('min_rating', 0) == 5 ? 'selected' : '' }}>5</option>
+                            </select>
+                        </div>
 
                             <label for="distance">Online Tutor Proximity</label>
                             <input type="text" name="postcode" id="postcode" value="{{ request()->postcode }}" placeholder="Enter Postcode">
 
                             <label for="distance">Show Tutors Within 15 Miles:</label>
                             <input type="number" name="distance" id="distance" value="{{ request('distance', 15) }}">
+                            <label for="distance">Keyword:</label>
+                            <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword" value="{{ request('keyword') }}">
 
                            <br> <label for="gender">Gender:</label>
                            <div class="field select-field">
@@ -105,13 +104,12 @@
                                 </svg>
                             </div>
                             <button type="submit" class="btn btn-primary">Apply Filters</button>
-                            <a href="http://192.168.9.32:8000/tutors" class="btn btn-secondary">Clear Filter</a>
+                            <a href="{{route('tutors.tutorFilter')}}" class="btn btn-secondary">Clear Filter</a>
                         </form>
                     </div>
                     <div class="col col-tutor-listing">
                             @if(!empty($tutors) && count($tutors) > 0)
                                 @foreach($tutors as $tutor)
-                                    @php $tutorcourses = getTutorCourses(@$tutor->tutor->tutor_specializations); @endphp
                                     <div class="tutor-block">
                                         @if(!empty($tutor->profile_image) && file_exists(public_path('storage/'.$tutor->profile_image)))
                                         <div class="tutor-img">
@@ -129,7 +127,6 @@
                                         <div class="tutor-block-content">
                                             <div class="tutor-title">
                                                 <h3><a href="{{route('tutors.show', $tutor->id)}}">{{ $tutor->firstname }} {{ $tutor->lastname }}</a></h3>
-                                                {!! $tutorcourses !!}
                                                 <div class="tutor-price">£{{ @$tutor->tutor->rate}}/ hr</div>
                                             </div>
                                             <div class="tutor-description">
@@ -160,14 +157,19 @@
                     </div> 
                     <nav class="pagination-block" aria-label="Tutor Pagination">
                         <ul class="pagination justify-content-center">
-                        {{ $tutors->links() }}
+                            {{ $tutors->withQueryString()->links() }}
+
                         </ul>
                     </nav>
                 </div>
             </div>
         </section>
 @endsection
-@section('custom-js')        
+@section('custom-js')  
+<!-- Add this to your <head> section -->
+
+    
+    
 <script>
     // Price Range Slider
     const priceSlider = document.getElementById('priceSlider');
@@ -268,4 +270,7 @@
 		
     });
 </script>
+
+
+    
 @endsection
