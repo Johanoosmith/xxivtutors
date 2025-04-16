@@ -540,15 +540,16 @@ class TutorController extends Controller
     }
 
 
-    public function tutordmyclients(Request $request)
+    public function tutorMyClients(Request $request)
     { 
-        $courses_list = $this->getCourses();
-        $courses_list_level = $this->getCoursesLevel();
-
-        if (!Auth::check()) {
-            abort(403, 'Unauthorized access');
-        }
         $user = Auth::user();
+        $paidBookings = Booking::where('tutor_id',$user->id)
+                            ->whereHas('payments', function ($query) {
+                                $query->where('status', 'paid');
+                            })->with(['student','booking_enquiry'])->get();
+        
+        
+        /*
         $enquiries = Enquiry::whereIn('id', function ($query) use ($user) {
             $query->selectRaw('MAX(id)')
                   ->from('enquiries')
@@ -558,28 +559,20 @@ class TutorController extends Controller
         ->with(['receiver'])
         ->latest()
         ->get();
+        */
             
-        
-        //dd($enquiries);
-
-        return view('tutor.tutor_myclient', compact('courses_list','enquiries'));
+        return view('tutor.tutor_myclient', compact('paidBookings'));
     }
-    public function turorcontract()
+    public function turorContract($id)
     { 
-        //dd("ter");
-        $courses_list = $this->getCourses();
-        $courses_list_level = $this->getCoursesLevel();
-
-        if (!Auth::check()) {
-            abort(403, 'Unauthorized access');
-        }
         $user = Auth::user();
-        $enquiries = Enquiry::where('receiver_id', $user->id)
-            ->with('sender')
-            ->get();
+        $booking = Booking::where('id', $id)
+            ->with(['tutor'=>['tutor'],'student'])
+            ->first();
 
-        return view('tutor.turor_contract');
+        return view('tutor.turor_contract',compact('booking'));
     }
+    
     public function tutorprivacy()
     { 
         $courses_list = $this->getCourses();
@@ -807,7 +800,7 @@ class TutorController extends Controller
     public function showEnquire($enquiry_id, $booking_id=NULL)
     {
         $user = Auth::user();
-
+        $booking = [];
         // Fetch all chats between the logged-in tutor and the specific sender
         $enquiry = Enquiry::where('id', $enquiry_id)
                         ->with([
@@ -820,16 +813,87 @@ class TutorController extends Controller
                         ->first();              
 
         if(empty($booking_id)){
-            $booking_id = $enquiry->booking_enquiry[0]->booking_id;
+            $booking_id = !empty($enquiry->booking_enquiry[0]) ? $enquiry->booking_enquiry[0]->booking_id : 0;
         }
 
-        $booking = Booking::where('id',$booking_id)->first();
+        if(!empty($booking_id)){
+            $booking = Booking::where('id',$booking_id)->first();
+        }
 
         $messages = $this->getChatMessages($enquiry_id);
         
         $sender = User::find($enquiry_id);
         return view('tutor.enquiries.chats', compact('enquiry','sender','booking','messages'));
     }
+
+    //user_id is denote for student_id
+    public function createEnquire($user_id)
+    {
+        $request = request();
+        $auth_user = Auth::user();
+
+        $user  = User::where('id', $user_id)
+                            ->with(['student'])
+                            ->first(); // Fetch the sender (student)
+
+        if($auth_user->role_id == $user->role_id){
+            return redirect()->back()->with('error', 'As per security guideline you can not connect same role user.');
+        }
+
+        $monthlyEnquiryCount = getMonthlyEnquiryCount($auth_user->id);
+        
+        if($monthlyEnquiryCount >= config('constants.SITE.ENQUIRY_LIMIT')){
+            return redirect()->back()->with('error', 'You have exceed enquiry '.config('constants.SITE.ENQUIRY_LIMIT').' limit for this month.');
+        }
+
+        /* Check existing latest enquiry with this user : Start */
+        $enquiry = Enquiry::where('receiver_id', $user_id)
+                            ->where('sender_id',$auth_user->id)
+                            ->latest()
+                            ->first();   
+        
+        if(!empty($enquiry)){
+            return redirect()->route('tutor.enquiries.chat',$enquiry->id);
+        }
+        /* Check existing latest enquiry with this user : END */
+
+        
+        if($request->isMethod('post')){
+
+            if(empty($request->content)){
+                return redirect()->back()->with('error', 'Enquiry message is required.');
+            }
+
+            $enquiry = [
+                'sender_id'			=> $auth_user->id,
+                'receiver_id'		=> $user_id,
+                'status'		    => 1,
+                'content'		    => 'Tutor enquiry for student.',
+                'is_read'		    => 0,
+            ];
+
+            $createdEnquiry = Enquiry::create($enquiry);
+
+            if(!empty($createdEnquiry->id)){
+
+                EnquiryComment::create([
+                    'parent_id'     =>  0, 
+                    'enquiry_id'    => $createdEnquiry->id,
+                    'sender_id'     => $auth_user->id,
+                    'receiver_id'   => $user_id,
+                    'content'       => $request->content,
+                    'status'        => 'unread'
+                ]);
+
+                return redirect()->route('tutor.enquiries.chat',$createdEnquiry->id);
+            }else{
+                return redirect()->back()->with('error', 'Enquiry not created.');
+            }
+        }
+
+        return view('tutor.enquiries.create', compact('user','auth_user'));
+    }
+
     public function sendEnquiryMessage(Request $request)
     {
         // $request->validate([
