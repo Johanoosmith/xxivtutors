@@ -31,9 +31,11 @@
                 <div class="profileblock">
                     <div class="profileline">
                         <h4><a href="{{ route('profile', $enquiry->receiver->id) }}">{{ $enquiry->receiver->username }}</a></h4>
+                        @if(!empty($booking->student_rate))
                         <div class="text-primary fs-3">
                             {{config('constants.CURRENCY_SYMBOL')}} {{ intval($booking->student_rate) }}<span class="ph">/hr</span>
                         </div>
+                        @endif
                     </div>
                     <div class="profileline">
                         <div class="address">
@@ -49,9 +51,11 @@
                                 
                             @endif
                         </div>
+                        @if(!empty($booking->hourly_rate))
                         <div class="recivced-money fs-5">
                             You receive {{config('constants.CURRENCY_SYMBOL')}} {{ intval($booking->hourly_rate) }}<span class="ph">/hr</span>
                         </div>
+                        @endif
                     </div>
                     <div class="profileline row">
                         <div class="col-12 col-md-4 text-primary">
