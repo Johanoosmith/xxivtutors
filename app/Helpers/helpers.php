@@ -26,7 +26,7 @@ function sendMail($email, $data, $slug){
 	$data	  = array_merge($data, $site_var);
 	
 	// comment this line because of stream_socket_enable_crypto is not proper set up
-	//Notification::route('mail', $email)->notify(new CustomEmailNotification($email, $data, $slug));
+	Notification::route('mail', $email)->notify(new CustomEmailNotification($email, $data, $slug));
 }
 
 function getSiteVariable(){
@@ -706,4 +706,17 @@ function getTutorByTownStatic(){
 
 function getAmount($amount){
 	return config('constants.CURRENCY_SYMBOL').intval($amount); 
+}
+
+function getMonthlyEnquiryCount($user_id){
+
+	// Get start and end of current month
+	$startOfMonth = Carbon::now()->startOfMonth();
+	$endOfMonth = Carbon::now()->endOfMonth();
+
+	$monthlyEnquiryCount = \App\Models\Enquiry::where('sender_id', $user_id)
+					->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+					->count();
+					
+	return $monthlyEnquiryCount;
 }

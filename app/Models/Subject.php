@@ -9,7 +9,7 @@ class Subject extends Model
 {
 	use Notifiable;
 	
-    protected $fillable = ['course_id', 'title', 'cities', 'status'];
+    protected $fillable = ['course_id', 'title', 'cities', 'status','featured'];
 
 	// Boot method to automatically create slug on add & edit
     protected static function boot()

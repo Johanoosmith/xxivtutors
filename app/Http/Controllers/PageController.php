@@ -10,6 +10,10 @@ use App\Models\City;
 use App\Models\Course;
 use App\Models\User;
 use App\Models\Tutor;
+use App\Models\Subject;
+use App\Models\SubjectTutor;
+use App\Models\SubjectStudent;
+
 use App\Models\ContactUs;
 use Illuminate\Support\Facades\DB;
 use Auth;
@@ -244,4 +248,5 @@ class PageController extends Controller
     {
         return view('front.customer');
     }
+
 }

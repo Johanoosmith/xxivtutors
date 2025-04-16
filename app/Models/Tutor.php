@@ -14,7 +14,9 @@ class Tutor extends Authenticatable
         'email', 'password', 'firstname', 'lastname', 'rating','mobile', 
         'address', 'profile_image', 'short_description', 'full_description',
         'qualification_1', 'qualification_2', 'qualification_3', 'qualification_4',
-        'experience', 'rate', 'status','tutor_specializations', 'user_id', 'user_id', 'title', 'town', 'county', 'country'
+        'experience', 'rate', 'status','tutor_specializations', 'user_id', 'user_id', 'title', 'town', 'county', 'country',
+        'list_in_directory',
+        'profile_status',
     ];
     public function specialization()
     {
@@ -32,5 +34,10 @@ class Tutor extends Authenticatable
     public function subject_tutors()
     {
         return $this->belongsToMany(Subject::class, 'subject_tutors', 'user_id', 'subject_id');
+    }
+
+    public function notification()
+    {
+        return $this->hasOne(Notification::class, 'user_id');
     }
 }

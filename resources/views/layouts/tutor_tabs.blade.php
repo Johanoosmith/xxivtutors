@@ -70,11 +70,14 @@
 			Account</a>
 		</li>
 
-		<li><a href="#">
+		<li>
+			<li class="nav-link {{ request()->routeIs('suggested-students') ? 'active' : '' }}">
+			<a href="{{ route('suggested-students')}}">
 			<svg class="icon">
-				<use xlink:href="#study"></use>
+				<use xlink:href="#article"></use>
 			</svg>
 			My Suggested Students</a></li>
+		</li>
 		<li class="nav-link {{ request()->routeIs('tutor.photo.upload') ? 'active' : '' }}">
 			<a href="{{ route('tutor.photo.upload')}}">
 			<svg class="icon">

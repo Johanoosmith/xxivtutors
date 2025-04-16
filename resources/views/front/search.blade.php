@@ -98,11 +98,16 @@
                                    {{$page->browse_by_location_title1}}
                                 </div>
                                 <div class="searching-list-option">
-                                    <ul> 
-                                    @foreach ($cities as $city)
-                                        <option value="{{ $city->id }}"><a href="javascript:void(0);">{{ $city->name }}</a></option>
-                                    @endforeach
-                                    </ul>
+                                <ul>
+                            @foreach ($cities as $city)
+                            <li>
+                                <a href="{{ route('tutors.tutorFilter', ['town' => $city]) }}">
+                                    {{ $city }}
+                                </a>
+                            </li>
+                            @endforeach
+                        </ul>
+
                                 </div>
                             </div>
                         </div>
@@ -132,12 +137,15 @@
                                     {{$page->browse_by_subject_title1}}
                                 </div>
                                 <div class="searching-list-option">
-                                    <ul>
-                                    @foreach ($courses as $cours)
-                                        <option value="{{ $cours->id }}"><a href="javascript:void(0);">{{ $cours->title }}</a></option>
-                                    @endforeach
-                                        
-                                    </ul>
+                                <ul>
+                            @foreach ($courses as $cours)
+                            <li>
+                                <a href="{{ route('tutors.tutorFilter', ['subject' => $cours->slug]) }}">
+                                {{ $cours->title }}
+                                </a>
+                            </li>
+                            @endforeach
+                        </ul>
                                 </div>
                             </div>
                         </div>

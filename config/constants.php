@@ -38,6 +38,7 @@ return [
 		'STUDENT_RATE'=>25, // Increase student rate than hourly rate by 25 percent
 		'TUTOR_PAYMENT_HELP_PAGE_ID'=>12,
 		'ONLINE_LESSON_PAGE_ID'=>13,
+		'ENQUIRY_LIMIT'=>30,
 		'ENQUIRY_MESSAGE_LIMIT'=>30,
 		'CURRENCY'=>'gbp',
         'DATE_FORMAT'=>'d/m/Y'
