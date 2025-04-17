@@ -12,6 +12,8 @@ use App\Models\SubjectTutor;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Http\Controllers\BookingMailController;
+
 
 class BookingController extends Controller
 {
@@ -213,6 +215,7 @@ class BookingController extends Controller
 			$booking = Booking::create($record);
 			$bookingIds[] = $booking->id;
 		}
+		
 	
 		// **Create a new enquiry & get its ID**
 		$enquiry = $this->__createEnquiry($request);
@@ -233,9 +236,8 @@ class BookingController extends Controller
 			\App\Models\BookingEnquiry::insert($bookingEnquiryRecords);
 		}
 
-
-
-
+		// $mailController = new BookingMailController();
+		// $mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_REMINDER');
 		return redirect()->route('tutor.booking.index')->with('success', 'Bookings created successfully.');
 	}
 	
@@ -395,6 +397,8 @@ class BookingController extends Controller
 		$booking->start_time		= $request->start_time;
 		$booking->duration			= $request->duration;
 		$booking->save();
+		$mailController = new BookingMailController();
+		$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_DETAIL_CHANGED');
 		
         return redirect()->route('tutor.booking.index')->with('success', 'Booking updated successfully.');
     }
@@ -409,10 +413,11 @@ class BookingController extends Controller
 		$user_id = Auth::user()->id;
 		$booking = Booking::where('tutor_id',$user_id)->findOrFail($request->booking_id);
 		
-		$booking->status    = 3;
+		$booking->status = 3;
 		$booking->cancel_by = 'Lesson cancel by tutor.';
 		$booking->save();
-        
+		$mailController = new BookingMailController();
+		$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_CANCELLED');
         return redirect()->route('tutor.booking.index')->with('success', 'Booking cancelled successfully.');
     }
 	

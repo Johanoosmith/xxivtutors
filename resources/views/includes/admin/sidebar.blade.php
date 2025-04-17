@@ -35,12 +35,15 @@
                         <li class="pc-item  {{ $currentRoute === 'admin.header.index' ? 'active' : '' }} {{ $currentRoute === 'admin.header.edit' ? 'active' : '' }} {{ $currentRoute === 'admin.header.create' ? 'active' : '' }}">
                         <a class="pc-link " href="{{route('admin.header.index')}}">Header</a></li>
 
-                        <li class="pc-item  {{ $currentRoute === 'admin.footer.index' ? 'active' : '' }} {{ $currentRoute === 'admin.footer.edit' ? 'active' : '' }} {{ $currentRoute === 'admin.footer.create' ? 'active' : '' }}">
-                            <a class="pc-link " href="{{route('admin.footer.index')}}">Footer</a></li>
+                        <!-- <li class="pc-item  {{ $currentRoute === 'admin.footer.index' ? 'active' : '' }} {{ $currentRoute === 'admin.footer.edit' ? 'active' : '' }} {{ $currentRoute === 'admin.footer.create' ? 'active' : '' }}">
+                            <a class="pc-link " href="{{route('admin.footer.index')}}">Footer</a></li> -->
 
 
                         <li class="pc-item  {{ $currentRoute === 'admin.emailtemplates.index' ? 'active' : '' }} {{ $currentRoute === 'admin.emailtemplates.edit' ? 'active' : '' }} {{ $currentRoute === 'admin.emailtemplates.create' ? 'active' : '' }}">
                             <a class="pc-link" href="{{ route('admin.notification-templates.index') }}">Notification Templates</a></li>
+
+                            <li class="pc-item  {{ $currentRoute === 'admin.emailtemplates.index' ? 'active' : '' }} {{ $currentRoute === 'admin.contract.index' ? 'active' : '' }} {{ $currentRoute === 'admin.emailtemplates.edit' ? 'active' : '' }} {{ $currentRoute === 'admin.emailtemplates.create' ? 'active' : '' }}">
+                            <a class="pc-link" href="{{ route('admin.contract.index') }}">Contract Declaration</a></li>
 
 
 

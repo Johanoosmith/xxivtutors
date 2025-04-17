@@ -7,6 +7,10 @@ use App\Http\Controllers\Admin\LevelController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\VerificationController;
+use App\Http\Controllers\Admin\ManageContractController;
+use Illuminate\Support\Facades\Route;
+
+
 use Mockery\VerificationDirector;
 
 Route::get('/', 'App\Http\Controllers\Admin\AdminController@login')->name('adlogin');
@@ -133,4 +137,7 @@ Route::group(['middleware' => ['admin']], function () {
 	Route::get('questions', [QuestionController::class, 'index'])->name('questions.index');
 	Route::post('/questions/accept', [QuestionController::class, 'accept'])->name('questions.accept');
 	Route::post('/questions/reject', [QuestionController::class, 'reject'])->name('questions.reject');
+
+	Route::get('/contract', [ManageContractController::class, 'index'])->name('contract.index');
+	Route::post('/contractStore', [ManageContractController::class, 'store'])->name('contract.store');
 });

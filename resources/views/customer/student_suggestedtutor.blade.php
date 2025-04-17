@@ -14,7 +14,7 @@
                     </p>
                 </span>
                 @else
-                <table cellpadding="10" cellspacing="0" style="width: 100%;">
+                <!-- <table cellpadding="10" cellspacing="0" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>Job Detail</th>
@@ -30,7 +30,30 @@
                         </tr>
                         @endforeach
                     </tbody>
-                </table>
+                </table> -->
+                <table class="table table-striped table-hover" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Job Detail</th>
+                            </tr>
+                          
+                        </thead>
+                        <tbody>
+                        @foreach ($tutors as $tutor)
+                            <tr>
+                                <td>
+                                <a href="#" title="Send Message">
+                                    <strong>{{ $tutor->level_title }} {{ $tutor->subject_title }}</strong>
+                                    @if(!empty($tutor->town) && !empty($tutor->county))
+                                    located in {{ $tutor->town }} {{ $tutor->county }}
+                                    @endif
+                                </a>
+                                </td>
+                               
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 @endif
 
             </div>

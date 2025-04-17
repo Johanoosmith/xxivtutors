@@ -11,23 +11,34 @@
                 <h4 class="mt-3">Here we list potential students which we found matched your profile infomation
                 </h4>
                 <div class="mt-3">
-                    <table style="width: 100%; border-collapse: collapse;">
+                    <table class="table table-striped table-hover" style="width: 100%;">
                         <thead>
                             <tr>
-                                <th style="text-align: left; padding: 10px;">Job Detail</th>
+                                <th style="text-align: left;">Job Detail</th>
                             </tr>
+                          
                         </thead>
                         <tbody>
                             @foreach ($students as $student)
                             <tr>
-                                <td style="padding: 10px; width: 100%;">
+                                <td>
+                                <a href="#" title="Send Message">
+
                                     <strong>{{ $student->level_title }} {{ $student->subject_title }}</strong>
-                                    located in {{ $student->town ?? 'N/A' }} {{ $student->county ?? 'N/A' }}
+                                    @if(!empty($student->town) && !empty($student->county))
+                                    located in {{ $student->town }} {{ $student->county }}
+                                    @endif
+                                </a>
                                 </td>
+                                <td style="padding: 10px;">
+                                <a href="#" title="Send Message">
+                                <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Message" style="width: 20px; height: 20px;">
+                                </a> </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
+
 
                 </div>
             </div>
