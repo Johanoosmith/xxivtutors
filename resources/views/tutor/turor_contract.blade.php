@@ -8,14 +8,18 @@
     <section class="dashboard-with-sidebar">
         <div class="container">
             <div class="row">
-                <div class="col dashboard-content">
+              <div class="col dashboard-content">
+                  @include('elements.alert_message')
                     <div id="maincontent">
                         <h1>Tutor Contract</h1>
                         <div>
                             <tt style="font-size: 16px;">This contract forms an agreement between <b>{{ @$booking->tutor->tutor->title}} {{ @$booking->tutor->full_name}}</b> and
-                                <b>{{ config('constants.SITE.TITLE') }}</b>.<br>Dated: {{ $booking->created_at->format(config('constants.SITE.DATE_FORMAT')) }}</tt>
+                                <b>{{ config('constants.SITE.TITLE') }}</b>.
+                                @if(!empty($contractObj->signed_date))
+                                <br>Dated: {{ date(config('constants.SITE.DATE_FORMAT'), strtotime($contractObj->signed_date)) }}
+                                @endif
+                            </tt>
                         </div>
-                        <p></p>
                         <div>
                             <p>To ensure that {{ config('constants.SITE.TITLE') }} can maintain its low commission rate we
                                 expect all our tutors to work with us and not book lessons outside our site. Tutors who
@@ -25,59 +29,70 @@
                                     style="font-weight: bold;">Please read the clauses below very carefully - you can agree
                                     to each clause by clicking the box on the left side.</em></p>
                             <div style="min-height: 140px;">
+                                @if(!empty($contractObj->cd_1))
                                 <div id="declaration-1" class="declare mb-2">
-                                    I acknowledge that {{ config('constants.SITE.TITLE') }} will carry out regular
-                                    compliance checks with students introduced to me to ensure all lessons are booked
-                                    through {{ config('constants.SITE.TITLE') }}.
+                                    {!! $contractObj->cd_1 !!}
                                 </div>
+                                @endif
  
+                                @if(!empty($contractObj->cd_1))
                                 <div id="declaration-2" class="declare mb-2">
-                                    I understand that, Lauren (Miss) has agreed to pay an <strong>hourly rate of
-                                        {{ getAmount($booking->hourly_rate) }}</strong> which includes {{ config('constants.SITE.TITLE') }}'s commission.
+                                  {!! $contractObj->cd_2 !!}
                                 </div>
+                                @endif
 
+                                @if(!empty($contractObj->cd_1))
                                 <div id="declaration-3" class="declare mb-2">
-                                    I understand that all online lessons must take place through our whiteboard (provided by
-                                    Zoom). Access links to the lesson will appear 15 minutes before the lesson takes place.
+                                  {!! $contractObj->cd_3 !!}
                                 </div>
+                                @endif
 
+                                @if(!empty($contractObj->cd_1))
                                 <div id="declaration-4" class="declare mb-2">
-                                    If I break these rules I understand that I will be subject to a maximum fine of {{ getAmount(150) }} per
-                                    student, permanent removal from {{ config('constants.SITE.TITLE') }}, and no option to
-                                    re-join as we only allow one account per photo ID we receive.
+                                  {!! $contractObj->cd_4 !!}
                                 </div>
+                                @endif
 
+                                @if(!empty($contractObj->cd_1))
                                 <div id="declaration-5" class="declare mb-2">
-                                    I understand that if I cannot attend a lesson, or if I need to rearrange the lesson
-                                    time/date, I must do so within the {{ config('constants.SITE.TITLE') }} booking system.
-                                    The student will automatically get notified as to any scheduling alterations.
+                                  {!! $contractObj->cd_5 !!}
                                 </div>
+                                @endif
                             </div>
                             <p>
                                 <br> <br>
                                 Your Name: {{ @$booking->tutor->full_name}}<br><br>
                             </p>
-                            <!--<p><tt style="font-size: 13px; margin-top: 20px; display:inline-block;">Your contract signature
-                                    will be stored along with your IP Address: <strong
-                                        style="color: #000;">77.96.138.183</strong><br>Once signed, a copy of this contract
-                                    will be available to you to view within the members portal for reference.</tt>
-                            </p>-->
+                            
+                            @if(!empty($contractObj->ip_address))
+                              <p><tt style="font-size: 13px; margin-top: 20px; display:inline-block;">Your contract signature
+                                      will be stored along with your IP Address: <strong
+                                          style="color: #000;">{{ $contractObj->ip_address }}</strong></tt>
+                              </p>
+                            @endif
 
-                           
 
-                           
-                            <div id="content">
-                              <div id="signatureparent">
-                                <div>jSignature inherits colors from parent element. Text = Pen color. Background = Background. (This works even when Flash-based Canvas emulation is used.)</div>
-                                <div id="signature"></div></div>
-                              <div id="tools"></div>
-                              <div>
-                                  <p>Signature Display:</p>
-                                  <div id="displayarea"></div>
+                            @if(!empty($contractObj->signature) && $contractObj->status == 'signed')
+                              <div class="signature">
+                                <img src="{{ asset('storage/signatures/'.$contractObj->signature) }}" alt="Signature" style="width: 200px; height: auto;">
                               </div>
-                            </div>
+                            @else
+                            <form id="signatureform" method="post" action="{{ route('tutor.contract', $contractObj->id) }}">
+                                @csrf
+                                
+                              <div id="content">
+                                  <div id="signatureparent">
+                                    <div>jSignature inherits colors from parent element. Text = Pen color. Background = Background. (This works even when Flash-based Canvas emulation is used.)</div>
+                                    <div id="signature"></div></div>
+                                  <div id="tools"></div>
+                                  <div>
+                                      <div id="displayarea"></div>
+                                  </div>
+                                </div>
                           
-
+                                <input type="submit" id="submit" class="btn btn-green" value="Sign Submit" />
+                            </form>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -96,4 +111,10 @@
   </script>
 <script src="{{ asset('front/assets/js/jSignature.min.noconflict.js') }}"></script>
 <script src="{{ asset('front/assets/js/signature.js') }}"></script>
+@endsection
+
+@section('custom-js')
+<script>
+  jQuery('')
+</script>
 @endsection

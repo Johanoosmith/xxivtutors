@@ -194,7 +194,7 @@ class PageController extends Controller
                 $query->where('postcode', $request->postcode);
             }
         }
-
+       
 
         if ($request->min_price != null || $request->max_price != null || $request->distance != null ||  $request->min_rating != '0') {
             $query->whereHas('tutor', function ($q) use ($request) {
@@ -209,11 +209,13 @@ class PageController extends Controller
                 if ($request->distance != null) {
                     $q->whereBetween('tutors.distance', [0, $request->distance]);
                 }
-                if ($request->min_rating != '0') {
+                if ($request->min_rating != '0' && $request->min_rating != null) {
                     $q->where('tutors.rating', $request->min_rating);
                 }
             });
         }
+
+       
 
         if ($request->gender != null) {
             $query->where('gender', $request->gender);
@@ -223,6 +225,8 @@ class PageController extends Controller
         if ($request->postcode != null) {
             $query->where('postcode', $request->postcode);
         }
+
+        
 
         $arr['tutors'] = $query->paginate(10);
 
