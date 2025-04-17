@@ -4,10 +4,10 @@
 		$subjects	= getSubjectList();
 		$levels		= getLevelList();
 	@endphp
-	
 	<script>
-		// Convert Laravel $subject_list to JavaScript array
-		var availableTags = @json($subjects->map(fn($title, $id) => ['label' => $title, 'value' => $id])->values());
+		// Convert Laravel $subjects to JavaScript array with id, title, and slug
+		var availableTags = @json($subjects->map(fn($subject) => ['label' => $subject->title, 'value' => $subject->id, 'slug' => $subject->slug]));
+		console.log(availableTags);
 	</script>
 
 	<ul class="search-tabs" id="SiteSearchTab">
@@ -20,8 +20,8 @@
 		<div class="field">                                    
     <input type="text" name="subject_title" id="SubjectSearch" class="input" placeholder="Enter a subject" value="{{ old('subject_title', request('subject_title')) }}">
     <input type="hidden" name="subject_id" id="FilterSubjectValue" value="{{ old('subject_id', request('subject_id')) }}">
-</div>
-
+    <input type="hidden" name="slug" id="FilterSubjectslug" value="{{ old('slug', request('slug')) }}">
+    </div>
 <div class="field select-field">
     <select id="level" name="level" class="select">
         <option value="All Levels" {{ old('level', request('level')) == 'All Levels' ? 'selected' : '' }}>All Levels</option>
@@ -37,7 +37,7 @@
 </div>
 
 <div class="field postcode" id="SiteSearchPostcode">
-    <input type="text" name="postcode" placeholder="Postcode" class="input number" maxlength="8" value="{{ old('postcode', request('postcode')) }}">
+    <input type="text" name="postcode" placeholder="Postcode" class="input number" required maxlength="8" value="{{ old('postcode', request('postcode')) }}">
 </div>
 
 		<div class="btn-field">
@@ -58,12 +58,13 @@
 		jQuery("#SubjectSearch").autocomplete({
 			source: availableTags,
 			select: function(event, ui) {
+				console.log(ui.item);
 				// Populate the input with the course title (label)
 				jQuery("#SubjectSearch").val(ui.item.label);
 
 				// Optionally populate a hidden input with the course ID (value)
 				jQuery("#FilterSubjectValue").val(ui.item.value);
-
+				jQuery("#FilterSubjectslug").val(ui.item.slug); 
 				return false; // Prevent default behavior
 			},
 			open: function() {

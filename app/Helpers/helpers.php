@@ -576,6 +576,14 @@ function getHourList(){
     return $hours;
 }
 
+
+if (!function_exists('format_label')) {
+    function format_label($value)
+    {
+        return ucwords(str_replace('_', ' ', $value));
+    }
+}
+
 function getSubjectList(){
 	$subjects = Subject::getSubjectList();
 	return $subjects;
@@ -711,4 +719,17 @@ function getMonthlyEnquiryCount($user_id){
 					->count();
 					
 	return $monthlyEnquiryCount;
+}
+
+
+function getEnquiryByContractId($contract_id){
+	$bookingContract = \App\Models\BookingContract::where('contract_id', $contract_id)->first();
+	if(!empty($bookingContract)){
+		$bookingEnquiry = \App\Models\BookingEnquiry::where('booking_id', $bookingContract->booking_id)->first();
+		
+		if(!empty($bookingEnquiry)){
+			return $bookingEnquiry->enquiry_id;
+		}
+	}
+	return 0;
 }

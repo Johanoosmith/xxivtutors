@@ -17,6 +17,13 @@
 		<link rel="stylesheet" href="{{asset('front/assets/css/style.css')}}">
 		<link rel="stylesheet" href="{{asset('front/assets/css/responsive.css')}}">
 		<link rel="stylesheet" href="{{asset('front/assets/css/custom.css')}}">
+		
+
+		<!-- Add this to your <head> section -->
+			<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	
+
+
 		@yield('custom-css')	
         @show      
     </head>   
@@ -29,6 +36,7 @@
         @include('includes.front.footer')
         @include('includes.front.footer_script')
 		@yield('page-js')
+		
 		@yield('custom-js')
         @section('inline-js')
         @show

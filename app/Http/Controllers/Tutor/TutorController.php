@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Tutor;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash; // Import the Hash facade
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+use App\Http\Controllers\Controller;
 use App\Models\User; // Assuming you have a Customer model
 use App\Models\Country;
 use App\Models\County;
-use Illuminate\Support\Facades\Hash; // Import the Hash facade
-use Illuminate\Support\Facades\Auth;
 use App\Models\UserView;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\Language;
@@ -35,6 +38,7 @@ class TutorController extends Controller
 {
     public function index()
     {
+        
         $user = Auth::user(); // Get the currently logged-in user
         $userId = $user->id;
         $tutorsdata = DB::table('tutors')->where('user_id', $userId)->get();
@@ -546,11 +550,19 @@ class TutorController extends Controller
     public function tutorMyClients(Request $request)
     { 
         $user = Auth::user();
+        
+        $contracts = \App\Models\Contract::where('tutor_id',$user->id)
+                                ->with(['student','tutor'])
+                                ->orderBy('created_at', 'DESC')
+                                ->get();
+        
+
+        /*
         $paidBookings = Booking::where('tutor_id',$user->id)
                             ->whereHas('payments', function ($query) {
                                 $query->where('status', 'paid');
                             })->with(['student','booking_enquiry'])->get();
-        
+        */
         
         /*
         $enquiries = Enquiry::whereIn('id', function ($query) use ($user) {
@@ -564,16 +576,79 @@ class TutorController extends Controller
         ->get();
         */
             
-        return view('tutor.tutor_myclient', compact('paidBookings'));
+        return view('tutor.tutor_myclient', compact('contracts'));
     }
     public function turorContract($id)
-    { 
+    {
+        $id = 1; 
+        $request = request();
         $user = Auth::user();
-        $booking = Booking::where('id', $id)
-            ->with(['tutor'=>['tutor'],'student'])
-            ->first();
 
-        return view('tutor.turor_contract',compact('booking'));
+        $booking_contract = \App\Models\BookingContract::where('contract_id', $id)->first();
+        $booking = Booking::where('id', $booking_contract->booking_id)->first();
+        $contractObj = \App\Models\Contract::where('id', $id)->first();
+        if(empty($contractObj)){
+            return redirect()->back()->with('error', 'Contract not found.');
+        }
+
+        if($contractObj->status == 'pending'){
+            
+            $placeholders = ['{site_name}', '{hourly_rate}'];
+            $values = [config('constants.SITE.TITLE'), getAmount($booking->hourly_rate)];
+
+            $contractObj->cd_1 = str_replace($placeholders, $values, 'I acknowledge that {site_name} will carry out regular
+                                    compliance checks with students introduced to me to ensure all lessons are booked
+                                    through {site_name}.');
+            $contractObj->cd_2 = str_replace($placeholders, $values, 'I understand that, Lauren (Miss) has agreed to pay an <strong>hourly rate of
+                                        {hourly_rate}</strong> which includes {site_name}/\'/s commission.');
+            $contractObj->cd_3 = str_replace($placeholders, $values, 'I understand that all online lessons must take place through our whiteboard (provided by
+                                    Zoom). Access links to the lesson will appear 15 minutes before the lesson takes place.');
+            $contractObj->cd_4 = str_replace($placeholders, $values, 'If I break these rules I understand that I will be subject to a maximum fine of 150 per
+            student, permanent removal from {site_name}, and no option to re-join as we only allow one account per photo ID we receive.');
+
+            $contractObj->cd_5 = str_replace($placeholders, $values, 'I understand that if I cannot attend a lesson, or if I need to rearrange the lesson time/date, I must do so within the {site_name} booking system. The student will automatically get notified as to any scheduling alterations.');
+        }
+
+        if($request->isMethod('post')){
+            
+            $signature = $request->input('signature'); // data:image/png;base64,...
+
+            // Extract the actual base64 data
+            if (preg_match('/^data:image\/(\w+);base64,/', $signature, $type)) {
+                $data = substr($signature, strpos($signature, ',') + 1);
+                $extension = strtolower($type[1]); // jpg, png, gif, etc.
+        
+                // Decode
+                $data = base64_decode($data);
+        
+                if ($data === false) {
+                    return redirect()->back()->with('error', 'Base64 decode failed.');
+                }
+            } else {
+                return redirect()->back()->with('error', 'Invalid image data.');
+            }
+            
+
+            $request->validate([
+             'signature' => 'required',
+            ]);
+
+            // Generate a unique file name
+            $fileName = 'signature_' . Str::random(10) . '.' . $extension;
+
+            // Save to storage/app/public/signatures (you may need to run `php artisan storage:link`)
+            Storage::disk('public')->put('signatures/' . $fileName, $data);
+
+            $contractObj->ip_address  = $_SERVER['REMOTE_ADDR'];
+            $contractObj->signed_date = date('Y-m-d H:i:s');
+            $contractObj->status      = 'signed';
+            $contractObj->signature   = $fileName;
+            if($contractObj->save()){
+                return redirect()->route('tutor.contract', $id)->with('success', 'Contract is signed successfully.');
+            }
+        }
+
+        return view('tutor.turor_contract',compact('booking', 'contractObj'));
     }
     // public function tutorprivacy()
     // { 
