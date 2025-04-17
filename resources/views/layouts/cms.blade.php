@@ -36,28 +36,7 @@
         @include('includes.front.footer')
         @include('includes.front.footer_script')
 		@yield('page-js')
-		<script>
-			$(function () {
-				const minPrice = parseInt($('#minPrice').val()) || 0;
-				const maxPrice = parseInt($('#maxPrice').val()) || 500;
-			
-				$("#priceSlider").slider({
-					range: true,
-					min: 0,
-					max: 500,
-					values: [minPrice, maxPrice],
-					slide: function (event, ui) {
-						$("#priceDisplay").text(ui.values[0] + " - " + ui.values[1]);
-						$("#minPrice").val(ui.values[0]);
-						$("#maxPrice").val(ui.values[1]);
-					}
-				});
-			
-				// Set initial text
-				$("#priceDisplay").text($("#priceSlider").slider("values", 0) +
-					" - " + $("#priceSlider").slider("values", 1));
-			});
-			</script>  
+		
 		@yield('custom-js')
         @section('inline-js')
         @show

@@ -45,13 +45,14 @@ http://dojofoundation.org/license for more information.
         // This is the part where jSignature is initialized.
         var $sigdiv = $("#signature").jSignature({'UndoButton':true})
         
+        
         // All the code below is just code driving the demo. 
         , $tools = $('#tools')
         , $extraarea = $('#displayarea')
         , pubsubprefix = 'jSignature.demo.'
         
         var export_plugins = $sigdiv.jSignature('listPlugins','export')
-        , chops = ['<span><b>Extract signature data as: </b></span><select>','<option value="">(select export format)</option>']
+        , chops = ['<span style="display:none"><b>Extract signature data as: </b></span><select style="display:none">','<option value="">(select export format)</option>']
         , name
         for(var i in export_plugins){
             if (export_plugins.hasOwnProperty(i)){
@@ -59,11 +60,17 @@ http://dojofoundation.org/license for more information.
                 chops.push('<option value="' + name + '">' + name + '</option>')
             }
         }
-        chops.push('</select><span><b> or: </b></span>')
+        chops.push('</select></span>')
+
+        chops.push('<input type="button" id="GetImageData" class="btn btn-yellow" value="Confirm Signature" />')
         
-        $(chops.join('')).bind('change', function(e){
-            if (e.target.value !== ''){
-                var data = $sigdiv.jSignature('getData', e.target.value)
+        //$(chops.join('')).bind('change', function(e){
+            $(chops.join('')).bind('click', function(e){
+                
+            //if (e.target.value !== ''){
+                //var data = $sigdiv.jSignature('getData', e.target.value)
+                var data = $sigdiv.jSignature('getData', 'default');
+                
                 $.publish(pubsubprefix + 'formatchanged')
                 if (typeof data === 'string'){
                     $('textarea', $tools).val(data)
@@ -77,15 +84,15 @@ http://dojofoundation.org/license for more information.
                         $('textarea', $tools).val('Not sure how to stringify this, likely binary, format.')
                     }
                 }
-            }
+            //}
         }).appendTo($tools)
     
         
-        $('<input type="button" value="Reset">').bind('click', function(e){
+        $('<input type="button" class="btn btn-danger" value="Reset">').bind('click', function(e){
             $sigdiv.jSignature('reset')
         }).appendTo($tools)
         
-        $('<div><textarea style="width:100%;height:7em;"></textarea></div>').appendTo($tools)
+        $('<div><textarea name="signature" style="display:none;width:100%;height:7em;"></textarea></div>').appendTo($tools)
         
         $.subscribe(pubsubprefix + 'formatchanged', function(){
             $extraarea.html('')
@@ -140,3 +147,10 @@ http://dojofoundation.org/license for more information.
     })
     
     })(jQuery)
+
+
+
+    /*
+        Working on 
+    
+    */

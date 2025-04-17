@@ -213,7 +213,8 @@ class BookingController extends Controller
 			$booking = Booking::create($record);
 			$bookingIds[] = $booking->id;
 		}
-	
+		
+		
 		// **Create a new enquiry & get its ID**
 		$enquiry = $this->__createEnquiry($request);
 	
@@ -234,6 +235,28 @@ class BookingController extends Controller
 		}
 
 
+		/* Contract & BookingContract Entries */
+		$last_record = end($records);
+		$contract_end_date = $last_record['start_date'];
+
+		$contract = $this->__createContract($request, $contract_end_date);
+
+		// **Insert into booking_enquiries table**
+		if ($contract) {
+			$contractId = $contract->id;
+			$bookingContractRecords = [];
+			
+			foreach ($bookingIds as $bookingId) {
+				$bookingContractRecords[] = [
+					'booking_id'  => $bookingId,
+					'contract_id'  => $contractId,
+				];
+			}
+	
+			// Bulk insert into booking_contracts table
+			\App\Models\BookingContract::insert($bookingContractRecords);
+		}
+
 
 
 		return redirect()->route('tutor.booking.index')->with('success', 'Bookings created successfully.');
@@ -252,6 +275,19 @@ class BookingController extends Controller
 		];
 		
 		return \App\Models\Enquiry::create($enquiry);
+	}
+
+	private function __createContract($request, $contract_end_date){
+		$user_id = Auth::user()->id;
+		
+		$contract = [
+			'tutor_id'	=> $user_id,
+			'student_id'=> $request->student_id,
+			'start_date'=> $request->start_date,
+			'end_date'	=> $contract_end_date,
+		];
+		
+		return \App\Models\Contract::create($contract);
 	}
 
 	/**

@@ -26,19 +26,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($paidBookings as $paidBooking)
+                                @foreach($contracts as $contract)
                                 <tr>
-                                    <td class="col-qualification"><a href="#">{{ $paidBooking->student->full_name }}</a></td>
+                                    <td class="col-qualification"><a href="{{ route('profile',$contract->student->id) }}">{{ $contract->student->full_name }}</a></td>
                                     <td class="col-institute">
-                                        {{ $paidBooking->created_at->format(config('constants.SITE.DATE_FORMAT')) }}
+                                        {{ ($contract->signed_date) ? date(config('constants.SITE.DATE_FORMAT'), strtotime($contract->signed_date)) : '-' }}
                                     </td>
                                     <td class="col-status">
-                                        <span class="infookay">Connected</span>
-                                        &nbsp;&nbsp;
-                                        
-                                        <a href="{{ route('tutor.enquiries.chat', @$paidBooking->booking_enquiry->enquiry_id) }}">View contact details </a>
+                                        @if($contract->status == 'signed')
+                                            <span class="infookay">Connected</span>
+                                        @endif
+
+                                        <a href="{{ route('tutor.enquiries.chat', getEnquiryByContractId($contract->id)) }}">View contact details </a>
                                             &nbsp;&nbsp;|&nbsp;&nbsp;
-                                        <a href="{{ route('tutor.contract', @$paidBooking->id) }}">View contract </a>
+                                        <a href="{{ route('tutor.contract', @$contract->id) }}">View contract </a>
                                     </td>
                                 </tr>
                                 @endforeach

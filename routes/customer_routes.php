@@ -128,7 +128,7 @@ Route::middleware(['auth'])->prefix('tutor')->group(function () {
 		Route::get('/personalinfo', [TutorController::class, 'personalinfo'])->name('tutor.personalinfo');
 		Route::get('/password', [TutorController::class, 'studpassword'])->name('tutor.password');
 		Route::get('/myclients', [TutorController::class, 'tutorMyClients'])->name('tutor.myclients');
-		Route::get('/turorcontract/{id}', [TutorController::class, 'turorContract'])->name('tutor.contract');
+		Route::match(['get','post'], '/turorcontract/{id}', [TutorController::class, 'turorContract'])->name('tutor.contract');
 		Route::get('/privacy', [TutorController::class, 'tutorprivacy'])->name('tutor.privacy');
 		Route::put('/privacyNotifications/update', [TutorController::class, 'updateNotifications'])->name('tutor.update');
 
