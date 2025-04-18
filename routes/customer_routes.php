@@ -3,7 +3,9 @@
 use App\Http\Controllers\Tutor\TutorController;
 use App\Http\Controllers\Tutor\SubjectController;
 use App\Http\Controllers\Tutor\BookingController;
-use App\Http\Controllers\Tutor\TagController;
+use App\Http\Controllers\Tutor\TagController; 
+use App\Http\Controllers\Tutor\TutorFeedbackController;
+
 
 
 /* Student */
@@ -131,6 +133,7 @@ Route::middleware(['auth'])->prefix('tutor')->group(function () {
 		Route::match(['get','post'], '/turorcontract/{id}', [TutorController::class, 'turorContract'])->name('tutor.contract');
 		Route::get('/privacy', [TutorController::class, 'tutorprivacy'])->name('tutor.privacy');
 		Route::put('/privacyNotifications/update', [TutorController::class, 'updateNotifications'])->name('tutor.update');
+		Route::get('/feedbacklist', [TutorFeedbackController::class, 'feedbackList'])->name('tutor.feedback');
 
 		Route::post('/update-personalinfo', [TutorController::class, 'personalinfoupdate'])->name('tutor.personalinfoupdate');
 		Route::put('/update-password', [TutorController::class, 'studpasswordupdate'])->name('tutor.studpasswordupdate');

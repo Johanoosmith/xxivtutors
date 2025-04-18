@@ -20,6 +20,8 @@ use App\Models\Tutor;
 use App\Models\Question;
 use App\Models\Booking;
 
+
+
 class FeedbackController extends Controller
 {
     // Show Feedback Form
@@ -69,6 +71,7 @@ class FeedbackController extends Controller
             'content' => $request->content,
             'status' => 'pending',
         ]);
+
 
         return redirect()->route('student.feedback')->with('success', 'Feedback submitted successfully.');
     }

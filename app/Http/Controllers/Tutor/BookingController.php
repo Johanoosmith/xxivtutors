@@ -17,11 +17,11 @@ use App\Http\Controllers\BookingMailController;
 
 class BookingController extends Controller
 {
-    public function index(Request $request)
-    {
-		
-        $perPage = 10; // Adjust as necessary
-		
+	public function index(Request $request)
+	{
+
+		$perPage = 10; // Adjust as necessary
+
 		$user_id = Auth::user()->id;
 
 		// Create a new query for the Subject model
@@ -32,45 +32,45 @@ class BookingController extends Controller
 			'past'	   => 'Previous Booking',
 			'cancel'   => 'Cancel Booking',
 		];
-		
-		$query->where('tutor_id',$user_id)->with(['Tutor','Student','Subject','Level','booking_enquiry']);
-							
-		
+
+		$query->where('tutor_id', $user_id)->with(['Tutor', 'Student', 'Subject', 'Level', 'booking_enquiry']);
+
+
 		if (!empty($request->booking_on) && $request->booking_on == 'past') {
 			// Past Records 
 			$query->where(function ($q) {
 				$q->where('start_date', '<', now()->toDateString())
-				  ->orWhere(function ($subQ) {
-					  $subQ->where('start_date', now()->toDateString())
-						   ->where('start_time', '<', now()->format('H:i:s'));
-				  });
+					->orWhere(function ($subQ) {
+						$subQ->where('start_date', now()->toDateString())
+							->where('start_time', '<', now()->format('H:i:s'));
+					});
 			})->orderBy('start_date', 'DESC')->orderBy('start_time', 'DESC');
-		} else { 
+		} else {
 			// Upcoming by default
 			$query->where(function ($q) {
 				$q->where('start_date', '>', now()->toDateString())
-				  ->orWhere(function ($subQ) {
-					  $subQ->where('start_date', now()->toDateString())
-						   ->where('start_time', '>=', now()->format('H:i:s'));
-				  });
+					->orWhere(function ($subQ) {
+						$subQ->where('start_date', now()->toDateString())
+							->where('start_time', '>=', now()->format('H:i:s'));
+					});
 			})->orderBy('start_date', 'ASC')->orderBy('start_time', 'ASC');
 		}
-		
+
 		if (!empty($request->booking_on) && $request->booking_on == 'cancel') {
-			$query->where('status',3);
-		}else{
-			$query->whereIn('status',[1,2]);
+			$query->where('status', 3);
+		} else {
+			$query->whereIn('status', [1, 2]);
 		}
-							
-		
+
+
 		// Paginate the query results
 		$bookings = $query->paginate($perPage);
 
 		$booking_json = $this->getBookingsJson();
 		//pr($booking_json);
 
-		return view('tutor.booking.index', compact('bookings','booking_json','booking_on'));
-    }
+		return view('tutor.booking.index', compact('bookings', 'booking_json', 'booking_on'));
+	}
 
 	public function getBookingsJson()
 	{
@@ -89,7 +89,7 @@ class BookingController extends Controller
 			$isPast = $startDateTime->lt($now);
 
 			$events[] = [
-				'title' => $booking->student->full_name .' @ '.date('H:i', strtotime($booking->start_time)),
+				'title' => $booking->student->full_name . ' @ ' . date('H:i', strtotime($booking->start_time)),
 				'start' => $startDateTime->toIso8601String(),
 				'end' => $startDateTime->toIso8601String(),
 				'url'   => $isPast ? '' : route('tutor.booking.edit', $booking),
@@ -100,25 +100,32 @@ class BookingController extends Controller
 		//return response()->json($events);
 	}
 
-    public function create()
-    {
+	public function create()
+	{
 		$user_id = Auth::user()->id;
-		
+
 		$tutor_subjects = $students = [];
-		if(empty(request()->old('lesson_repeat'))){
+		if (empty(request()->old('lesson_repeat'))) {
 			//request()->old('lesson_repeat', 1);
 		}
-		
-		
+
+
 		$students = User::getStudentList('name_email');
 		$tutor_subjects = SubjectTutor::getTutorSubjectList($user_id);
-		$days = [ 1 => 'Mon', 2 => 'Tue', 3 => 'Wed',
-			4 => 'Thus', 5 => 'Fri', 6 => 'Sat', 7 => 'Sun'];
-		
-		
-		return view('tutor.booking.create', compact('tutor_subjects','students','days'));
-    }
-	
+		$days = [
+			1 => 'Mon',
+			2 => 'Tue',
+			3 => 'Wed',
+			4 => 'Thus',
+			5 => 'Fri',
+			6 => 'Sat',
+			7 => 'Sun'
+		];
+
+
+		return view('tutor.booking.create', compact('tutor_subjects', 'students', 'days'));
+	}
+
 	public function store(Request $request)
 	{
 		$user_id = Auth::user()->id;
@@ -127,8 +134,8 @@ class BookingController extends Controller
 			'start_date' => Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d'),
 			'start_time' => sprintf('%02d:%02d', $request->start_time_hour, $request->start_time_minute)
 		]);
-		
-		
+
+
 
 
 		$request->validate([
@@ -165,9 +172,9 @@ class BookingController extends Controller
 		$lessonRepeat = $request->lesson_repeat;
 		$days = $request->day; // Array of days
 		$records = [];
-		
+
 		$subject_tutor = SubjectTutor::where('id', $request->subject_tutor_id)->first();
-		
+
 		$request->merge([
 			'subject_id'	=> $subject_tutor->subject_id,
 			'level_id' 		=> $subject_tutor->level_id,
@@ -206,37 +213,37 @@ class BookingController extends Controller
 		//dd($records);
 		// Insert all records at once
 		//Booking::insert($records);
-		
+
 		//$this->__createEnquiry($request);
 
 
 		// **Insert all bookings & retrieve inserted booking IDs**
 		$bookingIds = [];
-		$firstBooking=null;
+		$firstBooking = null;
 		foreach ($records as $index => $record) {
 			$booking = Booking::create($record);
 			$bookingIds[] = $booking->id;
-			if($index === 0){
-				$firstBooking=$booking;
+			if ($index === 0) {
+				$firstBooking = $booking;
 			}
 		}
-		
-		
+
+
 		// **Create a new enquiry & get its ID**
 		$enquiry = $this->__createEnquiry($request);
-	
+
 		// **Insert into booking_enquiries table**
 		if ($enquiry) {
 			$enquiryId = $enquiry->id;
 			$bookingEnquiryRecords = [];
-			
+
 			foreach ($bookingIds as $bookingId) {
 				$bookingEnquiryRecords[] = [
 					'booking_id'  => $bookingId,
 					'enquiry_id'  => $enquiryId,
 				];
 			}
-	
+
 			// Bulk insert into booking_enquiries table
 			\App\Models\BookingEnquiry::insert($bookingEnquiryRecords);
 		}
@@ -253,31 +260,32 @@ class BookingController extends Controller
 		if ($contract) {
 			$contractId = $contract->id;
 			$bookingContractRecords = [];
-			
+
 			foreach ($bookingIds as $bookingId) {
 				$bookingContractRecords[] = [
 					'booking_id'  => $bookingId,
 					'contract_id'  => $contractId,
 				];
 			}
-	
+
 			// Bulk insert into booking_contracts table
 			\App\Models\BookingContract::insert($bookingContractRecords);
 		}
 
-		if($firstBooking){
-		$mailController = new BookingMailController();
-		$mailController->sendStudentBookingRelatedMail($firstBooking, 'STUDENT_BOOKING_INITIATED');
+		if ($firstBooking) {
+			$mailController = new BookingMailController();
+			$mailController->sendStudentBookingRelatedMail($firstBooking, 'TUTOR_BOOKING');
 		}
 
 
 
 		return redirect()->route('tutor.booking.index')->with('success', 'Bookings created successfully.');
 	}
-	
-	private function __createEnquiry($request){
+
+	private function __createEnquiry($request)
+	{
 		$user_id = Auth::user()->id;
-		
+
 		$enquiry = [
 			'sender_id'			=> $user_id,
 			'receiver_id'		=> $request->student_id,
@@ -286,20 +294,21 @@ class BookingController extends Controller
 			'content'		=> 'Tutor create booking enquiries.',
 			'is_read'		=> 0,
 		];
-		
+
 		return \App\Models\Enquiry::create($enquiry);
 	}
 
-	private function __createContract($request, $contract_end_date){
+	private function __createContract($request, $contract_end_date)
+	{
 		$user_id = Auth::user()->id;
-		
+
 		$contract = [
 			'tutor_id'	=> $user_id,
-			'student_id'=> $request->student_id,
-			'start_date'=> $request->start_date,
+			'student_id' => $request->student_id,
+			'start_date' => $request->start_date,
 			'end_date'	=> $contract_end_date,
 		];
-		
+
 		return \App\Models\Contract::create($contract);
 	}
 
@@ -325,7 +334,7 @@ class BookingController extends Controller
 			'subject_tutor_id' => $request->subject_tutor_id,
 			'subject_id' 	   => $request->subject_id,
 			'level_id' 		   => $request->level_id,
-			'teaching_location'=> $request->teaching_location,
+			'teaching_location' => $request->teaching_location,
 			'lesson_repeat'    => $request->lesson_repeat,
 			'hourly_rate'      => $request->hourly_rate,
 			'student_rate'      => $request->student_rate,
@@ -337,10 +346,10 @@ class BookingController extends Controller
 			'updated_at'       => now(),
 		];
 	}
-	
-	
 
-    
+
+
+
 	/*
     public function store(Request $request)
     {
@@ -381,35 +390,35 @@ class BookingController extends Controller
 		return redirect()->route('tutor.booking.index')->with('success', 'Booking created successfully.');
     }
 	*/
-	
-    public function edit(Booking $booking)
-    {
+
+	public function edit(Booking $booking)
+	{
 		$request = request();
-		
+
 		list($startHour, $startMinute) = explode(':', $booking->start_time);
 		$booking->start_date = date('d/m/Y', strtotime($booking->start_date));
-		
-		
-		if(!empty(request()->old('start_time'))){
+
+
+		if (!empty(request()->old('start_time'))) {
 			list($startHour, $startMinute) = explode(':', request()->old('start_time'));
 		}
-		
-		if(!empty(request()->old('start_date'))){
+
+		if (!empty(request()->old('start_date'))) {
 			$booking->start_date = date('d/m/Y', strtotime(request()->old('start_date')));
 		}
-		
-		return view('tutor.booking.edit', compact('booking', 'startHour', 'startMinute'));
-    }
 
-    public function update(Request $request, Booking $booking)
-    {
-		
+		return view('tutor.booking.edit', compact('booking', 'startHour', 'startMinute'));
+	}
+
+	public function update(Request $request, Booking $booking)
+	{
+
 		$request->merge([
 			'start_date' => Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d'),
 			'start_time' => Carbon::parse($request->start_time)->format('H:i')
 		]);
-		
-        $request->validate([
+
+		$request->validate([
 			'teaching_location' => 'required|integer',
 			'hourly_rate'       => 'required|numeric',
 			'start_date'        => ['required', 'date', 'after_or_equal:' . now()->toDateString()],
@@ -432,11 +441,11 @@ class BookingController extends Controller
 			],
 			'duration'  => 'required|integer'
 		]);
-		
+
 		$user_id = Auth::user()->id;
-		
-		$booking = Booking::where('tutor_id',$user_id)->findOrFail($booking->id);
-		
+
+		$booking = Booking::where('tutor_id', $user_id)->findOrFail($booking->id);
+
 		$booking->hourly_rate 		= $request->hourly_rate;
 		$booking->student_rate 		= getStudentPrice($request->hourly_rate);
 		$booking->teaching_location = $request->teaching_location;
@@ -446,69 +455,67 @@ class BookingController extends Controller
 		$booking->save();
 		$mailController = new BookingMailController();
 		$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_DETAIL_CHANGED');
-		
-        return redirect()->route('tutor.booking.index')->with('success', 'Booking updated successfully.');
-    }
 
-    public function destroy(Request $request)
-    {
+		return redirect()->route('tutor.booking.index')->with('success', 'Booking updated successfully.');
 	}
-	
+
+	public function destroy(Request $request) {}
+
 	public function cancel(Request $request)
-    {
-		
+	{
+
 		$user_id = Auth::user()->id;
-		$booking = Booking::where('tutor_id',$user_id)->findOrFail($request->booking_id);
-		
+		$booking = Booking::where('tutor_id', $user_id)->findOrFail($request->booking_id);
+
 		$booking->status = 3;
 		$booking->cancel_by = 'Lesson cancel by tutor.';
 		$booking->save();
 		$mailController = new BookingMailController();
 		$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_CANCELLED');
-        return redirect()->route('tutor.booking.index')->with('success', 'Booking cancelled successfully.');
-    }
-	
+		return redirect()->route('tutor.booking.index')->with('success', 'Booking cancelled successfully.');
+	}
+
 	public function help()
-    {
+	{
 		$page_id = config('constants.SITE.TUTOR_PAYMENT_HELP_PAGE_ID');
 		$page = \App\Models\Page::getPage($page_id);
 		return view('tutor.booking.help', compact('page'));
-    }
-	
+	}
+
 	public function payment_history(Request $request)
-    {
+	{
 		$payment_history = '';
-		
+
 		$perPage = 10;
-		
+
 		$auth_user_id = Auth::user()->id;
-		
+
 		$query = Payment::query();
-		
-		$query->where('tutor_id',$auth_user_id)
-				->with(['booking','student'])
-				->orderBy('created_at','DESC');
-							
+
+		$query->where('tutor_id', $auth_user_id)
+			->with(['booking', 'student'])
+			->orderBy('created_at', 'DESC');
+
 		// Paginate the query results
 		$payments = $query->paginate($perPage);
-		
+
 		return view('tutor.booking.payment_history', compact('payments'));
-    }
-	
+	}
+
 	public function online_lesson(Request $request)
-    {
+	{
 		$user_id = Auth::user()->id;
-		$tutor = \App\Models\Tutor::where('user_id',$user_id)->first();
-		if($request->isMethod('post')){
+		$tutor = \App\Models\Tutor::where('user_id', $user_id)->first();
+		if ($request->isMethod('post')) {
 			$tutor->teaching_experience = $request->teaching_experience;
 			$tutor->learning_online		= $request->learning_online;
 			$tutor->additional_comments = $request->additional_comments;
 			$tutor->save();
 		}
-		
+
 		return view('tutor.booking.online_lesson', compact('tutor'));
-    }
-	
+	}
+
 	/*
 	public function getSubjectByCourse($course_id, $selected_id=NULL)
     {
@@ -538,6 +545,4 @@ class BookingController extends Controller
 		}
     }
 	*/
-    
 }
-
