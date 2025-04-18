@@ -90,7 +90,7 @@
                                   </div>
                                 </div>
                           
-                                <input type="submit" id="submit" class="btn btn-green" value="Sign Submit" />
+                                <input type="submit" id="SignatureSubmit" class="btn btn-green" disabled title="Confirm signature before submit" value="Sign Submit" />
                             </form>
                             @endif
                         </div>
@@ -115,6 +115,8 @@
 
 @section('custom-js')
 <script>
-  jQuery('')
+  jQuery(document).on('click','#GetImageData',function(){
+    jQuery('#SignatureSubmit').attr('disabled', false);
+  });
 </script>
 @endsection

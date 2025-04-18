@@ -580,7 +580,6 @@ class TutorController extends Controller
     }
     public function turorContract($id)
     {
-        $id = 1; 
         $request = request();
         $user = Auth::user();
 
@@ -647,6 +646,8 @@ class TutorController extends Controller
                 return redirect()->route('tutor.contract', $id)->with('success', 'Contract is signed successfully.');
             }
         }
+
+        
 
         return view('tutor.turor_contract',compact('booking', 'contractObj'));
     }
@@ -750,8 +751,11 @@ class TutorController extends Controller
     {
         $userID = Auth::id();
 
-        $verification = Verification::where('user_id', $userID)->first();
-        $references   = Reference::where('user_id', $userID)->get();
+        $verification   = Verification::where('user_id', $userID)->first();
+        $references     = Reference::where('user_id', $userID)->get();
+
+        //$verifications  = Verification::where('user_id', $userID)->get();
+        //dd($verifications->all());
 
 
         if ($references->isEmpty()) {
@@ -843,11 +847,13 @@ class TutorController extends Controller
 
         // Insert new record into the Verification table
         Verification::create([
-            'user_id' => Auth::id(), // Assigning the current authenticated user
+            'user_id'           => Auth::id(), 
+            'verification_type' => 3, /* For DBS */ 
+            'document_type'=>'other',
             'dbs_number' => $request->dbs_number,
-            'expire_date' => $request->expire_date,
+            'expire_date' => date('Y-m-d',strtotime($request->expire_date)),
             'file' => $filePath,
-            'status' => 2, // Default status is 'Pending'
+            'status' => 2, 
         ]);
 
         return redirect()->route('tutor.verification')->with('success', 'Proof of Identification Submitted Successfully');

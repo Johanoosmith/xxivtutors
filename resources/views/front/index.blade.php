@@ -19,12 +19,12 @@
 						@include('includes/front/site_search')
                     
 					</div>
-                    <div class="col img-block d-none d-lg-block">
+                    <div class="col img-block d-none d-md-block">
                         <div class="animation-image-wrapper">
-                            <div class="shape-img shape-1 d-none d-lg-block">
+                            <div class="shape-img shape-1 d-none d-md-block">
                                 <img src="{{asset('front/assets/images/shape-1.png')}}" alt="">
                             </div>
-                            <div class="shape-img shape-2 d-none d-lg-block">
+                            <div class="shape-img shape-2 d-none d-md-block">
                                 <img src="{{asset('front/assets/images/shape-2.png')}}" alt="">
                             </div>
                             <div class="icon-img icon-1">

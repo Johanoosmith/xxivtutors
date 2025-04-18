@@ -104,11 +104,12 @@ class BookingController extends Controller
 
 	public function getBookingsJson()
 	{
+		$user_id = Auth::user()->id;
 		$now = Carbon::now();
 		$startRange = $now->copy()->subMonths(6)->startOfDay();
 		$endRange = $now->copy()->addMonths(6)->endOfDay();
 
-		$bookings = Booking::whereBetween('start_date', [$startRange, $endRange])->get();
+		$bookings = Booking::where('student_id',$user_id)->whereBetween('start_date', [$startRange, $endRange])->get();
 
 		$events = [];
 
@@ -171,7 +172,7 @@ class BookingController extends Controller
 		$booking = Booking::with(['subject', 'level', 'student', 'tutor']) // eager load relationships
 			->where('student_id', $user_id)
 			->where('start_date', '>=', Carbon::now()->toDateString())
-			->where('start_time', '>', Carbon::now()->toTimeString())
+			//->where('start_time', '>', Carbon::now()->toTimeString())
 			->findOrFail($request->id);
 		if ($booking) {
 			$booking->status = 2; // Confirm Booking

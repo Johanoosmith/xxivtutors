@@ -57,19 +57,21 @@
                                         <th>User Name</th>
                                         <th>Verification Type</th>
                                         <th>Document Type</th>
-                                        <th>DBS Number</th>
-                                        <th>Name on Document</th>
-                                        <th>Other Name on Document</th>
                                         <th>Status</th>
                                         <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+
+                                    @php
+										$sNo = ($verifications->currentPage() - 1) * $verifications->perPage() + 1;  /* Increasing Serial Number */
+									@endphp
+
                                     @foreach ($verifications as $index => $v)
                                         <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $v->user->fullname ?? '-' }}</td>
+                                            <td>{{ $sNo++ }}</td>
+                                            <td>{{ $v->user->full_name ?? '-' }}</td>
                                             <td>
                                                 @php
                                                     $types = [
@@ -83,9 +85,6 @@
                                                 {{ $types[$v->verification_type] ?? 'N/A' }}
                                             </td>
                                             <td>{{ format_label($v->document_type) ?? '-' }}</td>
-                                            <td>{{ $v->dbs_number ?? '-' }}</td>
-                                            <td>{{ $v->firstname_on_doc }} {{ $v->lastname_on_doc }} </td>
-                                            <td>{{ $v->othername_on_doc }} </td>
                                             <td>
                                                 @php
                                                     $statusLabels = [1 => 'Approved', 2 => 'Pending', 3 => 'Rejected'];

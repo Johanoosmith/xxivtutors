@@ -1,4 +1,4 @@
-<header class="site-header navbar-expand-lg">
+<header class="site-header navbar-expand-md">
         <div class="container d-flex align-items-center justify-content-between">
             <div class="col-lg-6 brand-logo">
                 <a href="{{ url('/') }}">
@@ -56,7 +56,7 @@
 						<svg class="icon">
 							<use xlink:href="#user"></use>
 						</svg>
-						{{ __('Sign up') }} 
+						{{ __('Register') }} 
                         <span class="svg-wrapper">
                             <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M15.787 6.02812C16.071 5.73644 16.071 5.26355 15.787 4.97187L11.1586 0.218756C10.8746 -0.0729186 10.4142 -0.0729186 10.1301 0.218756C9.84612 0.510433 9.84612 0.983328 10.1301 1.27501L14.2442 5.49999L10.1301 9.72502C9.84612 10.0167 9.84612 10.4895 10.1301 10.7813C10.4142 11.0729 10.8746 11.0729 11.1586 10.7813L15.787 6.02812ZM0 6.24687H15.2727V4.75311H0V6.24687Z" fill="currentColor"/>

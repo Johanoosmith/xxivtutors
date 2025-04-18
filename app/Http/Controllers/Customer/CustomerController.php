@@ -450,14 +450,17 @@ class CustomerController extends Controller
         return view('customer.student_profile', compact('user', 'student', 'subjects', 'levels', 'groupedSubjects')); // Pass user data to the profile view
     }
     public function studmyclients()
-    {
+    { 
+        $user = Auth::user();
         $courses_list = $this->getCourses();
         $courses_list_level = $this->getCoursesLevel();
-
-        $payments = Payment::with(['tutor'])
-            ->orderBy('created_at', 'desc')
-            ->get();
-        return view('customer.student_myclient', compact('courses_list', 'payments'));
+       
+        $payments = Payment::where('student_id', $user->id)
+                            ->with(['tutor'])
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+                            
+        return view('customer.student_myclient', compact('courses_list' ,'payments'));
     }
 
     public function showInvoice($paymentId)

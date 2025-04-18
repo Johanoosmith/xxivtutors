@@ -578,8 +578,7 @@ function getHourList(){
 
 
 if (!function_exists('format_label')) {
-    function format_label($value)
-    {
+    function format_label($value) {
         return ucwords(str_replace('_', ' ', $value));
     }
 }
@@ -734,6 +733,22 @@ function getEnquiryByContractId($contract_id){
 	return 0;
 }
 
+function getVerificationType($key = NULL){
+	$verificationType = [
+		'1' => 'Profile Image',
+		'2' => 'Identity Id',
+		'3' => 'DBS',
+		'4' => 'References',
+	];
+	if(!empty($key)){
+		if(!empty($verificationType[$key])){
+			return $verificationType[$key];
+		}else{
+			return 'Other';
+		}
+	}
+	return $verificationType;
+}
 
 if (!function_exists('static_cities')) {
     function static_cities()

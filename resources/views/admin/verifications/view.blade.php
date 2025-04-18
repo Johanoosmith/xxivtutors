@@ -18,35 +18,35 @@
                         <!-- List of Verification Details -->
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <strong>User Name:</strong> {{ $Verification->user->fullname }}
+                                <strong>User Name:</strong> {{ $Verification->user->full_name }}
                             </li>
                             <li class="list-group-item">
                                 <strong>Verification Type:</strong>
-                                @if ($Verification->verification_type == '1')
-                                    Profile Image
-                                @elseif ($Verification->verification_type == '2')
-                                    Identity ID
-                                @elseif ($Verification->verification_type == '3')
-                                    DBS
-                                @elseif ($Verification->verification_type == '4')
-                                    Reference
-                                @else
-                                    Pending
-                                @endif
+                                {{ getVerificationType(@$Verification->verification_type) }}
                             </li>
                             <li class="list-group-item">
                                 <strong>Document Type:</strong> {{ $Verification->document_type }}
                             </li>
+                            
+                            @if(!empty($Verification->dbs_number))
                             <li class="list-group-item">
                                 <strong>DBS Number:</strong> {{ $Verification->dbs_number }}
                             </li>
+                            @endif
+
+                            @if(!empty($Verification->firstname_on_doc))
                             <li class="list-group-item">
                                 <strong>Name on Document:</strong> {{ $Verification->firstname_on_doc }}
                                 {{ $Verification->lastname_on_doc }}
                             </li>
+                            @endif
+
+                            @if(!empty($Verification->othername_on_doc))
                             <li class="list-group-item">
                                 <strong>Other Name on Document:</strong> {{ $Verification->othername_on_doc }}
                             </li>
+                            @endif
+
                             @php
                                 $statusLabels = [1 => 'Approved', 2 => 'Pending', 3 => 'Rejected'];
                                 $badgeClass = [1 => 'success', 2 => 'warning', 3 => 'danger'];
@@ -125,6 +125,17 @@
                             </div>
                         </div>
                     @endif
+
+                    @if ($Verification->verification_type == null)
+                        <div class="col-sm-4">
+                            <div class="file-item">
+                                <p><strong>Profile Image:</strong></p>
+                                <img src="{{ asset('storage/' . $Verification->file) }}" alt="Profile Image"
+                                    class="img-fluid" style="max-width: 200px;">
+                            </div>
+                        </div>
+                    @endif
+
                     </ul>
 
                     <!-- Display Documents Based on Verification Type -->
