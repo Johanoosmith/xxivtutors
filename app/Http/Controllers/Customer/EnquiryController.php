@@ -21,6 +21,8 @@ use App\Models\Enquiry;
 use App\Models\EnquiryComment;
 use App\Models\Notification;
 
+
+
 class EnquiryController extends Controller
 {
     public function enquiries(Request $request)
