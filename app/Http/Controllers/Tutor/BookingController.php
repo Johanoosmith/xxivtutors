@@ -74,11 +74,12 @@ class BookingController extends Controller
 
 	public function getBookingsJson()
 	{
+		$user_id = Auth::user()->id;
 		$now = Carbon::now();
 		$startRange = $now->copy()->subMonths(6)->startOfDay();
 		$endRange = $now->copy()->addMonths(6)->endOfDay();
 
-		$bookings = Booking::whereBetween('start_date', [$startRange, $endRange])->get();
+		$bookings = Booking::where('tutor_id',$user_id)->whereBetween('start_date', [$startRange, $endRange])->get();
 
 		$events = [];
 

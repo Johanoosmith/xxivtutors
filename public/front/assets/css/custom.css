@@ -173,3 +173,22 @@ input[readonly] {
     background: var(--primary-color) !important;
     color: var(--color-1);
 }
+
+.invoice-container{
+    background: #fff;
+    border-radius: 5px;
+    padding: 40px 20px;
+    margin-bottom: 60px;
+}
+.invoice-container .invoice-logo{
+    margin: 30px 0;
+}
+.invoice-container .invoice-logo img{
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    display: block;
+}
+.invoice-container .table thead th{
+    background-color: #eee;
+}

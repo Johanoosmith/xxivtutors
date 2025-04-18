@@ -428,12 +428,15 @@ class CustomerController extends Controller
     }
     public function studmyclients()
     { 
+        $user = Auth::user();
         $courses_list = $this->getCourses();
         $courses_list_level = $this->getCoursesLevel();
        
-        $payments = Payment::with(['tutor'])
-        ->orderBy('created_at', 'desc')
-        ->get();
+        $payments = Payment::where('student_id', $user->id)
+                            ->with(['tutor'])
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+                            
         return view('customer.student_myclient', compact('courses_list' ,'payments'));
     }
 

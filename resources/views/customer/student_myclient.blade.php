@@ -38,7 +38,7 @@
                                             {{ \Carbon\Carbon::parse($payment->created_at)->format('d/m/Y') }}
                                         </td>
                                         <td class="col-grade">
-                                            ${{ getAmount($payment->charge_amount) }} {{-- assuming amount in cents --}}
+                                            {{ getAmount($payment->charge_amount) }} {{-- assuming amount in cents --}}
                                         </td>
                                         <td class="col-status">
                                             @if($payment->status === 'paid')

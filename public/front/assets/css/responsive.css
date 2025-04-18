@@ -1,4 +1,4 @@
-@media screen and (min-width: 992px){
+@media screen and (min-width: 768px){
     .navbar-row{
         background-color: var(--primary-color);
         margin-top: 16px;
@@ -13,6 +13,9 @@
     .right-menu .user-btn svg.icon{
         display: none;
     }
+    
+}
+@media screen and (min-width: 992px){
     .filter-mobile-heading{
         display: none;
     }
@@ -197,75 +200,7 @@
     }
 }
 @media screen and (max-width: 991px){
-    .site-header{
-        padding: 16px 0;
-    }
-    .main-menu .navbar-toggler{
-        position: absolute;
-        top: 0;
-        right: 0;
-        color: #fff;
-        width: 60px;
-        height: 60px;
-    }
-    .main-menu .navbar-toggler .navbar-toggler-icon{
-        width: 60px;
-        height: 60px;
-    }
-    .main-menu{
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 999;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.8);
-        width: 100%;
-        transition: 0.4s;
-    }
-    .main-menu.collapse:not(.show){
-        display: block;
-        transform: translateX(-110%);
-    }
-    .main-menu.collapsing{
-        height: 100% !important; 
-    }
-    .main-navigation{
-        flex-direction: column;
-        background-color: var(--primary-color);
-        height: 100%;
-        justify-content: flex-start;
-        align-items: flex-start;
-        width: 100%;
-        max-width: 80vw;
-        padding: 40px;
-        row-gap: 0;
-        font-size: 16px;
-        overflow-y: auto;
-    }
-    .main-navigation > li{
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        width: 100%;
-    }
-    .main-navigation > li > a{
-        padding: 16px 0;
-        width: 100%;
-    }
-    .main-navigation a:after{
-        content: none;
-    }
-
-    .right-menu .user-btn svg.icon{
-        width: 20px;
-        height: 20px;
-    }
-    .right-menu .user-btn{
-        font-size: 0;
-        column-gap: 0;
-        min-width: 64px;
-    }
-    .right-menu .user-btn .svg-wrapper{
-        display: none;
-    }
+    
 
     .section{
         padding: 70px 0;
@@ -288,6 +223,10 @@
         width: 100%;
         height: 100%;
         z-index: -1;
+        opacity: .4;
+    }
+    .main-banner .search-form{
+        background-color: rgba(255, 255, 255, 0.8);
     }
     .animation-image-wrapper{
         height: 100%;
@@ -569,6 +508,77 @@
     body{
         font-size: 14px;
     }
+
+    .site-header{
+        padding: 16px 0;
+    }
+    .main-menu .navbar-toggler{
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #fff;
+        width: 60px;
+        height: 60px;
+    }
+    .main-menu .navbar-toggler .navbar-toggler-icon{
+        width: 60px;
+        height: 60px;
+    }
+    .main-menu{
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        width: 100%;
+        transition: 0.4s;
+    }
+    .main-menu.collapse:not(.show){
+        display: block;
+        transform: translateX(-110%);
+    }
+    .main-menu.collapsing{
+        height: 100% !important; 
+    }
+    .main-navigation{
+        flex-direction: column;
+        background-color: var(--primary-color);
+        height: 100%;
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 100%;
+        max-width: 80vw;
+        padding: 40px;
+        row-gap: 0;
+        font-size: 16px;
+        overflow-y: auto;
+    }
+    .main-navigation > li{
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        width: 100%;
+    }
+    .main-navigation > li > a{
+        padding: 16px 0;
+        width: 100%;
+    }
+    .main-navigation a:after{
+        content: none;
+    }
+
+    .right-menu .user-btn svg.icon{
+        width: 20px;
+        height: 20px;
+    }
+    .right-menu .user-btn{
+        font-size: 0;
+        column-gap: 0;
+        min-width: 64px;
+    }
+    .right-menu .user-btn .svg-wrapper{
+        display: none;
+    }
+
     .right-menu .user-btn{
         min-width: 44px;
     }
