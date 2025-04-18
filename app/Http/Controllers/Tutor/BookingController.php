@@ -211,9 +211,13 @@ class BookingController extends Controller
 
 		// **Insert all bookings & retrieve inserted booking IDs**
 		$bookingIds = [];
-		foreach ($records as $record) {
+		$firstBooking=null;
+		foreach ($records as $index => $record) {
 			$booking = Booking::create($record);
 			$bookingIds[] = $booking->id;
+			if($index === 0){
+				$firstBooking=$booking;
+			}
 		}
 		
 		
@@ -237,6 +241,7 @@ class BookingController extends Controller
 		}
 
 
+
 		/* Contract & BookingContract Entries */
 		$last_record = end($records);
 		$contract_end_date = $last_record['start_date'];
@@ -257,6 +262,11 @@ class BookingController extends Controller
 	
 			// Bulk insert into booking_contracts table
 			\App\Models\BookingContract::insert($bookingContractRecords);
+		}
+
+		if($firstBooking){
+		$mailController = new BookingMailController();
+		$mailController->sendStudentBookingRelatedMail($firstBooking, 'STUDENT_BOOKING_INITIATED');
 		}
 
 
