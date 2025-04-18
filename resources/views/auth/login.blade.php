@@ -2,7 +2,6 @@
 @section('meta_title') Login @endsection
 @section('meta_desc') Login @endsection
 @section('content')
-
 <main>
 	<section class="page-banner text-center text-white register-page-banner">
 		<div class="banner-img">
@@ -73,6 +72,4 @@
 		</div>
 	</section>
 </main>
-
-
 @endsection

@@ -102,7 +102,9 @@
 				<use xlink:href="#history"></use>
 			</svg>
 			History</a></li>
-			<li><a href="#">
+			
+			<li class="nav-link {{ request()->routeIs('tutor.feedback') ? 'active' : '' }}">
+			<a href="{{ route('tutor.feedback')}}">
 			<svg class="icon">
 				<use xlink:href="#feedback"></use>
 			</svg>

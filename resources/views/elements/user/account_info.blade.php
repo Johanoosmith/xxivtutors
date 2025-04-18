@@ -1,3 +1,4 @@
+<section>
 <div class="row">
 	<div class="col-12 d-block d-sm-none">
 		<h3 class="step-heading">
@@ -9,7 +10,7 @@
 			ACCOUNT INFORMATION</h3>
 </div>
 	<div class="col-12 form-field">
-		<label class="form-label" for="accountType">Account Type</label>
+		<label class="form-label" for="accountType">Account Type <span class="required text-danger">*</span></label>
 		<div class="select-field">
 		<select class="form-select" id="accountType" name="role" required>
 			<option value="" disabled selected>Please Select Role</option>
@@ -22,22 +23,23 @@
 		</div>
 	</div>
 	<div class="col-md-6 form-field">
-		<label class="form-label" for="username">Username</label>
+		<label class="form-label" for="username">Username <span class="required text-danger">*</span></label>
 		<input class="form-control" type="text" id="username" name="username" placeholder="Name" required value="{{ old('username') }}">
 	</div>
 	<div class="col-md-6 form-field">
-		<label class="form-label" for="email">Email Address</label>
+		<label class="form-label" for="email">Email Address <span class="required text-danger">*</span></label>
 		<input class="form-control" type="email" id="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
 	</div>
 	<div class="col-md-6 form-field">
-		<label class="form-label" for="password">Password</label>
+		<label class="form-label" for="password">Password <span class="required text-danger">*</span></label>
 		<input class="form-control" type="password" id="password" name="password" placeholder="Password" required>
 	</div>
 	<div class="col-md-6 form-field">
-		<label class="form-label" for="confirmPassword">Confirm Password</label>
+		<label class="form-label" for="confirmPassword">Confirm Password <span class="required text-danger">*</span></label>
 		<input class="form-control" type="password" id="confirmPassword" name="password_confirmation" placeholder="Confirm Password" required>
 	</div>
 	<div class="col-12 step-submit">
 		<button type="submit" class="btn btn-green next-btn">Continue</button>
 	</div>
 </div>
+</section>

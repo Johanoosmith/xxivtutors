@@ -70,6 +70,7 @@ class FeedbackController extends Controller
             'status' => 'pending',
         ]);
 
+
         return redirect()->route('student.feedback')->with('success', 'Feedback submitted successfully.');
     }
 }

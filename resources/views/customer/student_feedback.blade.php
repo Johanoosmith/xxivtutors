@@ -22,7 +22,7 @@
                                     <tr>
                                         <td  class="col-qualification">
                                             <a href="#">
-                                                {{ $feedback->tutor->username }}
+                                                {{ $feedback->tutor->full_name }}
                                             </a>
                                         </td>
                                         <td class="col-institute">{{ \Carbon\Carbon::parse($feedback->purchase_date)->format('d/m/Y') }}</td>
@@ -55,7 +55,7 @@
                                         <th class="col-grade">Rating</th>
                                         <th class="col-institute">Status</th>
                                         <th class="col-grade">Sent</th>
-                                        <th class="col-grade">Action</th>
+                                        <!-- <th class="col-grade">Action</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -70,11 +70,11 @@
                                             <td>{{ $feedback->tutor_rating }} / 5</td>
                                             <td>Awaiting Approval</td>
                                             <td>{{ optional($feedback->created_at)->format('d/m/Y') ?? 'N/A' }}</td>
-                                            <td>
+                                            <!-- <td>
                                                 <a href="#">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                            </td>
+                                            </td> -->
                                         </tr>
                                     @endforeach
                                 </tbody>

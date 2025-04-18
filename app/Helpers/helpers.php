@@ -733,3 +733,38 @@ function getEnquiryByContractId($contract_id){
 	}
 	return 0;
 }
+
+
+if (!function_exists('static_cities')) {
+    function static_cities()
+    {
+        return [
+            'Aberdeen',
+            'Belfast',
+            'Birmingham',
+            'Bolton',
+            'Bradford',
+            'Bristol',
+            'Cardiff',
+            'Coventry',
+            'Derby',
+            'Edinburgh',
+            'Glasgow',
+            'Leeds',
+            'Leicester',
+            'Liverpool',
+            'London',
+            'Luton',
+            'Manchester',
+            'Northampton',
+            'Nottingham',
+            'Plymouth',
+            'Portsmouth',
+            'Reading',
+            'Sheffield',
+            'Southampton',
+            'Westminster',
+            'Wolverhampton',
+        ];
+    }
+}

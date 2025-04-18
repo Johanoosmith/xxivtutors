@@ -105,17 +105,17 @@ class PageController extends Controller
         return view('front.' . strtolower($page_templates))->with($arr);
     }
 
-    
+
     public function SearchPage()
     {
         $arr = [];
         $arr['navigation'] = Category::where('status', 1)
             ->orderBy('order', 'asc')
             ->get();
-            $slug="search";
-    
+        $slug = "search";
+
         $page = Page::where('page_url', $slug)->where('status', '1')->first();
-    
+
         if (empty($page)) {
             return view('errors.404');
         } else {
@@ -128,20 +128,31 @@ class PageController extends Controller
                 }
             }
         }
-    
+
         $page_templates = $page->template;
-    
+
         // ✅ Update these two lines below as per your request
-    
-        $arr['cities'] = Tutor::whereNotNull('town')
+
+        $staticCities = static_cities();
+
+        // $arr['cities'] = Tutor::whereNotNull('town')
+        //     ->groupBy('town')
+        //     ->pluck('town');
+        $dynamicCities = Tutor::whereNotNull('town')
             ->groupBy('town')
-            ->pluck('town');
-    
+            ->pluck('town')
+            ->toArray();
+
+        $allCities = array_unique(array_merge($staticCities, $dynamicCities));
+        sort($allCities); // Optional: sort alphabetically
+
+        $arr['cities'] = $allCities;
+
         $arr['courses'] = Subject::where('featured', 1)
             ->where('status', 1)
             ->orderBy('title', 'asc')
             ->get();
-    
+
         $arr['tutors'] = User::where('role_id', 2)->get();
         $arr['page'] = $page;
         return view('front.search')->with($arr);
@@ -198,25 +209,25 @@ class PageController extends Controller
             switch ($request->sort_by) {
                 case 'distance':
                     $query->join('tutors', 'users.id', '=', 'tutors.user_id')
-                          ->orderBy('tutors.distance', 'asc')
-                          ->select('users.*'); 
+                        ->orderBy('tutors.distance', 'asc')
+                        ->select('users.*');
                     break;
             }
         }
-        
+
 
         $input = $request->all();
 
         if ($request->has('keyword') && $request->keyword != '') {
             $keyword = $request->keyword;
-            $query->where(function($q) use ($keyword) {
+            $query->where(function ($q) use ($keyword) {
                 $q->whereRaw("CONCAT(firstname, ' ', lastname) LIKE ?", ["%$keyword%"])
-                  ->orWhere('firstname', 'like', "%$keyword%")
-                  ->orWhere('lastname', 'like', "%$keyword%");
+                    ->orWhere('firstname', 'like', "%$keyword%")
+                    ->orWhere('lastname', 'like', "%$keyword%");
             });
         }
-        
-        
+
+
 
         if ($request->slug != null || $request->level != 'All Levels' || $request->subject_title != null || $request->postcode != null) {
             if ($request->slug != null) {
@@ -229,14 +240,14 @@ class PageController extends Controller
                     $q->where('level_id', $request->level);
                 });
             }
-          
+
 
 
             if ($request->postcode != null && $request->subject_id != null || $request->postcode != null && $request->level != 'All Levels') {
                 $query->where('postcode', $request->postcode);
             }
         }
-       
+
 
         if ($request->min_price != null || $request->max_price != null || $request->distance != null ||  $request->min_rating != '0') {
             $query->whereHas('tutor', function ($q) use ($request) {
@@ -257,7 +268,7 @@ class PageController extends Controller
             });
         }
 
-       
+
 
         if ($request->gender != null) {
             $query->where('gender', $request->gender);
@@ -268,7 +279,7 @@ class PageController extends Controller
             $query->where('postcode', $request->postcode);
         }
 
-        
+
 
         $arr['tutors'] = $query->paginate(10);
 
@@ -294,5 +305,4 @@ class PageController extends Controller
     {
         return view('front.customer');
     }
-
 }
