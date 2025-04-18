@@ -31,6 +31,8 @@ return [
 	'ROLE'		  => [ 'STUDENT'=>1, 'TUTOR'=>2, 'ADMIN'=>10 ],
 	'CURRENCY_SYMBOL' =>  '£',
 	'SITE'		  => [
+        'URL'=>env('APP_URL','https://myprotutor.com'),
+        //'URL'=>'https://myprotutor.com',
 		'TITLE'=>'MyProTutor',
         'ADDRESS'=>'Hamilton House, Mabledon Place, London WC1H 9BB ',
         'EMAIL'=>'info@myprotutor.com',

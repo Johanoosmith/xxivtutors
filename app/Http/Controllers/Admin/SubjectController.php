@@ -36,8 +36,7 @@ class SubjectController extends Controller
 
     public function create()
     {
-		$courses = Course::getCouseList();
-       
+        $courses = Course::getCouseList();
         return view('admin.subjects.create', compact('courses'));
     }
     

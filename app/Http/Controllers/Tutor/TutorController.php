@@ -1102,6 +1102,11 @@ class TutorController extends Controller
             'content'       => $request->content,
             'status'        => 'unread'
         ]);
+        $user = User::find($enquiry->receiver_id);
+        if ($user) {
+                $userArray['student_name'] = $user->firstname . ' ' . $user->lastname;
+                $emailSent = sendMail($user->email, $userArray, 'STUDENT_UNREAD_ENQUIRY');
+            }
 
         //return redirect()->route('tutor.enquiries.chats', ['enquiry_id' => $enquiry->id])
         return redirect()->back()->with('success', 'Message sent successfully.');

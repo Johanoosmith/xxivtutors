@@ -101,6 +101,15 @@ class Payment extends Model
 						}
 						
 						Payment::where('id',$payment->id)->update($payment_update);
+					}else{
+						/* 
+							1. Send mail of unpaid lesson to tutor
+							2. Cancel all upcoming lesson with that student & tutor 
+									a.) Message: Cancel lesson by the system because of unpaid last lesson payment : Booking id - 
+							3. Send mail of stripe issue to student
+						
+						*/
+						
 					}
 					
 				Log::channel('booking')->info("Payment processed for booking ID: {$booking->id}", [
