@@ -105,7 +105,7 @@
                 <input type="hidden" name="question_id" id="reject-question-id">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Reject Question</h5>
+                        <h5 class="modal-title">Reject Questions</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -142,6 +142,8 @@
     </div>
 </div>
 @endsection
+<!-- Bootstrap JS with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 @section('inline-js')
 <script>

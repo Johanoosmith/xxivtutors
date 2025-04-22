@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
 		
 		//$schedule->command('student-lesson-payment')->daily();
 		$schedule->command('student-lesson-payment');
+        $schedule->command('reminder:lesson-emails')->everyMinute(); // or ->everyFiveMinutes() for buffer
+
     }
 
     /**

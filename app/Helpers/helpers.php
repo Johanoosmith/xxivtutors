@@ -29,6 +29,18 @@ function sendMail($email, $data, $slug){
 	Notification::route('mail', $email)->notify(new CustomEmailNotification($email, $data, $slug));
 }
 
+function privacySetting(int $userId, string $settingKey): bool
+{
+	$notification = Notification::where('user_id', $userId)->first();
+
+	if (!$notification) {
+		return false;
+	}
+
+	// Check if the column exists and is set to 1
+	return isset($notification->$settingKey) && $notification->$settingKey == 1;
+}
+
 function getSiteVariable(){
 	return [
 		'site_name'=>'MyProTutor',

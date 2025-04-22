@@ -65,7 +65,7 @@ class VerificationController extends Controller
         $verification->reject_reason = $request->reject_reason;
         $verification->save();
     
-        return redirect()->back()->with('error', 'Verification rejected.');
+        return redirect()->back()->with('success', 'Verification rejected.');
     }
     
 

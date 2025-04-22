@@ -56,7 +56,7 @@
             <div class="form-group row">
                 <div class="col-sm-8">
                     <label class="form-label">Short Description<span class="required">*</span></label>
-                    {{ html()->text('tutor[short_description]')->class('form-control form-control-user short_desc required') }}
+                    {{ html()->textarea('tutor[short_description]')->class('form-control form-control-user short_desc required') }}
                     @if ($errors->has('short-message'))
                     <span class="error" role="alert">{{ $errors->first('short-message') }}</span>
                     @endif
@@ -65,7 +65,7 @@
             <div class="form-group row">
                 <div class="col-sm-8">
                     <label class="form-label">Full Description<span class="required">*</span></label> 
-                    {{ html()->text('tutor[full_description]')->class('form-control form-control-user short_desc required') }}
+                    {{ html()->textarea('tutor[full_description]')->class('form-control form-control-user short_desc required') }}
                     @if ($errors->has('full-message'))
                     <span class="error" role="alert">{{ $errors->first('full-message') }}</span>
                     @endif

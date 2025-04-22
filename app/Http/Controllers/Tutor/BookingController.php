@@ -129,9 +129,11 @@ class BookingController extends Controller
 	public function store(Request $request)
 	{
 		$user_id = Auth::user()->id;
-
+        // dd($request->all());
 		$request->merge([
-			'start_date' => Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d'),
+			// 'start_date' => Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d'),
+			'start_date' => Carbon::createFromFormat('m/d/Y', $request->start_date)->format('Y-m-d'),
+
 			'start_time' => sprintf('%02d:%02d', $request->start_time_hour, $request->start_time_minute)
 		]);
 
@@ -168,6 +170,7 @@ class BookingController extends Controller
 		]);
 
 		$startDate = Carbon::parse($request->start_date);
+		// dd($startDate);
 		$startTime = $request->start_time;
 		$lessonRepeat = $request->lesson_repeat;
 		$days = $request->day; // Array of days
@@ -455,7 +458,6 @@ class BookingController extends Controller
 		$booking->save();
 		$mailController = new BookingMailController();
 		$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_DETAIL_CHANGED');
-
 		return redirect()->route('tutor.booking.index')->with('success', 'Booking updated successfully.');
 	}
 

@@ -19,6 +19,8 @@ use App\Models\Student;
 use App\Services\StripeService;
 use Illuminate\Support\Facades\Notification;
 use App\Models\Tutor;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 
 
@@ -182,10 +184,10 @@ class CustomerController extends Controller
             // Send email
             $userArray = $user->toArray();
             // Add username manually (not needed because it's already in $userArray)
-            $userArray['username'] = $user->username;
-            $userArray['student_name'] = $user->firstname . ' ' . $user->lastname;
-            $userArray['tutor_name'] = $user->firstname . ' ' . $user->lastname;
-            $userArray['password'] = $userData['password'];
+            $userArray['username']      = $user->username;
+            $userArray['student_name']  = $user->firstname . ' ' . $user->lastname;
+            $userArray['tutor_name']    = $user->firstname . ' ' . $user->lastname;
+            $userArray['password']      = $userData['password'];
 
             if ($userData['role'] === 'tutor') {
                 $emailSent = sendMail($user->email, $userArray, 'TUTOR_REGISTRATION');
@@ -196,9 +198,13 @@ class CustomerController extends Controller
             // if($user && $user->role_id == config('constants.ROLE.TUTOR')){
             // 	$this->stripeAccountCreate($user->id);
             // }
-
-            session()->flash('message', 'Registration successful! The admin will review your profile shortly.');
-            // Optionally, you can clear the session data after saving
+            
+            if ($userData['role'] === 'student') {
+                session()->flash('message', 'Registration successful! Log in to explore your dashboard and start learning.');
+            } elseif ($user->role === 'tutor') {
+                session()->flash('message', 'Registration successful! The admin will review your profile shortly.');
+            }
+                        // Optionally, you can clear the session data after saving
             $request->session()->forget('registration_form');
             // Redirect or return a response
             return redirect()->route('login');
@@ -470,6 +476,19 @@ class CustomerController extends Controller
 
         return view('customer.student_invoice', compact('payment'));
     }
+
+    public function downloadInvoice($paymentId)
+    {
+
+        $emailSent = sendMail('mithilish.yadav@dotsquares.com', [], 'TUTOR_REGISTRATION');
+        dd($emailSent);
+        $payment = Payment::with(['student', 'tutor'])->findOrFail($paymentId);
+        // dd($payment);
+        $pdf =Pdf::loadView('customer.pdf.invoice', compact('payment'));
+        return $pdf->download('Invoices_'.$payment->id.'.pdf');
+    }
+    
+
     public function studprivacy()
     {
         $courses_list = $this->getCourses();

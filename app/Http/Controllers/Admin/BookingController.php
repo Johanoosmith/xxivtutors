@@ -54,7 +54,9 @@ class BookingController extends Controller
         }
     
         $perPage = $request->input('per_page', 10);
-        $bookings = $query->paginate($perPage);
+        // $bookings = $query->paginate($perPage);
+        $bookings = $query->orderBy('created_at', 'desc')->paginate($perPage);
+
     
         return view('admin.bookings.index', compact('bookings'));
     }

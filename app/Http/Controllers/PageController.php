@@ -200,11 +200,13 @@ class PageController extends Controller
     }
     public function tutorFilter(Request $request, $course_id = null)
     {
+        // dd($request->all());
         $course_id = $request->course_id ?? $course_id;
         $arr['course_id'] = $course_id;
 
         $query = User::query();
         $query->where('role_id', 2)->with('tutor');
+
         if ($request->has('sort_by')) {
             switch ($request->sort_by) {
                 case 'distance':
@@ -299,6 +301,7 @@ class PageController extends Controller
 
         return view('front.tutor')->with($arr);
     }
+  
 
 
     public function student(Request $request)

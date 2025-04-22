@@ -24,7 +24,7 @@
     </div>
 <div class="field select-field">
     <select id="level" name="level" class="select">
-        <option value="All Levels" {{ old('level', request('level')) == 'All Levels' ? 'selected' : '' }}>All Levels</option>
+        <option value="" {{ old('level', request('level')) == 'All Levels' ? 'selected' : '' }}>All Levels</option>
         @foreach ($levels as $level_id => $level_title)
             <option value="{{ $level_id }}" {{ old('level', request('level')) == $level_id ? 'selected' : '' }}>
                 {{ $level_title }}
@@ -37,7 +37,7 @@
 </div>
 
 <div class="field postcode" id="SiteSearchPostcode">
-    <input type="text" name="postcode" placeholder="Postcode" class="input number" required maxlength="8" value="{{ old('postcode', request('postcode')) }}">
+    <input type="text" name="postcode" id="postcode" placeholder="Postcode" class="input number" required maxlength="8" value="{{ old('postcode', request('postcode')) }}">
 </div>
 
 		<div class="btn-field">
@@ -58,7 +58,7 @@
 		jQuery("#SubjectSearch").autocomplete({
 			source: availableTags,
 			select: function(event, ui) {
-				console.log(ui.item);
+				console.log("test",ui.item);
 				// Populate the input with the course title (label)
 				jQuery("#SubjectSearch").val(ui.item.label);
 
@@ -92,6 +92,8 @@
 				jQuery('#SiteSearchPostcode').show();
 			}else if(teach_type == 'online'){
 				jQuery('#SiteSearchPostcode').hide();
+				jQuery('#postcode').removeAttr('required'); // Remove required
+
 			}
 		});
 		

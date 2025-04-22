@@ -49,7 +49,7 @@
             <div class="form-group row">
                 <div class="col-sm-8">
                     <label class="form-label">Short Description<span class="required">*</span></label>
-                    {{ html()->text('short_description')->class('form-control form-control-user short_desc required') }}
+                    {{ html()->textarea('short_description')->class('form-control form-control-user short_desc required') }}
                     @if ($errors->has('short-message'))
                     <span class="error" role="alert">{{ $errors->first('short-message') }}</span>
                     @endif
@@ -58,7 +58,7 @@
             <div class="form-group row">
                 <div class="col-sm-8">
                     <label class="form-label">Full Description<span class="required">*</span></label> 
-                    {{ html()->text('full_description')->class('form-control form-control-user short_desc required') }}
+                    {{ html()->textarea('full_description')->class('form-control form-control-user short_desc required') }}
                     @if ($errors->has('full-message'))
                     <span class="error" role="alert">{{ $errors->first('full-message') }}</span>
                     @endif
@@ -78,18 +78,18 @@
             <div class="form-group row">
                 <div class="col-sm-4">
                     <label for ="gender" class="form-label">Gender<span class="required">*</span></label>
-                    {{ html()->select('gender', ['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->class('form-control')->value($tutor->gender ?? '') }} 
-                </div>
+                    {{ html()->select('gender', ['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->class('form-control')->value(old('gender', $tutor->gender ?? '')) }}
+                    </div>
                 <div class="col-sm-4">
                     <label class="form-label"  for="postcode">Post code<span class="required">*</span></label> 
-                    {{ html()->text('postcode')->class('form-control')->value($tutor->postcode ?? '') }}
-                </div>
+                    {{ html()->text('postcode')->class('form-control')->value(old('postcode', $tutor->postcode ?? '')) }}
+                    </div>
             </div>
                 <div class="form-group row">
                 <div class="col-sm-4">
                     <label for="rating">Rating</label>
-                    {{ html()->number('rating')->class('form-control')->attribute('step', '0.1')->value($tutor->rating ?? '')->placeholder('e.g., 4.5') }}
-                </div>
+                    {{ html()->number('rating')->class('form-control')->attribute('step', '0.1')->value(old('rating', $tutor->rating ?? ''))->placeholder('e.g., 4.5') }}
+                    </div>
             </div>
         </div>
             {{-- <div class="qualification">

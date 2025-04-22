@@ -105,10 +105,13 @@
 											<div class="action-tools">
 												@if(request()->input('booking_on') != 'past' && request()->input('booking_on') != 'cancel')
 													<a href="{{ route('customer.booking.confirmed', $booking->id) }}" class="icon-btn" data-toggle="tooltip" title="Confirmed Booking" data-original-title="Confirmed Booking">
-														<svg class="icon">
+														<!-- <svg class="icon">
 															<use xlink:href="#edit"></use>
-														</svg>
+														</svg> -->
+														<i class="fa fa-check" style="font-size:24px"></i>
+
 													</a>
+													
 													
 												
 													<form id="{{ 'BookingDelete_'.$booking->id }}" action="{{ route('customer.booking.cancel') }}" method="POST" style="display: inline;" data-toggle="tooltip" onsubmit="return  confirm('are you sure to cancel the lesson?');" title="" data-original-title="Cancel Booking" >

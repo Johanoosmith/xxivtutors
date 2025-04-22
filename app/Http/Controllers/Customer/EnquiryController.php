@@ -116,7 +116,9 @@ class EnquiryController extends Controller
         $user = User::find($enquiry->sender_id);
         if ($user) {
                 $userArray['tutor_name'] = $user->firstname . ' ' . $user->lastname;
+                if (privacySetting($user->id, 'new_enquiry_email')) {
                 $emailSent = sendMail($user->email, $userArray, 'TUTOR_UNREAD_ENQUIRY');
+                }
             }
     
         //return redirect()->route('tutor.enquiries.chats', ['enquiry_id' => $enquiry->id])
