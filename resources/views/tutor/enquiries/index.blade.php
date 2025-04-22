@@ -8,8 +8,9 @@
                     <h2>My Enquiries</h2>
                     <p>Please ensure open enquiries are responded to, if you can not help the student you should close the enquiry.</p>
 
+                    <!--
                     <p class="instruction bg-success text-white">Please do not enter email addresses/urls/websites/home addresses (or any other information that can allow contact) in this message. Users who do so will immediately be removed from {{ config('constants.SITE.TITLE') }}.</p>
-
+                    -->    
                     @include('elements.alert_message')
 
                     <div class="table-responsive noscroll">

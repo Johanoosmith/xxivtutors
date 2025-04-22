@@ -25,12 +25,18 @@
                                 {{ getVerificationType(@$Verification->verification_type) }}
                             </li>
                             <li class="list-group-item">
-                                <strong>Document Type:</strong> {{ $Verification->document_type }}
+                                <strong>Document Type:</strong> {{ format_label($Verification->document_type) }}
                             </li>
                             
                             @if(!empty($Verification->dbs_number))
                             <li class="list-group-item">
                                 <strong>DBS Number:</strong> {{ $Verification->dbs_number }}
+                            </li>
+                            @endif
+
+                            @if(!empty($Verification->country_id))
+                            <li class="list-group-item">
+                                <strong>Country:</strong> {{ $Verification->country->name }}
                             </li>
                             @endif
 

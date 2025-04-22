@@ -116,9 +116,13 @@ Route::group(['middleware' => ['admin']], function () {
 		Route::post('reject', [\App\Http\Controllers\Admin\ArticleController::class, 'reject'])->name('reject');
 	});
 	//verification
+	
 	Route::resource('verification', VerificationController::class);
 	Route::post('/admin/verification/{id}/approve', [VerificationController::class, 'approve'])->name('verification.approve');
 	Route::post('/admin/verification/{id}/reject', [VerificationController::class, 'reject'])->name('verification.reject');
+	Route::get('/references', [VerificationController::class, 'references'])->name('verification.references');
+	Route::get('/reference_view/{user_id}', [VerificationController::class, 'reference_view'])->name('verification.reference_view');
+	Route::put('/update_reference/{id}', [VerificationController::class, 'update_reference'])->name('verification.update_reference');
 
 	//booking
 	Route::resource('booking', BookingController::class);

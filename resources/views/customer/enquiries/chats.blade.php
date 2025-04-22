@@ -13,11 +13,14 @@
                     <h3>Enquiry to <a href="{{ route('tutor', ['id' => $enquiry->sender->id]) }}"> {{ $enquiry->sender->username }}</a></h3>
                 </div>
                 <div class="profileblock">
+                    @if(!empty($booking->student_rate))
                     <div class="profileline">
                         <div class="text-primary fs-3">
                             {{config('constants.CURRENCY_SYMBOL')}} {{ intval($booking->student_rate) }}<span class="ph">/hr</span>
                         </div>
                     </div>
+                    @endif
+
                     <div class="profileline">
                         <div class="address">
                             @if(!empty($enquiry->sender->tutor->county))
@@ -58,6 +61,12 @@
                         <div id="enquirymsg" class="col-12 form-field">
                             <textarea class="form-control" maxlength="5500" name="content" id="content" placeholder="Write your message here (please don't exchange phone numbers or email addresses)"></textarea>
                             
+                            @if(!$isContractSigned)
+                                <p class="bg-gray fw-4"><small>Please do not enter email addresses/urls/websites/home addresses (or any other information that can allow contact) in this message. Users who do so will immediately be removed from MyProTutor.</small></p>
+                            @else
+                                <p class="bg-gray fs-10 fw-4"><small>You may now exchange contact details with the student.</small></p>
+                            @endif
+                        
                         </div>
                         <div class="col-12 form-field">
                             <button type="submit" class="btn btn-green">Send Enquiry</button>

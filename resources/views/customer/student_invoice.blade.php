@@ -67,10 +67,10 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="d-flex justify-content-between">
+                    <!--<div class="d-flex justify-content-between">
                         <div class="col-6">VAT Number:130 5954 26</div>
                         <div class="col-6 text-end">Ref:b71554751157759</div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <div class="text-right">

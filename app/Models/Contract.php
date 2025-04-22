@@ -20,4 +20,13 @@ class Contract extends Model
     public function student(){
         return $this->belongsTo(User::class, 'student_id', 'id');
     }
+
+    public static function isContractSigned($student_id, $tutor_id){
+        $contract = self::where('student_id',$student_id)
+                                ->where('tutor_id',$tutor_id)
+                                ->where('status','signed')
+                                ->first();
+        
+        return $contract ? true : false;
+    }
 }

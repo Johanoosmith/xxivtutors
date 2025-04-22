@@ -25,6 +25,7 @@ function sendMail($email, $data, $slug){
 	$site_var = getSiteVariable();
 	$data	  = array_merge($data, $site_var);
 	
+
 	// comment this line because of stream_socket_enable_crypto is not proper set up
 	Notification::route('mail', $email)->notify(new CustomEmailNotification($email, $data, $slug));
 }
@@ -47,6 +48,9 @@ function getSiteVariable(){
 		'support_email'=>'support@tutor.com'
 	];
 }
+
+
+
 
 
 function getCityCourses($cityid){
@@ -794,6 +798,41 @@ if (!function_exists('static_cities')) {
             'Wolverhampton',
         ];
     }
+}
 
-	
+function getVerificationStatus($key){
+	$verificationStatus = [
+		'1' => 'Approved',
+		'2' => 'Pending',
+		'3' => 'Rejected',
+	];
+
+	if(!empty($key)){
+		if(!empty($verificationStatus[$key])){
+			return $verificationStatus[$key];
+		}else{
+			return 'Pending';
+		}
+	}
+
+	return $verificationStatus;
+}
+
+
+function getGeneralStatus($key){
+	$generalStatus = [
+		'1' => 'Approved',
+		'2' => 'Pending',
+		'3' => 'Rejected',
+	];
+
+	if(!empty($key)){
+		if(!empty($generalStatus[$key])){
+			return $generalStatus[$key];
+		}else{
+			return 'Pending';
+		}
+	}
+
+	return $generalStatus;
 }

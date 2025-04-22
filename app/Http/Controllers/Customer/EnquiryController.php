@@ -44,7 +44,9 @@ class EnquiryController extends Controller
     }
     public function showEnquire($enquiry_id, $booking_id = null)
     {
-        $user = Auth::user();
+        $user               = Auth::user();
+        $booking            = [];
+        $isContractSigned   = false;
 
         // Fetch all chats between the logged-in tutor and the specific sender
         $enquiry = Enquiry::where('id', $enquiry_id)
@@ -58,14 +60,19 @@ class EnquiryController extends Controller
             ->first();
 
         if (empty($booking_id)) {
-            $booking_id = $enquiry->booking_enquiry[0]->booking_id;
+            $booking_id = !empty($enquiry->booking_enquiry[0]->booking_id) ? $enquiry->booking_enquiry[0]->booking_id:0;
         }
 
-        $booking = \App\Models\Booking::where('id', $booking_id)->first();
+        if(!empty($booking_id)){
+            $booking = \App\Models\Booking::where('id', $booking_id)->first();
+            
+            /* get Contract is available */
+            $isContractSigned = \App\Models\Contract::isContractSigned($booking->student_id, $booking->tutor_id);
+        }
 
         $messages = $this->getChatMessages($enquiry_id);
 
-        return view('customer.enquiries.chats', compact('enquiry', 'booking', 'messages'));
+        return view('customer.enquiries.chats', compact('enquiry', 'booking', 'messages', 'isContractSigned'));
     }
 
 

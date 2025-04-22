@@ -82,27 +82,20 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Contact</th>
-                                        {{-- <th>Specialization</th> --}}
                                         <th>Status</th>
                                         <th class="text-right">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list" id="pages">
+                                    @php
+                                        $sNo = ($tutors->currentPage() - 1) * $tutors->perPage() + 1;  /* Increasing Serial Number */
+                                    @endphp
                                     @foreach ($tutors as $tutor)
                                         <tr>
-                                            <td>{{ $tutor->id }}</td>
+                                            <td>{{ $sNo++ }}</td>
                                             <td>{{ $tutor->firstname }} {{ $tutor->lastname }}</td>
                                             <td>{{ $tutor->email }}</td>
                                             <td>{{ $tutor->mobile }}</td>
-                                            {{-- <td>
-                                            @if ($tutor->tutor->specialization)
-                                            @foreach ($tutor->tutor->specialization as $course)
-                                                <span class="badge bg-primary">{{ $course->title }}</span>
-                                            @endforeach
-                                        @else
-                                            <span class="text-muted">No Specializations</span>
-                                        @endif
-                                        </td> --}}
                                             <td>
                                                 @if ($tutor->status == 1)
                                                     <label class="badge bg-light-success">{{ ucfirst('active') }}</label>
