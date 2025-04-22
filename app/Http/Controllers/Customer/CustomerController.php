@@ -479,11 +479,7 @@ class CustomerController extends Controller
 
     public function downloadInvoice($paymentId)
     {
-
-        $emailSent = sendMail('mithilish.yadav@dotsquares.com', [], 'TUTOR_REGISTRATION');
-        dd($emailSent);
         $payment = Payment::with(['student', 'tutor'])->findOrFail($paymentId);
-        // dd($payment);
         $pdf =Pdf::loadView('customer.pdf.invoice', compact('payment'));
         return $pdf->download('Invoices_'.$payment->id.'.pdf');
     }
