@@ -32,7 +32,7 @@
                                 @if(!empty($contractObj->cd_1))
                                 <div id="declaration-1" class="declare">
                                     <div class="form-check form-check-inline">
-                                      @if(!empty($contractObj->signature) && $contractObj->status == 'pending')
+                                      @if($contractObj->status == 'pending')
                                       <input type="checkbox" id="declaration-1-checkbox" class="declaration-checkbox" name="cb_1_check" />
                                       @endif
                                       <label class="form-check-label" for="declaration-1-checkbox">
@@ -45,7 +45,7 @@
                                 @if(!empty($contractObj->cd_2))
                                 <div id="declaration-2" class="declare">
                                   <div class="form-check form-check-inline">
-                                    @if(!empty($contractObj->signature) && $contractObj->status == 'pending')
+                                    @if($contractObj->status == 'pending')
                                     <input type="checkbox" id="declaration-2-checkbox" class="declaration-checkbox" name="cb_2_check" />
                                     @endif
                                     <label class="form-check-label" for="declaration-2-checkbox">
@@ -58,7 +58,7 @@
                                 @if(!empty($contractObj->cd_3))
                                 <div id="declaration-3" class="declare">
                                   <div class="form-check form-check-inline kcb-flex">
-                                    @if(!empty($contractObj->signature) && $contractObj->status == 'pending')
+                                    @if($contractObj->status == 'pending')
                                     <input type="checkbox" id="declaration-3-checkbox" class="declaration-checkbox" name="cb_3_check" />
                                     @endif
                                     <label class="form-check-label kpl-5" for="declaration-3-checkbox">
@@ -71,7 +71,7 @@
                                 @if(!empty($contractObj->cd_4))
                                 <div id="declaration-4" class="declare">
                                   <div class="form-check form-check-inline kcb-flex">
-                                    @if(!empty($contractObj->signature) && $contractObj->status == 'pending')
+                                    @if($contractObj->status == 'pending')
                                     <input type="checkbox" id="declaration-4-checkbox" class="declaration-checkbox" name="cb_4_check" />
                                     @endif
                                     <label class="form-check-label kpl-5" for="declaration-4-checkbox">
@@ -84,7 +84,7 @@
                                 @if(!empty($contractObj->cd_5))
                                 <div id="declaration-5" class="declare">
                                   <div class="form-check form-check-inline kcb-flex">
-                                    @if(!empty($contractObj->signature) && $contractObj->status == 'pending')
+                                    @if($contractObj->status == 'pending')
                                     <input type="checkbox" id="declaration-5-checkbox" class="declaration-checkbox" name="cb_5_check" />
                                     @endif
                                     <label class="form-check-label kpl-5" for="declaration-5-checkbox">
