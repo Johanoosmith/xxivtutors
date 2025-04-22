@@ -5,37 +5,17 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="row">
-						<div class="col-md-10">
-							<h4>Verifications List</h4>
-						</div>
-						<div class="col-md-2">
-							<a href="{{ route('admin.verification.references') }}" class="btn btn-primary btn-sm custom_btn float-right">
-                            References</a>
-						</div>
-					</div>
+                    <h4>References List</h4>
                 </div>
 
                 <div class="card-body table-border-style mb-2">
-                    <form action="{{ route('admin.verification.index') }}" method="GET" id="filter-form">
+                    <form action="{{ route('admin.verification.references') }}" method="GET" id="filter-form">
                         <div class="row mb-4">
                             <div class="col-md-4">
                                 <input type="text" name="user" class="form-control" value="{{ request('user') }}"
                                     placeholder="Search by User Name">
                             </div>
-                            <div class="col-md-4">
-                                <select name="verification_type" class="form-control">
-                                    <option value="">All Types</option>
-                                    <option value="1" {{ request('verification_type') == '1' ? 'selected' : '' }}>
-                                        Profile Image</option>
-                                    <option value="2" {{ request('verification_type') == '2' ? 'selected' : '' }}>
-                                        Identity ID</option>
-                                    <option value="3" {{ request('verification_type') == '3' ? 'selected' : '' }}>DBS
-                                    </option>
-                                    <option value="4" {{ request('verification_type') == '4' ? 'selected' : '' }}>
-                                        References</option>
-                                </select>
-                            </div>
+                            
                             <div class="col-md-2 fiter-btn-pd">
                                 <button type="submit" class="btn btn-sm btn-primary filter-btn">Filter</button>
                                 <a href="{{ route('admin.verification.index') }}"
@@ -55,56 +35,49 @@
                     </form>
 
                     <div class="table-responsive">
-                        @if ($verifications->isEmpty())
-                            <p>No verifications found.</p>
+                        @if ($references->isEmpty())
+                            <p>No references found.</p>
                         @else
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>User Name</th>
-                                        <th>Verification Type</th>
-                                        <th>Document Type</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>References</th>
                                         <th>Status</th>
-                                        <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
                                     @php
-										$sNo = ($verifications->currentPage() - 1) * $verifications->perPage() + 1;  /* Increasing Serial Number */
+										$sNo = ($references->currentPage() - 1) * $references->perPage() + 1;  /* Increasing Serial Number */
 									@endphp
 
-                                    @foreach ($verifications as $index => $v)
+                                    @foreach ($references as $index => $reference)
+                                        
                                         <tr>
                                             <td>{{ $sNo++ }}</td>
-                                            <td>{{ $v->user->full_name ?? '-' }}</td>
                                             <td>
-                                                @php
-                                                    $types = [
-                                                        0 => 'Pending',
-                                                        1 => 'Profile Image',
-                                                        2 => 'Identity ID',
-                                                        3 => 'DBS',
-                                                        4 => 'References',
-                                                    ];
-                                                @endphp
-                                                {{ $types[$v->verification_type] ?? 'N/A' }}
+                                                <a href="{{ route('admin.tutors.edit', $reference->id) }}">
+                                                    {{ $reference->full_name }}
+                                                </a>
                                             </td>
-                                            <td>{{ format_label($v->document_type) ?? '-' }}</td>
+                                           
+                                            <td>{{ $reference->email }}</td>
+                                            <td>{{ @$reference->references_count }}</td>
                                             <td>
                                                 @php
                                                     $statusLabels = [1 => 'Approved', 2 => 'Pending', 3 => 'Rejected'];
                                                     $badgeClass = [1 => 'success', 2 => 'warning', 3 => 'danger'];
                                                 @endphp
-                                                <span class="badge bg-light-{{ $badgeClass[$v->status] ?? 'secondary' }}">
-                                                    {{ $statusLabels[$v->status] ?? 'Unknown' }}
+                                                <span class="badge bg-light-{{ $badgeClass[$reference->status] ?? 'secondary' }}">
+                                                    {{ $statusLabels[$reference->status] ?? 'Unknown' }}
                                                 </span>
                                             </td>
-                                            <td>{{ $v->created_at->format(config('constants.SITE.DATE_FORMAT')) }}</td>
                                             <td>
-                                                	<a href="{{ route('admin.verification.show' , $v->id) }}"
+                                                <a href="{{ route('admin.verification.reference_view' , $reference->id) }}"
                                                 class="btn btn-info btn-sm action-btn edit" data-toggle="tooltip" title=""
                                                 data-original-title="{{trans('admin.EDIT')}}">
                                                 <i class="far fa-edit"></i> View
@@ -114,8 +87,8 @@
                                     @endforeach
                                 </tbody>
                             </table>
-							@if (count($verifications))
-                            {!! $verifications->withQueryString()->links('pagination::bootstrap-5') !!}
+							@if (count($references))
+                            {!! $references->withQueryString()->links('pagination::bootstrap-5') !!}
                             @endif
                         @endif
                     </div>

@@ -30,32 +30,67 @@
                                     to each clause by clicking the box on the left side.</em></p>
                             <div style="min-height: 140px;">
                                 @if(!empty($contractObj->cd_1))
-                                <div id="declaration-1" class="declare mb-2">
-                                    {!! $contractObj->cd_1 !!}
+                                <div id="declaration-1" class="declare">
+                                    <div class="form-check form-check-inline">
+                                      @if(!empty($contractObj->signature) && $contractObj->status == 'pending')
+                                      <input type="checkbox" id="declaration-1-checkbox" class="declaration-checkbox" name="cb_1_check" />
+                                      @endif
+                                      <label class="form-check-label" for="declaration-1-checkbox">
+                                        {!! $contractObj->cd_1 !!}
+                                      </label>
+                                    </div>
                                 </div>
                                 @endif
  
-                                @if(!empty($contractObj->cd_1))
-                                <div id="declaration-2" class="declare mb-2">
-                                  {!! $contractObj->cd_2 !!}
+                                @if(!empty($contractObj->cd_2))
+                                <div id="declaration-2" class="declare">
+                                  <div class="form-check form-check-inline">
+                                    @if(!empty($contractObj->signature) && $contractObj->status == 'pending')
+                                    <input type="checkbox" id="declaration-2-checkbox" class="declaration-checkbox" name="cb_2_check" />
+                                    @endif
+                                    <label class="form-check-label" for="declaration-2-checkbox">
+                                      {!! $contractObj->cd_2 !!}
+                                    </label>
+                                  </div>
                                 </div>
                                 @endif
 
-                                @if(!empty($contractObj->cd_1))
-                                <div id="declaration-3" class="declare mb-2">
-                                  {!! $contractObj->cd_3 !!}
+                                @if(!empty($contractObj->cd_3))
+                                <div id="declaration-3" class="declare">
+                                  <div class="form-check form-check-inline kcb-flex">
+                                    @if(!empty($contractObj->signature) && $contractObj->status == 'pending')
+                                    <input type="checkbox" id="declaration-3-checkbox" class="declaration-checkbox" name="cb_3_check" />
+                                    @endif
+                                    <label class="form-check-label kpl-5" for="declaration-3-checkbox">
+                                      {!! $contractObj->cd_3 !!}
+                                    </label>
+                                  </div>
                                 </div>
                                 @endif
 
-                                @if(!empty($contractObj->cd_1))
-                                <div id="declaration-4" class="declare mb-2">
-                                  {!! $contractObj->cd_4 !!}
+                                @if(!empty($contractObj->cd_4))
+                                <div id="declaration-4" class="declare">
+                                  <div class="form-check form-check-inline kcb-flex">
+                                    @if(!empty($contractObj->signature) && $contractObj->status == 'pending')
+                                    <input type="checkbox" id="declaration-4-checkbox" class="declaration-checkbox" name="cb_4_check" />
+                                    @endif
+                                    <label class="form-check-label kpl-5" for="declaration-4-checkbox">
+                                      {!! $contractObj->cd_4 !!}
+                                    </label>
+                                  </div>
                                 </div>
                                 @endif
 
-                                @if(!empty($contractObj->cd_1))
-                                <div id="declaration-5" class="declare mb-2">
-                                  {!! $contractObj->cd_5 !!}
+                                @if(!empty($contractObj->cd_5))
+                                <div id="declaration-5" class="declare">
+                                  <div class="form-check form-check-inline kcb-flex">
+                                    @if(!empty($contractObj->signature) && $contractObj->status == 'pending')
+                                    <input type="checkbox" id="declaration-5-checkbox" class="declaration-checkbox" name="cb_5_check" />
+                                    @endif
+                                    <label class="form-check-label kpl-5" for="declaration-5-checkbox">
+                                      {!! $contractObj->cd_5 !!}
+                                    </label>
+                                  </div>
                                 </div>
                                 @endif
                             </div>
@@ -80,7 +115,7 @@
                             <form id="signatureform" method="post" action="{{ route('tutor.contract', $contractObj->id) }}">
                                 @csrf
                                 
-                              <div id="content">
+                                <div id="content" class="mb-2">
                                   <div id="signatureparent">
                                     <div>jSignature inherits colors from parent element. Text = Pen color. Background = Background. (This works even when Flash-based Canvas emulation is used.)</div>
                                     <div id="signature"></div></div>
@@ -116,7 +151,19 @@
 @section('custom-js')
 <script>
   jQuery(document).on('click','#GetImageData',function(){
-    jQuery('#SignatureSubmit').attr('disabled', false);
+    const allChecked = jQuery('.declaration-checkbox').length === jQuery('.declaration-checkbox:checked').length;
+    if(allChecked){
+      jQuery('#SignatureSubmit').attr('disabled', false);  
+    }
   });
+
+  jQuery(document).on('change', '.declaration-checkbox', function () {
+    const allChecked = jQuery('.declaration-checkbox').length === jQuery('.declaration-checkbox:checked').length;
+    if(!allChecked){
+      jQuery('#SignatureSubmit').attr('disabled', true);
+    }
+  });
+
+
 </script>
 @endsection

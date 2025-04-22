@@ -8,7 +8,7 @@
                     <div class="invoice-container">
                         <div class="title-with-link-wrapper">
                             <h3>Invoice for Payment #{{ $payment->id }}</h3>
-                            <!--<a href="#" class="btn btn-yellow btn-small">Print</a>-->
+                            <a href="#" class="btn btn-yellow btn-small">Print</a>
                         </div>
                         
                         <div class="invoice-logo">
@@ -17,7 +17,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h5>Invoice To:</h5>
-                                <p class="m-0">{{ $payment->student->fullname ?? ' ' }}</p>
+                                <p class="m-0">{{ $payment->student->full_name ?? ' ' }}</p>
                                 <p class="m-0">{{ $payment->student->address ?? 'Address not available' }}</p>
                                 <p class="m-0">{{ $payment->student->city ?? '' }}</p>
                                 <p class="m-0">{{ $payment->student->state ?? '' }}</p>
@@ -26,7 +26,7 @@
                             </div>
                             <div class="col-md-6">
                                 <h5>Tutor </h5>
-                                <p class="m-0">{{ $payment->tutor->fullname ?? ' ' }}</p>
+                                <p class="m-0">{{ $payment->tutor->full_name ?? ' ' }}</p>
                                 <p class="m-0">{{ $payment->tutor->address ?? 'Address not available' }}</p>
                                 <p class="m-0">{{ $payment->tutor->city ?? '' }}</p>
                                 <p class="m-0">{{ $payment->tutor->state ?? '' }}</p>
@@ -49,7 +49,7 @@
                                 <tbody>
                                     <!-- Tutor Fee Row -->
                                     <tr>
-                                        <td>Tutor Fee for {{ $payment->tutor->fullname ?? ' ' }}</td>
+                                        <td>Tutor Fee for {{ $payment->tutor->full_name ?? ' ' }}</td>
                                         <td>1</td>
                                         <td>{{ getAmount($payment->charge_amount, 2) }}</td>
                                         <!-- Assuming amount in cents -->
@@ -71,10 +71,10 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="d-flex justify-content-between">
+                        <!--<div class="d-flex justify-content-between">
                             <div class="col-6">VAT Number:130 5954 26</div>
                             <div class="col-6 text-end">Ref:b71554751157759</div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
                 <div class="text-right">

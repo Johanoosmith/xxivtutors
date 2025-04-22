@@ -192,3 +192,13 @@ input[readonly] {
 .invoice-container .table thead th{
     background-color: #eee;
 }
+
+
+.kcb-flex{
+    display: flex;
+    align-items: baseline;
+}
+
+.kpl-5{
+    padding-left: 5px;
+}

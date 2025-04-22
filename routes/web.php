@@ -35,6 +35,17 @@ Route::get('/clear-all', function () {
 	return 'All cache cleared';
 });
 
+Route::get('/clear', function () {
+	
+	Artisan::call('route:clear');
+	Artisan::call('config:clear');
+	Artisan::call('cache:clear');
+	Artisan::call('view:clear');
+	Artisan::call('config:cache');
+	Artisan::call('route:cache');
+	return 'All cache cleared';
+});
+
 Route::get('/storage-link', function () {
 	
 	Artisan::call('storage:link');
