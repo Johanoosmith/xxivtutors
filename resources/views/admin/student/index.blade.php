@@ -78,10 +78,13 @@
                             </tr>
                         </thead>
                         <tbody class="list" id="pages">
+                            @php
+                                $sNo = ($students->currentPage() - 1) * $students->perPage() + 1;  /* Increasing Serial Number */
+                            @endphp
                             @foreach ($students as $student)
                                 <tr>
-                                    <td>{{ $student->id }}</td>
-                                    <td> {{ $student->user->fullname  ?? ''}}</td>
+                                    <td>{{ $sNo++ }}</td>
+                                    <td> {{ $student->user->full_name  ?? ''}}</td>
                                     <td>{{ $student->user->email ?? '' }}</td>
                                     <td>{{ $student->user->mobile ?? ' '}}</td>
                                     <td>

@@ -254,23 +254,7 @@ class BookingController extends Controller
 		$last_record = end($records);
 		$contract_end_date = $last_record['start_date'];
 
-		$contract = $this->__createContract($request, $contract_end_date);
-
-		// **Insert into booking_enquiries table**
-		if ($contract) {
-			$contractId = $contract->id;
-			$bookingContractRecords = [];
-
-			foreach ($bookingIds as $bookingId) {
-				$bookingContractRecords[] = [
-					'booking_id'  => $bookingId,
-					'contract_id'  => $contractId,
-				];
-			}
-
-			// Bulk insert into booking_contracts table
-			\App\Models\BookingContract::insert($bookingContractRecords);
-		}
+		$contract = $this->__createContract($request, $bookingIds);
 
 		if ($firstBooking) {
 			$mailController = new BookingMailController();
@@ -298,18 +282,54 @@ class BookingController extends Controller
 		return \App\Models\Enquiry::create($enquiry);
 	}
 
-	private function __createContract($request, $contract_end_date)
+	private function __createContract($request, $bookingIds)
 	{
 		$user_id = Auth::user()->id;
 
-		$contract = [
+		/* check current contract exists or not */
+		$existingContract = \App\Models\Contract::where('tutor_id', $user_id)
+			->where('student_id', $request->student_id)
+			->first();
+
+		if(!empty($existingContract)){
+			return $existingContract;
+		}
+
+		$contract_arr = [
 			'tutor_id'	=> $user_id,
 			'student_id' => $request->student_id,
 			'start_date' => $request->start_date,
-			'end_date'	=> $contract_end_date,
 		];
 
-		return \App\Models\Contract::create($contract);
+
+
+		$contract = \App\Models\Contract::create($contract_arr);
+
+		// **Insert into booking_enquiries table**
+		if ($contract) {
+			$contractId = $contract->id;
+			$bookingContractRecords = [];
+
+			/*
+				Comment multiple contract with one booking as per client requirement: 22 April 2025
+			foreach ($bookingIds as $bookingId) {
+				$bookingContractRecords[] = [
+					'booking_id'  => $bookingId,
+					'contract_id'  => $contractId,
+				];
+			}
+			*/
+
+			$bookingContractRecords[] = [
+				'booking_id'  => $bookingIds[0],   /* Use the first booking ID*/
+				'contract_id'  => $contractId,
+			];
+
+			// Bulk insert into booking_contracts table
+			\App\Models\BookingContract::insert($bookingContractRecords);
+		}
+
+		return $contract;
 	}
 
 	/**

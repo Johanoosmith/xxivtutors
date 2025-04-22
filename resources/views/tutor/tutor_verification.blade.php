@@ -23,64 +23,71 @@
                                 <tr>
                                     <th>Profile image</th>
                                     <td>
-                                        @if ($user->profile_image)
-                                        <svg class="right-tick text-success">
-                                            <use xlink:href="#tick"></use>
-                                        </svg> 
-                                            Profile Photo Added
+                                        @if (!empty($profile_image_verify))
+                                            @if ($profile_image_verify->status == 1)
+                                                <svg class="right-tick text-success">
+                                                    <use xlink:href="#tick"></use>
+                                                </svg> 
+                                                Profile Photo Added
+                                            @else
+                                                {{ getVerificationStatus($profile_image_verify->status); }}
+                                            @endif
                                         @else
                                             Profile Photo Not Uploaded
                                         @endif
                                     </td>
-                                    @if ($user->profile_image)
+
+                                    @if (!empty($profile_image_verify) && $profile_image_verify->status == 1)
                                         <td></td>
                                     @else
                                         <td>
-                                        <a href="{{ route('customer.profile-photo') }}">Upload Profile Photo</a>
+                                            <a href="{{ route('tutor.photo.upload') }}">Upload Profile Photo</a>
                                         </td>
                                     @endif
                                 </tr>
                                 <tr>
                                     <th>Photo ID</th>
-                                    @if($verification)
                                     <td>
-                                        {{ $statusLabels[$verification->status] ?? 'Unknown Status' }}
+                                        @if(!empty($identity_id_verify))
+                                            @if ($identity_id_verify->status == 1)
+                                                <svg class="right-tick text-success">
+                                                    <use xlink:href="#tick"></use>
+                                                </svg> 
+                                                Photo ID Added
+                                            @else
+                                                {{ getVerificationStatus($identity_id_verify->status); }}
+                                            @endif
+                                        @else
+                                            Not Uploaded
+                                        @endif
                                     </td>
-                                    @else
-                                    <td>
-                                        No verification record found.
-                                    </td>
-                                    @endif
-                                    
                                     <td>
                                         <a href="{{ route('tutor.proofidentity') }}">Upload ID</a>   	 
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>References</th>
-                                    @if($verification)
                                     <td>
-                                        @php
-                                            $ref_app_count = 0;
-                                            foreach ($references as $reference) {
-                                                if ($reference->status == 1) {
-                                                    $ref_app_count++;
+                                        @if($references->isNotEmpty())
+                                            @php
+                                                $ref_app_count = 0;
+                                                foreach ($references as $reference) {
+                                                    if ($reference->status == 'approved') {
+                                                        $ref_app_count++;
+                                                    }
                                                 }
-                                            }
-                                        @endphp
+                                            @endphp
 
-                                        @if($ref_app_count > 2)
-                                            <svg class="right-tick text-success">
-                                                <use xlink:href="#tick"></use>
-                                            </svg>
+                                            @if($ref_app_count >= 2)
+                                                <svg class="right-tick text-success">
+                                                    <use xlink:href="#tick"></use>
+                                                </svg>
+                                            @endif
+                                            {{ $ref_app_count >= 2 ? 'Approved' : 'Pending'  }}
+                                        @else
+                                            No References found.
                                         @endif
-                                        {{ $ref_app_count > 2 ? 'Approved' : 'Pending'  }}
                                     </td>
-                                    @else
-                                    <td>
-                                        No verification record found.
-                                    </td>
-                                    @endif
                                     
                                     <td>
                                         <a href="{{ route('tutor.addrefernce') }}">Add Reference</a>   	 
@@ -88,22 +95,23 @@
                                 </tr>
                                 <tr>
                                     <th>Enhanced DBS</th>
-                                    @if($verification)
-                                <td>
-                                    <span class="profilescorealert">
-                                        <span class="infookay">{{ $statusLabels[$verification->status] ?? 'Unknown Status' }}</span>
-                                    </span>
-                                </td>
-                                @else
-                                <td>
-                                    <span class="profilescorealert">
-                                        <span class="infookay">No verification record found.</span>
-                                    </span>
-                                </td>
-                                @endif
-                                <td>
-                                    <a href="{{ route('tutor.proofdbs') }}">Upload Another DBS</a>
-                                </td>
+                                    <td>
+                                        @if(!empty($dbs_verify))
+                                            @if ($dbs_verify->status == 1)
+                                                <svg class="right-tick text-success">
+                                                    <use xlink:href="#tick"></use>
+                                                </svg> 
+                                                DBS Added
+                                            @else
+                                                {{ getVerificationStatus($dbs_verify->status); }}
+                                            @endif
+                                        @else
+                                            DBS Not Uploaded
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('tutor.proofdbs') }}">Upload DBS</a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

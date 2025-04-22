@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Config;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -45,6 +46,13 @@ class AppServiceProvider extends ServiceProvider
         } catch (\Exception $e){
             \Log::info('Navigation is not loaded.');
         }
+
+        /* Set settings data in table */
+        $settings = \DB::table('settings')->get();
+        foreach ($settings as $setting) {
+           Config::set('settings.' . $setting->key, $setting->value);
+        }
+
     }
 
     /**

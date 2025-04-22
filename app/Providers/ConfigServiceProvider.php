@@ -48,5 +48,7 @@ class ConfigServiceProvider extends ServiceProvider
             Config::set('mail', $emailConfig);
             Config::set('email', (array) $emailSetting);
         }
+
+        
     }
 }

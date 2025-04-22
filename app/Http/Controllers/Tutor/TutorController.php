@@ -383,7 +383,8 @@ class TutorController extends Controller
         $personalinfo = Auth::user();
         $student = $personalinfo->student;
         $countyies = County::get()->pluck('name', 'id');
-        $countries = Country::get()->pluck('name', 'id');
+        //$countries = Country::get()->pluck('name', 'id');
+        $countries = Country::getList();
         return view('tutor.tutor_personalinfo', compact('personalinfo', 'student', 'countyies', 'countries'));
     }
 
@@ -475,6 +476,23 @@ class TutorController extends Controller
         // Save the new photo path in the user's record
         $user->profile_image = $path;
         $user->save();
+
+        /* Verfication Added */
+        $ver_obj  = Verification::where('user_id', $user->id)->where('verification_type',1)->first();
+        
+        if(empty($ver_obj)){
+            $ver_obj = new Verification();
+            $ver_obj->user_id = $user->id;
+            $ver_obj->verification_type = 1;
+            $ver_obj->document_type = 'other';
+        }
+        
+        $ver_obj->file   = $path;
+        $ver_obj->status = 2;
+        $ver_obj->save();
+        
+        /* Verfication Added END */
+
 
         return back()->with('success', 'Profile photo uploaded successfully!');
     }
@@ -585,27 +603,33 @@ class TutorController extends Controller
 
         $booking_contract = \App\Models\BookingContract::where('contract_id', $id)->first();
         $booking = Booking::where('id', $booking_contract->booking_id)->first();
-        $contractObj = \App\Models\Contract::where('id', $id)->first();
+        $contractObj = \App\Models\Contract::where('id', $id)->with(['tutor','student'])->first();
         if(empty($contractObj)){
             return redirect()->back()->with('error', 'Contract not found.');
         }
 
         if($contractObj->status == 'pending'){
             
-            $placeholders = ['{site_name}', '{hourly_rate}'];
-            $values = [config('constants.SITE.TITLE'), getAmount($booking->hourly_rate)];
+            $placeholders = ['{site_name}', '{hourly_rate}', '{student_name}', '{user_title}'];
+            $values = [
+                        config('constants.SITE.TITLE'), 
+                        getAmount($booking->hourly_rate), 
+                        $contractObj->student->firstname,
+                        $contractObj->student->student->title, 
+                    ];
 
-            $contractObj->cd_1 = str_replace($placeholders, $values, 'I acknowledge that {site_name} will carry out regular
-                                    compliance checks with students introduced to me to ensure all lessons are booked
-                                    through {site_name}.');
+            $contractObj->cd_1 = str_replace($placeholders, $values, config('settings.contract_declaration_1'));
+            
+            /*
             $contractObj->cd_2 = str_replace($placeholders, $values, 'I understand that, Lauren (Miss) has agreed to pay an <strong>hourly rate of
                                         {hourly_rate}</strong> which includes {site_name}/\'/s commission.');
-            $contractObj->cd_3 = str_replace($placeholders, $values, 'I understand that all online lessons must take place through our whiteboard (provided by
-                                    Zoom). Access links to the lesson will appear 15 minutes before the lesson takes place.');
-            $contractObj->cd_4 = str_replace($placeholders, $values, 'If I break these rules I understand that I will be subject to a maximum fine of 150 per
-            student, permanent removal from {site_name}, and no option to re-join as we only allow one account per photo ID we receive.');
+            */
+            $contractObj->cd_2 = str_replace($placeholders, $values, config('settings.contract_declaration_2'));
 
-            $contractObj->cd_5 = str_replace($placeholders, $values, 'I understand that if I cannot attend a lesson, or if I need to rearrange the lesson time/date, I must do so within the {site_name} booking system. The student will automatically get notified as to any scheduling alterations.');
+            $contractObj->cd_3 = str_replace($placeholders, $values, config('settings.contract_declaration_3'));
+            $contractObj->cd_4 = str_replace($placeholders, $values, config('settings.contract_declaration_4'));
+
+            $contractObj->cd_5 = str_replace($placeholders, $values, config('settings.contract_declaration_5'));
         }
 
         if($request->isMethod('post')){
@@ -749,15 +773,16 @@ class TutorController extends Controller
 
     public function verification()
     {
-        $userID = Auth::id();
+        $user_id = Auth::id();
 
-        $verification   = Verification::where('user_id', $userID)->first();
-        $references     = Reference::where('user_id', $userID)->get();
-
-        //$verifications  = Verification::where('user_id', $userID)->get();
-        //dd($verifications->all());
-
-
+        $verification   = Verification::where('user_id', $user_id)->first();
+        $references     = Reference::where('user_id', $user_id)->get();
+      
+        $profile_image_verify  = Verification::where('user_id', $user_id)->where('verification_type',1)->first();
+        $identity_id_verify    = Verification::where('user_id', $user_id)->where('verification_type',2)->first();
+        $dbs_verify            = Verification::where('user_id', $user_id)->where('verification_type',3)->first();
+        
+                
         if ($references->isEmpty()) {
             $references = collect(); // Ensure it's an empty collection instead of null/false
         }
@@ -768,51 +793,56 @@ class TutorController extends Controller
             3 => 'Rejected',
         ];
         $user = Auth::user();
-        //dd($tutordata);
-
-        return view('tutor.tutor_verification', compact('user', 'verification', 'statusLabels', 'references'));
+        
+        return view('tutor.tutor_verification', compact('user', 'verification', 'statusLabels', 'references','profile_image_verify','identity_id_verify','dbs_verify'));
     }
     public function proofidentity()
     {
-        $user = Auth::user();
-        //dd($user);
-        return view('tutor.tutor_proofidentity', compact('user'));
+        $user      = Auth::user();
+        $countries = Country::getList();
+        return view('tutor.tutor_proofidentity', compact('user','countries'));
     }
     public function proofstore(Request $request)
     {
         // dd($request->all());
 
         $request->validate([
-            'document_type' => 'required|in:passport,national_id,driver_license',
+            'document_type'   => 'required|in:passport,national_id,driver_license',
             'lastname_on_doc' => 'required|string|max:255',
-            'firstname_on_doc' => 'required|string|max:255',
+            'firstname_on_doc'=> 'required|string|max:255',
             'country_id' => 'required|exists:countries,id',
             'expire_date' => 'required|date',
-            'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
-        // dd($request->all());
+        
 
-        $userID = Auth::id();
+        $user_id = Auth::id();
 
         $filePath = $request->hasFile('file')
             ? $request->file('file')->store('identification_files', 'public')
             : null;
 
+        $vf_record = [
+            'document_type'     => strtolower(trim($request->document_type)),
+            'lastname_on_doc'   => $request->lastname_on_doc,
+            'firstname_on_doc'  => $request->firstname_on_doc,
+            'othername_on_doc'  => $request->othername_on_doc,
+            'country_id'        => $request->country_id,
+            'expire_date'       => date('Y-m-d', strtotime($request->expire_date)),
+            'status'            => 2, // Pending by default
+            'verification_type' => 1
+        ];
+
+        if(!empty($filePath)){
+            $vf_record['file'] = $filePath;
+        }
+
         // Update existing record or create a new one
         Verification::updateOrCreate(
-            ['user_id' => $userID], // Condition to check existing data
-            [
-                'document_type' => strtolower(trim($request->document_type)),
-                'lastname_on_doc' => $request->lastname_on_doc,
-                'firstname_on_doc' => $request->firstname_on_doc,
-                'othername_on_doc' => $request->othername_on_doc,
-                'country_id' => $request->country_id,
-                'expire_date' => $request->expire_date,
-                'file' => $filePath ?? Verification::where('userID', $userID)->value('file'),
-                'status' => 2, // Pending by default
-                'verification_type'=>1
-            ]
+            ['user_id' => $user_id], // Condition to check existing data
+            $vf_record
         );
+
         return redirect()->route('tutor.verification')->with('success', 'Proof of Identification Submitted Successfully');
     }
     public function proofdbs()
@@ -979,6 +1009,9 @@ class TutorController extends Controller
     {
         $user = Auth::user();
         $booking = [];
+
+        $isContractSigned= false;
+
         // Fetch all chats between the logged-in tutor and the specific sender
         $enquiry = Enquiry::where('id', $enquiry_id)
             ->with([
@@ -996,12 +1029,15 @@ class TutorController extends Controller
 
         if(!empty($booking_id)){
             $booking = Booking::where('id',$booking_id)->first();
+            
+            /* get Contract is available */
+            $isContractSigned = \App\Models\Contract::isContractSigned($booking->student_id, $booking->tutor_id);
         }
 
         $messages = $this->getChatMessages($enquiry_id);
 
         $sender = User::find($enquiry_id);
-        return view('tutor.enquiries.chats', compact('enquiry', 'sender', 'booking', 'messages'));
+        return view('tutor.enquiries.chats', compact('enquiry', 'sender', 'booking', 'messages', 'isContractSigned'));
     }
 
     //user_id is denote for student_id

@@ -44,7 +44,7 @@ http://dojofoundation.org/license for more information.
         
         // This is the part where jSignature is initialized.
         var $sigdiv = $("#signature").jSignature({'UndoButton':true})
-        
+       
         
         // All the code below is just code driving the demo. 
         , $tools = $('#tools')
@@ -62,7 +62,7 @@ http://dojofoundation.org/license for more information.
         }
         chops.push('</select></span>')
 
-        chops.push('<input type="button" id="GetImageData" class="btn btn-yellow" value="Confirm Signature" />')
+        chops.push('<input type="button" id="GetImageData" disabled class="btn btn-yellow" value="Confirm Signature" />')
         
         //$(chops.join('')).bind('change', function(e){
             $(chops.join('')).bind('click', function(e){
@@ -87,6 +87,10 @@ http://dojofoundation.org/license for more information.
             //}
         }).appendTo($tools)
     
+         
+        $sigdiv.find('canvas').on('mousedown touchstart', function () {
+            jQuery(document).find('#GetImageData').attr('disabled', false);
+        });
         
         $('<input type="button" class="btn btn-danger" value="Reset">').bind('click', function(e){
             $sigdiv.jSignature('reset')

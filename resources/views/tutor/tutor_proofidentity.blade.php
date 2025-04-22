@@ -9,42 +9,39 @@
                     <p>To become verfied you must upload proof of identification. This must be a clear photo of your passport with all 4 corners visible. 
                         Your data will be encrypted and held securely, and they will only be viewed by our admin team. We are registered with the Information
                          Commissioner`s Office.</p>
-                           @if(session('success'))
-                            <p style="color: green;">{{ session('success') }}</p>
-                            @else(session('error'))
-                            <p style="color: red;">{{ session('error') }}</p>
-                            @endif
+                            @include('elements.alert_message')
+                            
                             <form class="edit-form" action="{{ route('verification.submit') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <!-- @include('elements.user.alert_message') -->
                                 <div class="row">
                                     <!-- Identification Type -->
                                     <div class="col-md-6 form-field">
-                                        <label class="form-label" for="idtype">Identification Type</label>
+                                        <label class="form-label" for="document_type">Identification Type</label>
                                         <div class="select-field">
-                                            <select class="form-select" id="idtype" name="document_type">
+                                            <select class="form-select" id="document_type" name="document_type">
                                                 <option value="" disabled>Select</option>
-                                                <option value="passport" {{ old('idtype', $personalinfo->idtype ?? '') == 'passport' ? 'selected' : '' }}>Passport</option>
-                                                <option value="national_id" {{ old('idtype', $personalinfo->idtype ?? '') == 'national_id' ? 'selected' : '' }}>National ID</option>
-                                                <option value="driver_license" {{ old('idtype', $personalinfo->idtype ?? '') == 'driver_license' ? 'selected' : '' }}>Driver’s License</option>
+                                                <option value="passport" {{ old('document_type') == 'passport' ? 'selected' : '' }}>Passport</option>
+                                                <option value="national_id" {{ old('document_type') == 'national_id' ? 'selected' : '' }}>National ID</option>
+                                                <option value="driver_license" {{ old('document_type') == 'driver_license' ? 'selected' : '' }}>Driver’s License</option>
                                             </select>
                                         </div>
                                     </div>
                                     <!-- First Name -->
                                     <div class="col-md-6 form-field">
                                         <label class="form-label" for="firstname">Firstname on Document</label>
-                                        <input type="text" class="form-control" name="firstname_on_doc" id="firstname" value="">
+                                        <input type="text" class="form-control" name="firstname_on_doc" id="firstname" value="{{ old('firstname_on_doc') }}">
                                     </div>
                                     <!-- Last Name -->
                                     <div class="col-md-6 form-field">
                                         <label class="form-label" for="lastname">Lastname on Document</label>
-                                        <input type="text" class="form-control" name="lastname_on_doc" id="lastname" value="">
+                                        <input type="text" class="form-control" name="lastname_on_doc" id="lastname" value="{{ old('lastname_on_doc') }}">
                                     </div>
 
                                     <!-- Other names on Document -->
                                     <div class="col-md-6 form-field">
                                         <label class="form-label" for="othername">Other names on Document</label>
-                                        <input type="text" name="othername_on_doc" class="form-control" id="othername" value="">
+                                        <input type="text" name="othername_on_doc" class="form-control" id="othername" value="{{ old('othername_on_doc') }}">
                                     </div>
 
                                     <!-- Country -->
@@ -53,8 +50,9 @@
                                         <div class="select-field">
                                             <select class="form-select" id="country" name="country_id" >
                                                 <option value="" disabled>Select</option>
-                                                <option value="1" {{ old('country', $personalinfo->country ?? '') == 'United Kingdom' ? 'selected' : '' }}>United Kingdom</option>
-                                                <option value="2" {{ old('country', $personalinfo->country ?? '') == 'United States' ? 'selected' : '' }}>United States</option>
+                                                @foreach($countries as $id => $name)
+                                                    <option value="{{$id}}" {{ old('country_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -62,7 +60,7 @@
                                      <!-- Expiry Date -->
                                     <div class="form-group">
                                         <label for="expire_date">Expiry Date</label>
-                                        <input type="date" name="expire_date" id="expire_date" class="form-control" required>
+                                        <input type="date" name="expire_date" id="expire_date" class="form-control" value="{{ old('expire_date') }}" required>
                                     </div>
                                     <div class="col-12 form-field uploadContainer">
                                         <!-- Hidden Input for File Upload -->
