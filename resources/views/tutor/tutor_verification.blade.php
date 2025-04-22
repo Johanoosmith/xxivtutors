@@ -41,7 +41,7 @@
                                         <td></td>
                                     @else
                                         <td>
-                                            <a href="{{ route('tutor.photo.upload') }}">Upload Profile Photo</a>
+                                        <a href="{{ route('tutor.photo.upload') }}">Upload Profile Photo</a>
                                         </td>
                                     @endif
                                 </tr>

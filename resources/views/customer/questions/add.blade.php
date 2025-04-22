@@ -14,7 +14,7 @@
                             @else(session('error'))
                             <p style="color: red;">{{ session('error') }}</p>
                             @endif
-                    <form class="edit-form" action="{{ route('student.questions.store') }}"  method="POST">
+                    <form class="edit-form" id="question-form" action="{{ route('student.questions.store') }}"  method="POST">
                         @csrf
                         @include('elements.alert_message')
                         <div class="row">
@@ -63,3 +63,6 @@
         </div>
 </section>
 @endsection
+
+
+

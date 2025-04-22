@@ -72,10 +72,7 @@ class VerificationController extends Controller
     }
 
     public function references(Request $request){
-       
-        
-
-        $ref_Obj = \App\Models\User::whereHas('references')->withCount('references');
+       $ref_Obj = \App\Models\User::whereHas('references')->withCount('references');
        
         if ($request->filled('user')) {
             $search = $request->input('user');

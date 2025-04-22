@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Services\StripeService;
+use App\Http\Controllers\BookingMailController;
+
 
 class Payment extends Model
 {
@@ -109,8 +111,31 @@ class Payment extends Model
 							3. Send mail of stripe issue to student
 						
 						*/
+							// 1. Send email to tutor and student
+							$bookingMail = new BookingMailController();
+							$bookingMail->sendTutorBookingRelatedMail($booking, 'BOOKING_CANCELLATION_UNPAID');
+							if (privacySetting($booking->tutor_id, 'feedback_email')) {
+							$bookingMail->sendTutorBookingRelatedMail($booking, 'TUTOR_FEEDBACK');
+							}
+							$bookingMail->sendStudentBookingRelatedMail($booking, 'STRIPE_ISSUE');
 						
-					}
+							// 2. Cancel (delete) all upcoming lessons between same tutor and student
+							try {
+								$cancelMessage = "Cancel lesson by the system because of unpaid last lesson payment : Booking id - {$booking->id}";
+						
+								Booking::where('student_id', $booking->student_id)
+									->where('tutor_id', $booking->tutor_id)
+									->where('start_date', '>', Carbon::now()) // only future bookings
+									->update([
+										'status' => 3,
+										'cancel_by' => $cancelMessage,
+									]);
+						
+								Log::channel('booking')->info("Cancelled all upcoming bookings (status set to 3) for student ID: {$booking->student_id} and tutor ID: {$booking->tutor_id} due to unpaid booking ID: {$booking->id}.");
+							} catch (\Exception $ex) {
+								Log::channel('booking')->error("Failed to cancel bookings for student ID: {$booking->student_id} and tutor ID: {$booking->tutor_id}. Error: " . $ex->getMessage());
+							}
+						}
 					
 				Log::channel('booking')->info("Payment processed for booking ID: {$booking->id}", [
 					'payload' => $data,

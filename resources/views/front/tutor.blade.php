@@ -35,7 +35,7 @@
                         <h4 class="filter-collapsable-link">Filters</h4>
                     </div>
                     <form id="sortForm" method="GET" action="{{ route('tutors.tutorFilter') }}">
-                        <div class="col-9 py-3 d-flex align-items-center justify-content-end sortby">
+                        <div class="col-9 py-3 d-flex align-items-center justify-content-end sortby" style="margin-top:-60px;">
                             <label for="sort_by" class="me-2">Sort By</label>
                             <div class="select-field position-relative">
                                 <select name="sort_by" class="select form-select" onchange="document.getElementById('sortForm').submit();">
@@ -74,7 +74,7 @@
                             
                             <div class="form-group">
                             <label for="ratingSelect">Tutor Rating:</label><br>
-                            <select id="ratingSelect" name="min_rating">
+                            <select id="ratingSelect" name="min_rating" class="m-2" style="width: 60px;">
                                 <option value="0" {{ request('min_rating', 0) == 0 ? 'selected' : '' }}>0+</option>
                                 <option value="1" {{ request('min_rating', 0) == 1 ? 'selected' : '' }}>1+</option>
                                 <option value="2" {{ request('min_rating', 0) == 2 ? 'selected' : '' }}>2+</option>
@@ -168,7 +168,7 @@
 
 
 
-@section('custom-js')  
+@section('inline-js')  
 <!-- Add this to your <head> section -->
 
     <script>

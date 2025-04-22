@@ -11,13 +11,13 @@ class SubscriptionController extends Controller
     {
         // Validate incoming request
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:subscriptions,email', // Ensure email is unique in the subscriptions table
-            'role' => 'required|in:tutor,student', // Ensure role is either 'tutor' or 'student'
+            's_name' => 'required|string|max:255',
+            's_email' => 'required|email|unique:subscriptions,email', // Ensure email is unique in the subscriptions table
+            's_role' => 'required|in:tutor,student', // Ensure role is either 'tutor' or 'student'
         ]);
          
         // Check if the email already exists (not needed because of the unique validation)
-        $existingSubscriber = Subscription::where('email', $request->email)->first();
+        $existingSubscriber = Subscription::where('email', $request->s_email)->first();
         if ($existingSubscriber) {
             // Email already registered, redirect back with an error message
             return redirect()->back()->with('s_error', 'This email address is already registered.');
@@ -25,9 +25,9 @@ class SubscriptionController extends Controller
     
         // If email doesn't exist, proceed with saving the new subscriber
         $subscriber = new Subscription();
-        $subscriber->name = $request->name;
-        $subscriber->email = $request->email;
-        $subscriber->role = $request->role;
+        $subscriber->name = $request->s_name;
+        $subscriber->email = $request->s_email;
+        $subscriber->role = $request->s_role;
         $subscriber->save();
     
         // Redirect back to the same page with a success message and retain the form inputs

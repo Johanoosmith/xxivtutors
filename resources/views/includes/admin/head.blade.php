@@ -4,7 +4,7 @@
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
 <!-- Favicon icon -->
-<link rel="icon" href="{{ asset('backend/images/favicon.ico') }}" type="image/x-icon" />
+<link rel="icon" href="{{ asset('uploads/logos/favicon.ico') }}" type="image/x-icon" />
 
 <!-- font css -->
 <link rel="stylesheet" href="{{ URL::asset('backend/fonts/feather.css') }}" />
