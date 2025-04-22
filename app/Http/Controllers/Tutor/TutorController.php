@@ -615,7 +615,7 @@ class TutorController extends Controller
                         config('constants.SITE.TITLE'), 
                         getAmount($booking->hourly_rate), 
                         $contractObj->student->firstname,
-                        $contractObj->student->student->title, 
+                        $contractObj->student->student->title ?? '', 
                     ];
 
             $contractObj->cd_1 = str_replace($placeholders, $values, config('settings.contract_declaration_1'));
