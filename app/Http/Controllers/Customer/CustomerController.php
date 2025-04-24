@@ -218,10 +218,11 @@ class CustomerController extends Controller
             
             if ($userData['role'] === 'student') {
                 session()->flash('message', 'Registration successful! Log in to explore your dashboard and start learning.');
-            } elseif ($user->role === 'tutor') {
+            } elseif ($userData['role'] === 'tutor') {
                 session()->flash('message', 'Registration successful! Once approved, you’ll be ready to start tutoring.');
             }
-                        // Optionally, you can clear the session data after saving
+            
+            // Optionally, you can clear the session data after saving
             $request->session()->forget('registration_form');
             // Redirect or return a response
             return redirect()->route('login');
@@ -277,7 +278,7 @@ class CustomerController extends Controller
             }
         }
 
-        return redirect()->route('login');
+        //return redirect()->route('login');
     }
 
     public function viewStudent($username)
