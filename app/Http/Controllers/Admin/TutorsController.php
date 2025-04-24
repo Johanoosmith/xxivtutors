@@ -9,6 +9,8 @@ use App\Models\Course;
 use App\Models\Tutor;
 use App\Models\Pagemeta;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Qualification;
+use App\Models\UserQualification;
 
 class TutorsController extends Controller
 {
@@ -295,4 +297,38 @@ class TutorsController extends Controller
 			}			
 		}
 	}
+
+
+
+
+    public function showUserQualifications($user_id)
+    {
+        $qualifications = UserQualification::where('user_id', $user_id)
+                            ->with('user','qualification')
+                            ->paginate(10);
+        return view('admin.qualifications.index', compact('qualifications'));
+    }
+
+    public function approve($id)
+{
+    UserQualification::where('id', $id)->update([
+        'status' => 1, // assuming 1 = approved
+        'reason' => null
+    ]);
+    return back()->with('success', 'Qualification approved.');
+}
+
+public function reject(Request $request, $id)
+{
+    $request->validate([
+        'reason' => 'required|string|max:255',
+    ]);
+
+    UserQualification::where('id', $id)->update([
+        'status' => 3, // assuming 0 = rejected
+        'reason' => $request->reason
+    ]);
+
+    return back()->with('success', 'Qualification rejected.');
+}
 }

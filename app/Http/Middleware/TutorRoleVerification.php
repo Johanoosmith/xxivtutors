@@ -19,6 +19,15 @@ class TutorRoleVerification
     {
 		$user = Auth::user();
 		
+        if (Auth::check()) {
+            if (Auth::user()->status !== 1) {
+                Auth::logout();
+                return redirect()->route('login')->withErrors([
+                    'email' => 'Your account has been deactivated by the admin.',
+                ]);
+            }
+        }
+
 		// If user is not authenticated, deny access
         if (!$user) {
 			if ($request->ajax() || $request->wantsJson()) {

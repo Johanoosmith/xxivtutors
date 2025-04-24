@@ -55,6 +55,8 @@ Route::middleware(['auth'])->prefix('tutor')->group(function () {
 		Route::post('/verification/submit', [TutorController::class, 'proofstore'])->name('verification.submit');
 		Route::get('/proofdbs', [TutorController::class, 'proofdbs'])->name('tutor.proofdbs');
 		Route::post('/proofdbs/submit', [TutorController::class, 'proofdbssubmit'])->name('proofdbs.submit');
+		Route::delete('/delete/refernce', [TutorController::class, 'deleteReference'])->name('reference.delete');
+
 		Route::get('/add/refernce', [TutorController::class, 'addrefernce'])->name('tutor.addrefernce');
 		Route::post('/refernce/submit', [TutorController::class, 'submitreference'])->name('tutor.submitreference');
 		Route::post('/resend-email/{id}', [TutorController::class, 'resendEmail'])->name('tutor.resend.email');

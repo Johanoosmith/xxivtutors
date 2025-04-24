@@ -53,7 +53,7 @@
                                     <td class="col-action">
                                     <a href="{{ route('tutor.qualification.edit', $userQualification->id) }}" class="icon-btn">
                                             <svg class="icon">
-                                                <use xlink:href="#view"></use>
+                                                <use xlink:href="#edit"></use>
                                             </svg>
                                         </a>
                                         <form action="{{ route('tutor.qualification.delete', $userQualification->id) }}" method="POST" style="display:inline;">

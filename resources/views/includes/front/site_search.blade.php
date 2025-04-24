@@ -90,6 +90,7 @@
 			
 			if(teach_type == 'in-person'){
 				jQuery('#SiteSearchPostcode').show();
+				jQuery('#postcode').attr('required', true); // Add required
 			}else if(teach_type == 'online'){
 				jQuery('#SiteSearchPostcode').hide();
 				jQuery('#postcode').removeAttr('required'); // Remove required

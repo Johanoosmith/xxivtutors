@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Notifications\CustomEmailNotification;
 use Illuminate\Support\Facades\Notification;
+use App\Models\Notification as NotificationTable;
+
 
 
 function sendMail($email, $data, $slug){
@@ -32,7 +34,7 @@ function sendMail($email, $data, $slug){
 
 function privacySetting(int $userId, string $settingKey): bool
 {
-	$notification = Notification::where('user_id', $userId)->first();
+	$notification = NotificationTable::where('user_id', $userId)->first();
 
 	if (!$notification) {
 		return false;

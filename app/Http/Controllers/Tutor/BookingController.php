@@ -485,17 +485,29 @@ class BookingController extends Controller
 
 	public function cancel(Request $request)
 	{
-
-		$user_id = Auth::user()->id;
-		$booking = Booking::where('tutor_id', $user_id)->findOrFail($request->booking_id);
-
-		$booking->status = 3;
-		$booking->cancel_by = 'Lesson cancel by tutor.';
-		$booking->save();
-		$mailController = new BookingMailController();
-		$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_CANCELLED');
-		return redirect()->route('tutor.booking.index')->with('success', 'Booking cancelled successfully.');
+		try {
+			$user_id = Auth::user()->id;
+	
+			// Attempt to find the booking by the tutor ID and booking ID
+			$booking = Booking::where('tutor_id', $user_id)->findOrFail($request->booking_id);
+	
+			// Update the booking status and cancel details
+			$booking->status = 3;
+			$booking->cancel_by = 'Lesson cancelled by tutor.';
+			$booking->save();
+	
+			// Send cancellation email to the student
+			$mailController = new BookingMailController();
+			$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_CANCELLED');
+	
+			// Redirect with success message
+			return redirect()->route('tutor.booking.index')->with('success', 'Booking cancelled successfully.');
+		} catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			// If booking is not found, return an error message
+			return redirect()->route('tutor.booking.index')->with('error', 'You cannot cancel this booking.');
+		}
 	}
+	
 
 	public function help()
 	{
