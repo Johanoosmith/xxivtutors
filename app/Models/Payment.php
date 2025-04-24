@@ -35,8 +35,8 @@ class Payment extends Model
 	/* Run by kernal every day */
 	public function studentLessonCharge(){
 		
-		$startTime	= Carbon::now()->subDay(); // 24 hours ago
-		$endTime	= Carbon::now(); // Current time
+		$startTime	= $startTime = Carbon::yesterday()->startOfDay(); // 24 hours ago
+		$endTime	= $endTime = Carbon::yesterday()->endOfDay();  // Current time
 		
 		// Confirm Booking
 		$bookings = \App\Models\Booking::where('status', 2)  
@@ -45,10 +45,8 @@ class Payment extends Model
 				$query->where('status', 'paid');
 			})
 			->get();
-			
-		
 
-        if ($bookings->isEmpty()) {
+		if ($bookings->isEmpty()) {
             Log::channel('booking')->info('No confirmed bookings found in the last 24 hours.');
             return;
         }
@@ -115,7 +113,7 @@ class Payment extends Model
 							$bookingMail = new BookingMailController();
 							$bookingMail->sendTutorBookingRelatedMail($booking, 'BOOKING_CANCELLATION_UNPAID');
 							if (privacySetting($booking->tutor_id, 'feedback_email')) {
-							$bookingMail->sendTutorBookingRelatedMail($booking, 'TUTOR_FEEDBACK');
+								$bookingMail->sendTutorBookingRelatedMail($booking, 'TUTOR_FEEDBACK');
 							}
 							$bookingMail->sendStudentBookingRelatedMail($booking, 'STRIPE_ISSUE');
 						

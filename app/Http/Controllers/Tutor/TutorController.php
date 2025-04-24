@@ -833,7 +833,7 @@ class TutorController extends Controller
             'country_id'        => $request->country_id,
             'expire_date'       => date('Y-m-d', strtotime($request->expire_date)),
             'status'            => 2, // Pending by default
-            'verification_type' => 1
+            'verification_type' => 2
         ];
 
         if(!empty($filePath)){
