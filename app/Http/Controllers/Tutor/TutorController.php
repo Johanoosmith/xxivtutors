@@ -601,12 +601,15 @@ class TutorController extends Controller
         $request = request();
         $user = Auth::user();
 
-        $booking_contract = \App\Models\BookingContract::where('contract_id', $id)->first();
-        $booking = Booking::where('id', $booking_contract->booking_id)->first();
-        $contractObj = \App\Models\Contract::where('id', $id)->with(['tutor','student'])->first();
+        $contractObj = \App\Models\Contract::where('tutor_id', $user->id)
+                                            ->where('id', $id)
+                                            ->with(['tutor','student'])->first();
+
         if(empty($contractObj)){
             return redirect()->back()->with('error', 'Contract not found.');
         }
+        $booking_contract = \App\Models\BookingContract::where('contract_id', $id)->first();
+        $booking = Booking::where('id', $booking_contract->booking_id)->first();
 
         if($contractObj->status == 'pending'){
             

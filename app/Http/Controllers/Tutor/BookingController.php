@@ -67,8 +67,7 @@ class BookingController extends Controller
 		$bookings = $query->paginate($perPage);
 
 		$booking_json = $this->getBookingsJson();
-		//pr($booking_json);
-
+		
 		return view('tutor.booking.index', compact('bookings', 'booking_json', 'booking_on'));
 	}
 
@@ -91,7 +90,8 @@ class BookingController extends Controller
 			$events[] = [
 				'title' => $booking->student->full_name . ' @ ' . date('H:i', strtotime($booking->start_time)),
 				'start' => $startDateTime->toIso8601String(),
-				'end' => $startDateTime->toIso8601String(),
+				//'end' => $startDateTime->toIso8601String(),
+				'end' => '',
 				'url'   => $isPast ? '' : route('tutor.booking.edit', $booking),
 				'className' => $isPast ? 'bg-secondary text-light' : 'bg-success text-white',
 			];
@@ -131,8 +131,8 @@ class BookingController extends Controller
 		$user_id = Auth::user()->id;
         // dd($request->all());
 		$request->merge([
-			// 'start_date' => Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d'),
-			'start_date' => Carbon::createFromFormat('m/d/Y', $request->start_date)->format('Y-m-d'),
+			 'start_date' => Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d'),
+			//'start_date' => Carbon::createFromFormat('m/d/Y', $request->start_date)->format('Y-m-d'),
 
 			'start_time' => sprintf('%02d:%02d', $request->start_time_hour, $request->start_time_minute)
 		]);

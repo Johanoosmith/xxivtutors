@@ -1,7 +1,7 @@
 @extends('layouts.cms')
 
 @section('page-css')
-<link rel="stylesheet" href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css">
+<!--<link rel="stylesheet" href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css">-->
 @endsection
 
 @section('content')
@@ -167,7 +167,7 @@
 @endsection
 
 @section('page-js')
-<script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js"></script>
+<!--<script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js"></script>-->
 @endsection
 
 @section('custom-js')

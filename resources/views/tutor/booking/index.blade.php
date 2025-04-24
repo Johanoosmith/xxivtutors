@@ -203,6 +203,7 @@
 								weekNumbers: true,
 								navLinks: false, // can click day/week names to navigate views
 								nowIndicator: true,
+								eventDisplay: 'block',
 								initialView: 'dayGridMonth',
 								dateClick: function(info) {
 									return false;
