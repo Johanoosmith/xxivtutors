@@ -213,11 +213,30 @@
 				String(today.getDate()).padStart(2, '0');
 
 			var calendar = new FullCalendar.Calendar(calendarEl, {
-				headerToolbar: {
-					left: 'prev',
-					center: 'title',
-					right: 'next'
-				},
+								headerToolbar: {
+									left: 'prev',
+									center: 'title',
+									right: 'next'
+								},
+			  
+								selectable: false,
+								selectMirror: true,
+								displayEventTime:false,
+								editable: false,
+								droppable: false, // this allows things to be dropped onto the calendar
+								initialDate: initialDate,
+								weekNumbers: true,
+								navLinks: false, // can click day/week names to navigate views
+								nowIndicator: true,
+								eventDisplay: 'block',
+								initialView: 'dayGridMonth',
+								dateClick: function(info) {
+									return false;
+								},
+								events: booking_json,
+								eventDidMount: function(info) {
+									// Split title on '@' to separate name and time
+									const [name, time] = info.event.title.split(' @ ');
 
 				selectable: false,
 				selectMirror: true,
