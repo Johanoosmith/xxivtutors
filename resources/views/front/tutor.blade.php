@@ -171,7 +171,7 @@
 @section('inline-js')  
 <!-- Add this to your <head> section -->
 
-    <script>
+    <!-- <script>
         $(function () {
             const minPrice = parseInt($('#minPrice').val()) || 0;
             const maxPrice = parseInt($('#maxPrice').val()) || 500;
@@ -192,7 +192,7 @@
             $("#priceDisplay").text($("#priceSlider").slider("values", 0) +
                 " - " + $("#priceSlider").slider("values", 1));
         });
-        </script>      
+        </script>       -->
     
 <script>
     // Price Range Slider
@@ -212,7 +212,7 @@
     priceSlider.noUiSlider.on('update', function(values) {
         document.getElementById('minPrice').value = values[0];
         document.getElementById('maxPrice').value = values[1];
-        document.getElementById('priceDisplay').innerText = `$${values[0]} - $${values[1]}`;
+        document.getElementById('priceDisplay').innerText = `${values[0]} - ${values[1]}`;
     });
     // // Rating Range Slider
     const ratingSlider = document.getElementById('ratingSlider');

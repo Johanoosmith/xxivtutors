@@ -109,7 +109,7 @@ class BookingController extends Controller
 		$startRange = $now->copy()->subMonths(6)->startOfDay();
 		$endRange = $now->copy()->addMonths(6)->endOfDay();
 
-		$bookings = Booking::where('student_id',$user_id)->whereBetween('start_date', [$startRange, $endRange])->get();
+		$bookings = Booking::where('student_id', $user_id)->whereBetween('start_date', [$startRange, $endRange])->get();
 
 		$events = [];
 
@@ -141,23 +141,30 @@ class BookingController extends Controller
 
 	public function cancel(Request $request)
 	{
-
 		$user_id = Auth::user()->id;
 		$booking = Booking::where('student_id', $user_id)
-			->where('start_date', '>=', Carbon::now()->toDateString())
-			->where('start_time', '>', Carbon::now()->toTimeString())
-			->findOrFail($request->booking_id);
+			->where(function ($query) {
+				$query->where('start_date', '>', Carbon::now()->toDateString())  // Start date is in the future
+					->orWhere(function ($query) {
+						$query->where('start_date', '=', Carbon::now()->toDateString())  // Start date is today
+							->where('start_time', '>', Carbon::now()->toTimeString());  // Start time is in the future today
+					});
+			})
+			->find($request->booking_id);
+		if ($booking) {
+			// Booking found, proceed with cancellation
+			$booking->status = 3;
+			$booking->cancel_by = 'Lesson cancelled by student.';
+			$booking->save();
 
-		$booking->status	= 3;
-		$booking->cancel_by = 'Lesson cancel by student.';
-		$booking->save();
+			$mailController = new BookingMailController();
+			$mailController->sendTutorBookingRelatedMail($booking, 'TUTOR_BOOKING_CANCELLATION');
 
-		$mailController = new BookingMailController();
-
-		$mailController->sendTutorBookingRelatedMail($booking, 'TUTOR_BOOKING_CANCELLATION');
-
-
-		return redirect()->route('customer.booking.index')->with('success', 'Booking cancelled successfully.');
+			return redirect()->route('customer.booking.index')->with('success', 'Booking cancelled successfully.');
+		} else {
+			// Booking not found, return error
+			return redirect()->route('customer.booking.index')->with('error', 'You cannot cancel this booking.');
+		}
 	}
 
 	public function confirmed(Request $request)
@@ -169,19 +176,25 @@ class BookingController extends Controller
 		// 				->where('start_time','>',Carbon::now()->toTimeString())
 		// 				->findOrFail($request->id);
 
-		$booking = Booking::with(['subject', 'level', 'student', 'tutor']) // eager load relationships
-			->where('student_id', $user_id)
-			->where('start_date', '>=', Carbon::now()->toDateString())
-			//->where('start_time', '>', Carbon::now()->toTimeString())
-			->findOrFail($request->id);
+		$booking = Booking::where('student_id', $user_id)
+			->where(function ($query) {
+				$query->where('start_date', '>', Carbon::now()->toDateString())  // Start date is in the future
+					->orWhere(function ($query) {
+						$query->where('start_date', '=', Carbon::now()->toDateString())  // Start date is today
+							->where('start_time', '>', Carbon::now()->toTimeString());  // Start time is in the future today
+					});
+			})
+			->find($request->booking_id);
 		if ($booking) {
 			$booking->status = 2; // Confirm Booking
 			$booking->save();
 			$mailController = new BookingMailController();
 			$mailController->sendTutorBookingRelatedMail($booking, 'TUTOR_BOOKING_CONFIRMATION');
 			$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_CONFIRMATION');
+			return redirect()->route('customer.booking.index')->with('success', 'Booking is confirmed successfully.');
+		} else {
+			return redirect()->route('customer.booking.index')->with('error', 'You are unable to confirm this booking');
 		}
-		return redirect()->route('customer.booking.index')->with('success', 'Booking is confirmed successfully.');
 	}
 
 

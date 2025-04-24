@@ -20,10 +20,14 @@
                             <li class="list-group-item">
                                 <strong>User Name:</strong> {{ $Verification->user->full_name }}
                             </li>
+                            
+                            @if(!empty($Verification->verification_type))
                             <li class="list-group-item">
                                 <strong>Verification Type:</strong>
-                                {{ getVerificationType(@$Verification->verification_type) }}
+                                {{ getVerificationType($Verification->verification_type) }}
                             </li>
+                            @endif
+
                             <li class="list-group-item">
                                 <strong>Document Type:</strong> {{ format_label($Verification->document_type) }}
                             </li>

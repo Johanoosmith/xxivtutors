@@ -242,12 +242,12 @@ class TutorController extends Controller
     public function newqualificationstore(Request $request)
     {
         $validated = $request->validate([
-            'qtype' => 'required|string|max:255',
+            'qualification_type' => 'required|string|max:255',
             'qualification_id' => 'required|integer|exists:qualifications,id', // Ensure it's an integer and exists in the qualifications table
-            'institute_name' => 'nullable|string|max:255',
-            'subject' => 'nullable|string|max:255',
-            'grade' => 'nullable|string|max:255',
-            'qyear' => 'nullable|digits:4',
+            'institute_name' => 'required|string|max:255',
+            'subject' => 'required|string|max:255',
+            'grade' => 'required|string|max:255',
+            'qualification_year' => 'required|digits:4',
             'qdocument' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
         ]);
 
@@ -259,14 +259,15 @@ class TutorController extends Controller
 
         UserQualification::create([
             'user_id' => Auth::id(),
-            'qtype' => $request->qtype,
+            'qtype' => $request->qualification_type,
             'qualification_id' => $request->qualification_id,
             'institute_name' => $request->institute_name,
             'subject' => $request->subject,
             'grade' => $request->grade,
-            'qyear' => $request->qyear,
+            'qyear' => $request->qualification_year,
             'qdocument' => $filePath,
             'status' => 1,
+
         ]);
         return redirect()->route('tutor.qualification')->with('success', 'Qualification added successfully!');
     }
@@ -289,15 +290,14 @@ class TutorController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'qtype' => 'required|string|max:255',
+            'qualification_type' => 'required|string|max:255',
             'qualification_id' => 'required|integer',
-            'institute_name' => 'nullable|string|max:255',
-            'subject' => 'nullable|string|max:255',
-            'grade' => 'nullable|string|max:255',
-            'qyear' => 'nullable|digits:4',
+            'institute_name' => 'required|string|max:255',
+            'subject' => 'required|string|max:255',
+            'grade' => 'required|string|max:255',
+            'qualification_year' => 'required|digits:4',
             'qdocument' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
         ], [
-            'qdocument.required' => 'Please upload a document.',
             'qdocument.mimes' => 'The document must be a file of type: pdf, doc, docx.',
             'qdocument.max' => 'The document size may not exceed 2MB.',
         ]);
@@ -305,12 +305,12 @@ class TutorController extends Controller
 
         $qualification = UserQualification::findOrFail($id);
 
-        $qualification->qtype = $request->qtype;
+        $qualification->qtype = $request->qualification_type;
         $qualification->qualification_id = $request->qualification_id;
         $qualification->institute_name = $request->institute_name;
         $qualification->subject = $request->subject;
         $qualification->grade = $request->grade;
-        $qualification->qyear = $request->qyear;
+        $qualification->qyear = $request->qualification_year;
 
         if ($request->hasFile('qdocument')) {
             $qualification->qdocument = $request->file('qdocument')->store('qualification_files', 'public');
@@ -1302,28 +1302,35 @@ class TutorController extends Controller
         if (!is_array($request->reference) || empty($request->reference)) {
             return back()->with('error', 'No valid references provided.');
         }
-
-        // Filter out empty rows
+    
+        // Filter out completely empty rows
         $validReferences = array_filter($request->reference, function ($ref) {
             return !empty($ref['firstname']) && !empty($ref['lastname']) &&
                 !empty($ref['email']) && !empty($ref['mobile']) &&
                 !empty($ref['profession']);
         });
-
+    
         if (empty($validReferences)) {
             return back()->with('error', 'No valid references provided.');
         }
-
-        // Validate only provided data
-        $request->validate([
-            'reference.*.email' => 'email',
-            'reference.*.mobile' => 'digits_between:10,15',
-        ], [
+    
+        // Dynamically build validation rules for valid references
+        $rules = [];
+        foreach ($validReferences as $index => $ref) {
+            $rules["reference.$index.email"] = 'required|email';
+            $rules["reference.$index.mobile"] = 'required|digits_between:10,15';
+        }
+    
+        $messages = [
             'reference.*.email.email' => 'Please enter a valid email address.',
             'reference.*.mobile.digits_between' => 'Mobile number must be between 10 and 15 digits.',
-        ]);
+        ];
+    
+        // Validate only the filtered valid rows
+        $request->validate($rules, $messages);
+    
+        // Store valid references and send email
         foreach ($validReferences as $ref) {
-            // Create reference record
             $newReference = Reference::create([
                 'user_id' => Auth::id(),
                 'first_name' => $ref['firstname'],
@@ -1335,22 +1342,39 @@ class TutorController extends Controller
                 'status' => 'pending',
                 'mail_send' => 0,
             ]);
-
+    
             // Convert model to array before passing to mail function
             $referenceArray = $newReference->toArray();
-            $referenceArray['username'] = $newReference->user->username; // Add username to the array
-
+            $referenceArray['username'] = $newReference->user->username;
+    
             // Send email
             $emailSent = sendMail($newReference->email, $referenceArray, 'REFERENCE_MAIL');
-
-            // Update mail_send flag if email was sent successfully
+    
+            // Update mail_send if email was sent
             if ($emailSent) {
                 $newReference->update(['mail_send' => 1]);
             }
         }
-        //Mail::to($reference->email)->send(new ReferenceEmail($reference));
+    
         return redirect()->back()->with('success', 'References added successfully!');
     }
+
+    public function deleteReference(Request $request)
+{
+    $reference = Reference::where('id', $request->reference_id)
+        ->where('user_id', Auth::id())
+        ->first();
+
+    if (!$reference) {
+        return back()->with('error', 'Reference not found or access denied.');
+    }
+
+    $reference->delete();
+
+    return back()->with('success', 'Reference deleted successfully.');
+}
+
+    
     public function resendEmail($id)
     {
         $reference = Reference::findOrFail($id);
@@ -1367,4 +1391,5 @@ class TutorController extends Controller
 
         return redirect()->back()->with('success', 'Email resent successfully.');
     }
+    
 }

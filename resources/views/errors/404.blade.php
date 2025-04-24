@@ -8,7 +8,7 @@
     <div class="error-content text-center">
     <img src="{{url('front/assets/images/404.png')}}" alt="404 error">
     <p>Nothing found for the requested page. Try a search instead?</p>
-    <a href="{{ url('home')}}" class="btn btn-green"><span>Back To Home</span></a>
+    <a href="{{ url('/')}}" class="btn btn-green"><span>Back To Home</span></a>
     </div>
   </div>
 </section>

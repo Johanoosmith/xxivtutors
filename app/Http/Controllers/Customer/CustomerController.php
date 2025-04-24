@@ -17,9 +17,10 @@ use App\Models\Payment;
 use App\Models\Subject;
 use App\Models\Student;
 use App\Services\StripeService;
-use Illuminate\Support\Facades\Notification;
+// use Illuminate\Support\Facades\Notification;
 use App\Models\Tutor;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Notification;
 
 
 
@@ -116,6 +117,11 @@ class CustomerController extends Controller
 
         // Save data to session
         $request->session()->put('registration_form.' . $step, $validatedData);
+        // $step2 = $request->session()->get('registration_form.2', []);
+
+        // // Dump the data and stop further script execution
+        // dd($step2);
+    
 
         if ($step < 3) {
             // Redirect to the next step
@@ -153,7 +159,18 @@ class CustomerController extends Controller
                 'dob_year' => $userData['dobYear'],
                 'dob_month' => $userData['dobMonth'],
                 'dob_day'     => $userData['dobDay'],
-                'status' => 1
+                'status' => ($userData['role'] === 'tutor') ? 0 : 1,
+            ]);
+
+            Notification::create([
+                'user_id' => $user->id,
+                'display_postcode' => 1,
+                'display_qualification' => 1,
+                'new_enquiry_email' => 1,
+                'email_on_profile_view' => 1,
+                'feedback_email' => 1,
+                'payment_email' => 1,
+                'lesson_reminder_email' => 1,
             ]);
 
             if ($userData['role'] === 'tutor') {
@@ -202,7 +219,7 @@ class CustomerController extends Controller
             if ($userData['role'] === 'student') {
                 session()->flash('message', 'Registration successful! Log in to explore your dashboard and start learning.');
             } elseif ($user->role === 'tutor') {
-                session()->flash('message', 'Registration successful! The admin will review your profile shortly.');
+                session()->flash('message', 'Registration successful! Once approved, you’ll be ready to start tutoring.');
             }
                         // Optionally, you can clear the session data after saving
             $request->session()->forget('registration_form');

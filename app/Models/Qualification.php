@@ -22,4 +22,6 @@ class Qualification extends Model
     {
         return $this->hasMany(UserQualification::class);
     }
+
+
 }

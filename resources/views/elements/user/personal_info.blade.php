@@ -1,3 +1,6 @@
+@php
+$step2 = session('registration_form.2', []);
+@endphp
 <div class="row">
 	<div class="col-12 d-block d-sm-none">
 		<h3 class="step-heading">
@@ -13,59 +16,55 @@
 		<label class="form-label" for="title">Title <span class="required text-danger">*</span></label>
 		<div class="select-field">
 			<select class="form-select" id="title" name="title" required>
-				<option value="" disabled selected>Select</option>
-				<option value="Mr" {{ old('title') == 'Mr' ? 'selected' : '' }}>Mr</option>
-				<option value="Ms" {{ old('title') == 'Ms' ? 'selected' : '' }}>Ms</option>
-				<option value="Mrs" {{ old('title') == 'Mrs' ? 'selected' : '' }}>Mrs</option>
+				<option value="" disabled {{ empty(old('title', $step2['title'] ?? '')) ? 'selected' : '' }}>Select</option>
+				<option value="Mr" {{ old('title', $step2['title'] ?? '') == 'Mr' ? 'selected' : '' }}>Mr</option>
+				<option value="Ms" {{ old('title', $step2['title'] ?? '') == 'Ms' ? 'selected' : '' }}>Ms</option>
+				<option value="Mrs" {{ old('title', $step2['title'] ?? '') == 'Mrs' ? 'selected' : '' }}>Mrs</option>
 			</select>
 			<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor" />
 			</svg>
 		</div>
 	</div>
+
 	<div class="col-md-6 form-field">
-		<label class="form-label" for="gender">Gender <span class="required text-danger">*</span></label>
-		<div class="select-field">
-			<select class="form-select" id="gender" name="gender" required>
-				<option value="" disabled selected>Select</option>
-				<option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
-				<option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
-			</select>
-			<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor" />
-			</svg>
-		</div>
-	</div>
+    <label class="form-label" for="gender">Gender</label>
+    <select class="form-select" id="gender" name="gender" required>
+        <option value="" disabled {{ old('gender', $step2['gender'] ?? '') ? '' : 'selected' }}>Select Gender</option>
+        <option value="male" {{ old('gender', $step2['gender'] ?? '') == 'male' ? 'selected' : '' }}>Male</option>
+        <option value="female" {{ old('gender', $step2['gender'] ?? '') == 'female' ? 'selected' : '' }}>Female</option>
+    </select>
+</div>
+
 	<div class="col-md-6 form-field">
 		<label class="form-label" for="firstName">First Name <span class="required text-danger">*</span></label>
-		<input class="form-control" type="text" id="firstName" name="firstName" placeholder="First Name" value="{{ old('firstName') }}" required>
+		<input class="form-control" type="text" id="firstName" name="firstName" placeholder="First Name" value="{{ old('firstName', $step2['firstName'] ?? '') }}" required>
 	</div>
 	<div class="col-md-6 form-field">
 		<label class="form-label" for="lastName">Last Name <span class="required text-danger">*</span></label>
-		<input class="form-control" type="text" id="lastName" name="lastName" placeholder="Last Name" value="{{ old('lastName') }}" required>
+		<input class="form-control" type="text" id="lastName" name="lastName" placeholder="Last Name" value="{{ old('lastName', $step2['lastName'] ?? '') }}" required>
 	</div>
 	<div class="col-md-6 form-field">
 		<label class="form-label" for="address1">Address 1 <span class="required text-danger">*</span></label>
-		<input class="form-control" type="text" id="address1" name="address1" placeholder="Address 1" value="{{ old('address1') }}" required>
+		<input class="form-control" type="text" id="address1" name="address1" placeholder="Address 1" value="{{ old('address1', $step2['address1'] ?? '') }}" required>
 	</div>
 	<div class="col-md-6 form-field">
 		<label class="form-label" for="address2">Address 2</label>
-		<input class="form-control" type="text" id="address2" name="address2" placeholder="Address 2" value="{{ old('address2') }}">
+		<input class="form-control" type="text" id="address2" name="address2" placeholder="Address 2" value="{{ old('address2', $step2['address2'] ?? '') }}">
 	</div>
 	<div class="col-lg-3 col-md-6 form-field">
 		<label class="form-label" for="town">Town <span class="required text-danger">*</span></label>
-		<input class="form-control" type="text" id="town" name="town" placeholder="Town" value="{{ old('town') }}" required>
+		<input class="form-control" type="text" id="town" name="town" placeholder="Town" value="{{ old('town', $step2['town'] ?? '')}}" required>
 	</div>
 	<div class="col-lg-3 col-md-6 form-field">
 		<label class="form-label" for="county">County <span class="required text-danger">*</span></label>
 		<div class="select-field">
-			<select class="form-select" id="county" name="county">
-				<option value="" disabled {{ old('county') ? '' : 'selected' }}>Select</option>
+			<select class="form-select" id="county" name="county" required>
+				<option value="" disabled {{ empty(old('county', $step2['county'] ?? '')) ? 'selected' : '' }}>Select</option>
 				@foreach($countyies as $id => $name)
-				<option value="{{ $id }}" {{ old('county') == $id ? 'selected' : '' }}>{{ $name }}</option>
+				<option value="{{ $id }}" {{ old('county', $step2['county'] ?? '') == $id ? 'selected' : '' }}>{{ $name }}</option>
 				@endforeach
 			</select>
-
 			<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor" />
 			</svg>
@@ -74,13 +73,12 @@
 	<div class="col-lg-3 col-md-6 form-field">
 		<label class="form-label" for="country">Country <span class="required text-danger">*</span></label>
 		<div class="select-field">
-			<select class="form-select" id="country" name="country">
-				<option value="" disabled {{ old('country') ? '' : 'selected' }}>Select</option>
+			<select class="form-select" id="country" name="country" required>
+				<option value="" disabled {{ empty(old('country', $step2['country'] ?? '')) ? 'selected' : '' }}>Select</option>
 				@foreach($countries as $id => $name)
-				<option value="{{ $id }}" {{ old('country') == $id ? 'selected' : '' }}>{{ $name }}</option>
+				<option value="{{ $id }}" {{ old('country', $step2['country'] ?? '') == $id ? 'selected' : '' }}>{{ $name }}</option>
 				@endforeach
 			</select>
-
 			<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor" />
 			</svg>
@@ -88,91 +86,47 @@
 	</div>
 	<div class="col-lg-3 col-md-6 form-field">
 		<label class="form-label" for="postcode">Postcode <span class="required text-danger">*</span></label>
-		<input class="form-control" type="text" id="postcode" name="postcode" placeholder="Postcode" value="{{old('postcode')}}" required>
+		<input class="form-control" type="text" id="postcode" name="postcode" placeholder="Postcode" value="{{ old('postcode', $step2['postcode'] ?? '')}}" required>
 	</div>
 	<div class="col-md-6 form-field">
 		<label class="form-label" for="phoneNumber">Phone Number <span class="required text-danger">*</span></label>
-		<input class="form-control" type="tel" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" value="{{old('phoneNumber')}}" required>
+		<input class="form-control" type="number" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" value="{{ old('phoneNumber', $step2['phoneNumber'] ?? '') }}" required>
 	</div>
 	<div class="col-md-12 form-field">
 		<label class="form-label" for="dobYear">Date of Birth <span class="required text-danger">*</span></label>
-		<!-- <div class="dob-select">
-			<div class="select-field">
-				<select class="form-select" id="dobYear" name="dobYear">
-					<option value="" disabled selected>Year</option>
-				</select>
-			</div>
-			<div class="select-field">
-				<select class="form-select" id="dobMonth" name="dobMonth">
-					<option value="" disabled selected>Month</option>
-				</select>
-			</div>
-			<div class="select-field">
-				<select class="form-select" id="dobDay" name="dobDay">
-					<option value="" disabled selected>Day</option>
-				</select>
-			</div>
-		</div> -->
-		
-		<div class="dob-select">
-	<div class="select-field">
-		<select class="form-select" id="dobYear" name="dobYear">
-			<option value="" disabled {{ old('dobYear') ? '' : 'selected' }}>Year</option>
-			@for($y = date('Y'); $y >= 1900; $y--)
-				<option value="{{ $y }}" {{ old('dobYear') == $y ? 'selected' : '' }}>{{ $y }}</option>
-			@endfor
-		</select>
-	</div>
-	<div class="select-field">
-		<select class="form-select" id="dobMonth" name="dobMonth">
-			<option value="" disabled {{ old('dobMonth') ? '' : 'selected' }}>Month</option>
-			@for($m = 1; $m <= 12; $m++)
-				<option value="{{ $m }}" {{ old('dobMonth') == $m ? 'selected' : '' }}>
-					{{ \Carbon\Carbon::create()->month($m)->format('F') }}
-				</option>
-			@endfor
-		</select>
-	</div>
-	<div class="select-field">
-		<select class="form-select" id="dobDay" name="dobDay">
-			<option value="" disabled {{ old('dobDay') ? '' : 'selected' }}>Day</option>
-			@for($d = 1; $d <= 31; $d++)
-				<option value="{{ $d }}" {{ old('dobDay') == $d ? 'selected' : '' }}>{{ $d }}</option>
-			@endfor
-		</select>
-	</div>
-</div>
 
-	</div>
-	<!-- <div class="col-md-12 form-field">
-		<label class="form-label" for="dobYear">Date of Birth</label>
+
 		<div class="dob-select">
 			<div class="select-field">
-				<select class="form-select" id="dobYear" name="dobYear">
-					<option value="" disabled selected>Year</option>
+				<select class="form-select" id="dobYear" name="dobYear" required>
+					<option value="" disabled {{ empty(old('dobYear', $step2['dobYear'] ?? '')) ? 'selected' : '' }}>Year</option>
+					@for($y = date('Y'); $y >= 1900; $y--)
+					<option value="{{ $y }}" {{ old('dobYear', $step2['dobYear'] ?? '') == $y ? 'selected' : '' }}>{{ $y }}</option>
+					@endfor
 				</select>
-				<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-				</svg>
 			</div>
 			<div class="select-field">
-				<select class="form-select" id="dobMonth" name="dobMonth">
-					<option value="" disabled selected>Month</option>
+				<select class="form-select" id="dobMonth" name="dobMonth" required>
+					<option value="" disabled {{ empty(old('dobMonth', $step2['dobMonth'] ?? '')) ? 'selected' : '' }}>Month</option>
+					@for($m = 1; $m <= 12; $m++)
+						<option value="{{ $m }}" {{ old('dobMonth', $step2['dobMonth'] ?? '') == $m ? 'selected' : '' }}>
+						{{ \Carbon\Carbon::create()->month($m)->format('F') }}
+						</option>
+						@endfor
 				</select>
-				<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-				</svg>
 			</div>
 			<div class="select-field">
-				<select class="form-select" id="dobDay" name="dobDay">
-					<option value="" disabled selected>Day</option>
+				<select class="form-select" id="dobDay" name="dobDay" required>
+					<option value="" disabled {{ empty(old('dobDay', $step2['dobDay'] ?? '')) ? 'selected' : '' }}>Day</option>
+					@for($d = 1; $d <= 31; $d++)
+						<option value="{{ $d }}" {{ old('dobDay', $step2['dobDay'] ?? '') == $d ? 'selected' : '' }}>{{ $d }}</option>
+						@endfor
 				</select>
-				<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-				</svg>
 			</div>
 		</div>
-	</div> -->
+
+	</div>
+
 	<div class="col-12 step-submit">
 		<a href="{{ route('register.step',$step-1) }}" class="btn btn-yellow">Previous</a>
 		<button type="submit" class="btn btn-green">Continue</button>

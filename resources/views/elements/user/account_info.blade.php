@@ -1,4 +1,7 @@
 <section>
+@php
+    $step1 = session('registration_form.1', []);
+@endphp
 <div class="row">
 	<div class="col-12 d-block d-sm-none">
 		<h3 class="step-heading">
@@ -9,35 +12,40 @@
 			</span>
 			ACCOUNT INFORMATION</h3>
 </div>
-	<div class="col-12 form-field">
-		<label class="form-label" for="accountType">Account Type <span class="required text-danger">*</span></label>
-		<div class="select-field">
-		<select class="form-select" id="accountType" name="role" required>
-			<option value="" disabled selected>Please Select Role</option>
-			<option value="Tutor" {{ old('role') == 'Tutor' ? 'selected' : '' }}>Tutor</option>
-			<option value="Student" {{ old('role') == 'Student' ? 'selected' : '' }}>Student</option>
-		</select>
-			<svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
-			</svg>
-		</div>
-	</div>
-	<div class="col-md-6 form-field">
-		<label class="form-label" for="username">Username <span class="required text-danger">*</span></label>
-		<input class="form-control" type="text" id="username" name="username" placeholder="Name" required value="{{ old('username') }}">
-	</div>
-	<div class="col-md-6 form-field">
-		<label class="form-label" for="email">Email Address <span class="required text-danger">*</span></label>
-		<input class="form-control" type="email" id="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-	</div>
-	<div class="col-md-6 form-field">
-		<label class="form-label" for="password">Password <span class="required text-danger">*</span></label>
-		<input class="form-control" type="password" id="password" name="password" placeholder="Password" required>
-	</div>
-	<div class="col-md-6 form-field">
-		<label class="form-label" for="confirmPassword">Confirm Password <span class="required text-danger">*</span></label>
-		<input class="form-control" type="password" id="confirmPassword" name="password_confirmation" placeholder="Confirm Password" required>
-	</div>
+<div class="col-12 form-field">
+    <label class="form-label" for="accountType">Account Type <span class="required text-danger">*</span></label>
+    <div class="select-field">
+        <select class="form-select" id="accountType" name="role" required>
+            <option value="" disabled selected>Please Select Role</option>
+            <option value="Tutor" {{ old('role', $step1['role'] ?? '') == 'tutor' ? 'selected' : '' }}>Tutor</option>
+            <option value="Student" {{ old('role', $step1['role'] ?? '') == 'student' ? 'selected' : '' }}>Student</option>
+        </select>
+        <svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.88003 0.711412L4.78941 4.87781C4.75142 4.91654 4.70631 4.94727 4.65665 4.96824C4.60699 4.98921 4.55376 5 4.5 5C4.44624 5 4.39301 4.98921 4.34335 4.96824C4.29369 4.94727 4.24858 4.91654 4.21059 4.87781L0.119973 0.711412C0.0626994 0.653143 0.0236882 0.578875 0.00787782 0.498012C-0.00793257 0.417149 0.000168735 0.333325 0.0311562 0.257154C0.0621436 0.180983 0.114624 0.115889 0.181953 0.0701121C0.249282 0.0243356 0.328432 -6.47572e-05 0.409384 1.29075e-07H8.59062C8.67157 -6.47572e-05 8.75072 0.0243356 8.81805 0.0701121C8.88538 0.115889 8.93786 0.180983 8.96884 0.257154C8.99983 0.333325 9.00793 0.417149 8.99212 0.498012C8.97631 0.578875 8.9373 0.653143 8.88003 0.711412Z" fill="currentColor"/>
+        </svg>
+    </div>
+</div>
+
+<div class="col-md-6 form-field">
+    <label class="form-label" for="username">Username <span class="required text-danger">*</span></label>
+    <input class="form-control" type="text" id="username" name="username" placeholder="Name" required
+        value="{{ old('username', $step1['username'] ?? '') }}">
+</div>
+
+<div class="col-md-6 form-field">
+    <label class="form-label" for="email">Email Address <span class="required text-danger">*</span></label>
+    <input class="form-control" type="email" id="email" name="email" placeholder="Email" value="{{ old('email', $step1['email'] ?? '') }}" required>
+</div>
+
+<div class="col-md-6 form-field">
+    <label class="form-label" for="password">Password <span class="required text-danger">*</span></label>
+    <input class="form-control" type="password" id="password" name="password" placeholder="Password" value="{{ old('password', $step1['password'] ?? '') }}" required>
+</div>
+
+<div class="col-md-6 form-field">
+    <label class="form-label" for="confirmPassword">Confirm Password <span class="required text-danger">*</span></label>
+    <input class="form-control" type="password" id="confirmPassword" name="password_confirmation" placeholder="Confirm Password" value="{{ old('password', $step1['password'] ?? '') }}" required>
+</div>
 	<div class="col-12 step-submit">
 		<button type="submit" class="btn btn-green next-btn">Continue</button>
 	</div>
