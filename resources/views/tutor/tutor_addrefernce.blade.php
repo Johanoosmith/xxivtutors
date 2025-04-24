@@ -10,8 +10,8 @@
                 <p>Please provide us with contact information for <strong>at least two referees</strong>. We will email them to collect a reference.</p>
                 @include('elements.alert_message')
                 <div class="alert alert-danger">
-                Please provide us contact information for at least two referees. We will email them to collect a reference. 
-                This is a requirement to start tutoring at {{ config('constants.SITE.TITLE') }}.
+                    Please provide us contact information for at least two referees. We will email them to collect a reference.
+                    This is a requirement to start tutoring at {{ config('constants.SITE.TITLE') }}.
                 </div>
                 <form class="edit-form" action="{{ route('tutor.submitreference') }}" method="POST">
                     @csrf
@@ -29,25 +29,39 @@
                                 </thead>
                                 <tbody>
                                     @for($i = 0; $i < 4; $i++)
-                                    <tr>
-                                   <td>
-                                    <input type="text" name="reference[{{$i}}][firstname]" class="form-control">
-                                    </td>
-                                        <td><input type="text" name="reference[{{$i}}][lastname]" class="form-control"></td>
-                                        <td><input type="email" name="reference[{{$i}}][email]" class="form-control"></td>
-                                        <td><input type="text" name="reference[{{$i}}][mobile]" class="form-control" ></td>
+                                        <tr>
+                                        <td>
+                                            <input type="text" name="reference[{{$i}}][firstname]" class="form-control"
+                                                value="{{ old("reference.$i.firstname") }}">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="reference[{{$i}}][lastname]" class="form-control"
+                                                value="{{ old("reference.$i.lastname") }}">
+                                        </td>
+                                        <td>
+                                            <input type="email" name="reference[{{$i}}][email]" class="form-control"
+                                                value="{{ old("reference.$i.email") }}">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="reference[{{$i}}][mobile]" class="form-control"
+                                                value="{{ old("reference.$i.mobile") }}">
+                                        </td>
                                         <td>
                                             <select name="reference[{{$i}}][profession]" class="form-select">
-                                                <option value="Teacher" selected>Teacher</option>
-                                                <option value="Doctor">Doctor</option>
-                                                <option value="Engineer">Engineer</option>
-                                                <option value="Lawyer">Lawyer</option>
-                                                <option value="Other">Other</option>
+                                                @php
+                                                $selectedProfession = old("reference.$i.profession", 'Teacher');
+                                                @endphp
+                                                <option value="Teacher" {{ $selectedProfession == 'Teacher' ? 'selected' : '' }}>Teacher</option>
+                                                <option value="Doctor" {{ $selectedProfession == 'Doctor' ? 'selected' : '' }}>Doctor</option>
+                                                <option value="Engineer" {{ $selectedProfession == 'Engineer' ? 'selected' : '' }}>Engineer</option>
+                                                <option value="Lawyer" {{ $selectedProfession == 'Lawyer' ? 'selected' : '' }}>Lawyer</option>
+                                                <option value="Other" {{ $selectedProfession == 'Other' ? 'selected' : '' }}>Other</option>
                                             </select>
                                         </td>
-                                    </tr>
-                                    @endfor
+                                        </tr>
+                                        @endfor
                                 </tbody>
+
                             </table>
                         </div>
 

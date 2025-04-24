@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\VerificationController;
 use App\Http\Controllers\Admin\ManageContractController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\TutorsController;
 
 
 use Mockery\VerificationDirector;
@@ -144,4 +145,9 @@ Route::group(['middleware' => ['admin']], function () {
 
 	Route::get('/contract', [ManageContractController::class, 'index'])->name('contract.index');
 	Route::post('/contractStore', [ManageContractController::class, 'store'])->name('contract.store');
+
+	Route::get('/admin/tutor/qualifications/{user_id}', [TutorsController::class, 'showUserQualifications'])->name('tutors.qualifications');
+	Route::post('/admin/tutor/qualifications/approve/{id}', [TutorsController::class, 'approve'])->name('tutors.qualifications.approve');
+
+	Route::post('/admin/tutor/qualifications/reject/{id}', [TutorsController::class, 'reject'])->name('tutors.qualifications.reject');
 });

@@ -112,5 +112,12 @@ class User extends Authenticatable implements MustVerifyEmail
 		
 		sendMail($this->email, $data, 'FORGOT_PASSWORD');
 	} 
+
+
+
+    public function qualifications()
+{
+    return $this->hasMany(Qualification::class, 'user_id');
+}
 	
 }

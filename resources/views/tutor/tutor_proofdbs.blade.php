@@ -5,6 +5,8 @@
             <div class="row"> 
                 @include('layouts.tutor_tabs')
                 <div class="col dashboard-content">
+                @include('elements.alert_message')
+
                     <h2>Enhanced DBS Certificate</h2>
                     <p>To pass {{ config('constants.SITE.TITLE') }} verification you must supply an Enhanced DBS certificate issued within the last 2 years, please upload your DBS here. 
                         We will show that we have verified your DBS on your profile. Your documents will be encrypted and held securely, they will only be viewed by our admin team. 
@@ -21,12 +23,12 @@
                                     <!-- First Name -->
                                     <div class="col-md-6 form-field">
                                         <label class="form-label" for="dbs_number">DBS Number:</label>
-                                        <input type="text" class="form-control" name="dbs_number" id="dbs_number" value="">
+                                        <input type="text" class="form-control" name="dbs_number" id="dbs_number" value="{{ old("dbs_number") }}">
                                     </div>
                                      <!-- Expiry Date -->
                                     <div class="col-md-6 form-field">
                                         <label class="form-label" for="expire_date">Expiry Date</label>
-                                        <input type="date" name="expire_date" id="expire_date" class="form-control" required>
+                                        <input type="date" name="expire_date" id="expire_date" class="form-control" value="{{ old("expire_date") }}" required>
                                     </div>
                                         <div class="col-12 form-field uploadContainer">
                                         <!-- Hidden Input for File Upload -->
