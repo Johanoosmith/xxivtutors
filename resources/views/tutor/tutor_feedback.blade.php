@@ -28,7 +28,7 @@
                             <tr>
                                 <td>
                                     <a href="#">
-                                        {{ $feedback->tutor->username }}
+                                        {{ $feedback->student->full_name }}
                                     </a>
                                 </td>
                                 <td>{{ $feedback->content }}</td>
