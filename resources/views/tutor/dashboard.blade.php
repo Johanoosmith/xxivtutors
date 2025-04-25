@@ -46,8 +46,16 @@
 									<input type="hidden" name="section" value="profile">
 									<input type="hidden" name="openaccount" id="openaccount" value="yes">
 									<label class="form-label" for="edit-bio">Your Bio</label>
-									<textarea value="{{ request('short_description') }}" class="form-control"  rows="30" cols="11" id="comments" maxlength="6500" name="short_description" style="height:210px;">
-									{{ old('short_description', $tutor->short_description ?? '') }}</textarea>
+									<textarea
+									class="form-control"
+									rows="30"
+									cols="11"
+									id="comments"
+									maxlength="6500"
+									name="short_description"
+									style="height:210px; vertical-align: top;">{{ old('short_description', $tutor->short_description ?? '') }}
+								</textarea>
+
 								</div>
 								<div class="col-12 form-field">
 									<label class="form-label" for="edit-availability">Your Availability</label>

@@ -106,9 +106,9 @@
                         <h2 class="section-heading">{{$page->search_tutors_section_heading}}</h2>
                         <p>{!! $page->search_tutors_section_description !!}</p>
                         <div class="button-group">
-                            <a href="#" class="btn btn-green">Find a Tutor</a>
-                            <a href="#" class="btn btn-yellow">Become a Tutor</a>
-                            <a href="#" class="btn btn-pink">Learn More</a>
+                            <a href="/tutors" class="btn btn-green">Find a Tutor</a>
+                            <a href="/user/register/1" class="btn btn-yellow">Become a Tutor</a>
+                            <a href="/contact-us" class="btn btn-pink">Learn More</a>
                         </div>
                     </div>
                 </div>
