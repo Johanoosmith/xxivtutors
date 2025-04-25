@@ -30,4 +30,11 @@ class Student extends Model
     {
         $this->attributes['password'] = bcrypt($value);
     }
+
+    public function subject_students()
+    {
+        return $this->belongsToMany(Subject::class, 'subject_students', 'user_id', 'subject_id');
+    }
+
+    
 }

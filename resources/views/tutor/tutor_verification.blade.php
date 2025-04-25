@@ -49,16 +49,16 @@
                                 <th>Photo ID</th>
                                 <td>
                                     @if(!empty($identity_id_verify))
-                                    @if ($identity_id_verify->status == 1)
-                                    <svg class="right-tick text-success">
-                                        <use xlink:href="#tick"></use>
-                                    </svg>
-                                    Photo ID Added
+                                        @if ($identity_id_verify->status == 1)
+                                            <svg class="right-tick text-success">
+                                                <use xlink:href="#tick"></use>
+                                            </svg>
+                                            Photo ID Added
+                                        @else
+                                            {{ getVerificationStatus($identity_id_verify->status); }}
+                                        @endif
                                     @else
-                                    {{ getVerificationStatus($identity_id_verify->status); }}
-                                    @endif
-                                    @else
-                                    Not Uploaded
+                                        Not Uploaded
                                     @endif
                                 </td>
                                 <td>

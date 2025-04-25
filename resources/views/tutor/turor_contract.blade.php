@@ -117,8 +117,8 @@
                                 
                                 <div id="content" class="mb-2">
                                   <div id="signatureparent">
-                                    <div>jSignature inherits colors from parent element. Text = Pen color. Background = Background. (This works even when Flash-based Canvas emulation is used.)</div>
-                                    <div id="signature"></div></div>
+                                    <div id="signature"></div>
+                                  </div>
                                   <div id="tools"></div>
                                   <div>
                                       <div id="displayarea"></div>

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -84,6 +85,16 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function getNameEmailAttribute()
     {
         return trim("{$this->firstname} {$this->lastname} - {$this->email}");
+    }
+
+    public function getLastLoginHumanAttribute()
+    {
+        return Carbon::parse($this->last_login)->diffForHumans();
+    }
+
+    public function getMemberSinceAttribute()
+    {
+        return Carbon::parse($this->created_at)->diffForHumans();
     }
 	
 	public static function getStudentList($field = 'full_name'){

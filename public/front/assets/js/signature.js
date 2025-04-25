@@ -62,6 +62,8 @@ http://dojofoundation.org/license for more information.
         }
         chops.push('</select></span>')
 
+        
+
         chops.push('<input type="button" id="GetImageData" disabled class="btn btn-yellow" value="Confirm Signature" />')
         
         //$(chops.join('')).bind('change', function(e){
@@ -95,6 +97,8 @@ http://dojofoundation.org/license for more information.
         $('<input type="button" class="btn btn-danger" value="Reset">').bind('click', function(e){
             $sigdiv.jSignature('reset')
         }).appendTo($tools)
+
+        
         
         $('<div><textarea name="signature" style="display:none;width:100%;height:7em;"></textarea></div>').appendTo($tools)
         

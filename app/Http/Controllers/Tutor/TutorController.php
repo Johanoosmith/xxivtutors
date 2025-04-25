@@ -251,8 +251,6 @@ class TutorController extends Controller
             'qdocument' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
         ]);
 
-        // dd($validated);  // Check if this reaches
-
         $filePath = $request->hasFile('qdocument')
             ? $request->file('qdocument')->store('qualification_files', 'public')
             : null;

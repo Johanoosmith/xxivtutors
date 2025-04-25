@@ -104,18 +104,18 @@
 							$booking_status = getBookingStatus();
 							@endphp
 							@foreach($bookings as $booking)
-							@php
-							$status_class = 'warning';
-							$status_label = 'Pending';
+								@php
+									$status_class = 'warning';
+									$status_label = 'Pending';
 
-							if($booking->status == 2){
-							$status_class = 'success';
-							$status_label = 'Confirmed';
-							}else if($booking->status == 3){
-							$status_class = 'danger';
-							$status_label = 'Cancelled';
-							}
-							@endphp
+								if($booking->status == 2){
+									$status_class = 'success';
+									$status_label = 'Confirmed';
+								}else if($booking->status == 3){
+									$status_class = 'danger';
+									$status_label = 'Cancelled';
+								}
+								@endphp
 							<tr>
 								<td>{{ $booking->student->full_name }}</td>
 								<td>
@@ -238,40 +238,43 @@
 									// Split title on '@' to separate name and time
 									const [name, time] = info.event.title.split(' @ ');
 
-				selectable: false,
-				selectMirror: true,
-				displayEventTime: false,
-				editable: false,
-				droppable: false, // this allows things to be dropped onto the calendar
-				initialDate: initialDate,
-				weekNumbers: true,
-				navLinks: false, // can click day/week names to navigate views
-				nowIndicator: true,
-				initialView: 'dayGridMonth',
-				dateClick: function(info) {
-					return false;
-				},
-				events: booking_json,
-				eventDidMount: function(info) {
-					// Split title on '@' to separate name and time
-					const [name, time] = info.event.title.split(' @ ');
+									selectable: false,
+									selectMirror: true,
+									displayEventTime: false,
+									editable: false,
+									droppable: false, // this allows things to be dropped onto the calendar
+									initialDate: initialDate,
+									weekNumbers: true,
+									navLinks: false, // can click day/week names to navigate views
+									nowIndicator: true,
+									initialView: 'dayGridMonth',
+									dateClick: function(info) {
+										return false;
+									},
+									events: booking_json,
+									eventDidMount: function(info) {
+										// Split title on '@' to separate name and time
+										const [name, time] = info.event.title.split(' @ ');
 
-					// Set the HTML manually
-					info.el.querySelector('.fc-event-title').innerHTML = `${name}<br><small>${time}</small>`;
-				},
-				/*
-				events: [
-					
-					{
-					title: 'Long Event',
-					start: '2021-02-07',
-					end: '2021-02-10',
-					className: "bg-danger"
-					url: 'http://google.com/',
-					},
-					
-				]
-				*/
+										// Set the HTML manually
+										info.el.querySelector('.fc-event-title').innerHTML = `${name}<br><small>${time}</small>`;
+									},
+									/*
+									events: [
+										
+										{
+										title: 'Long Event',
+										start: '2021-02-07',
+										end: '2021-02-10',
+										className: "bg-danger"
+										url: 'http://google.com/',
+										},
+										
+									]
+									*/
+									// Set the HTML manually
+									info.el.querySelector('.fc-event-title').innerHTML = `${name}<br><small>${time}</small>`;
+								},
 			});
 			calendar.render();
 		}
