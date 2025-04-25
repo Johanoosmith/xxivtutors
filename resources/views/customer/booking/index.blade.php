@@ -108,9 +108,7 @@
 										@if(request()->input('booking_on') != 'past')
 										@if($booking->status == 1)
 										<a href="{{ route('customer.booking.confirmed', $booking->id) }}" class="icon-btn" data-toggle="tooltip" title="Confirmed Booking" data-original-title="Confirmed Booking">
-											<!-- <svg class="icon">
-															<use xlink:href="#edit"></use>
-														</svg> -->
+											
 											<i class="fa fa-check" style="font-size:24px"></i>
 										</a>
 										@endif

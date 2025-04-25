@@ -7,7 +7,14 @@
             <div class="col dashboard-content">
                 @include('elements.alert_message')
                    
-                <div class="title-with-link-wrapper">
+                <div class="title-with-link-wrapper justify-content-start chat-user-profile">
+
+                    @if (Storage::exists('public/'.$enquiry->receiver->profile_image)) 
+                    <div class="user-profile-img p-2">
+                        <img width="100px" src="{{ asset('storage/' . $enquiry->receiver->profile_image) }}" alt="{{ $enquiry->receiver->username }}'s Profile Image" >
+                    </div>
+                    @endif
+
                     <h3>Enquiry to <a href="{{ route('profile', $enquiry->receiver->id) }}"> {{ $enquiry->receiver->username }}</a></h3>
                     
                     @if($enquiry->status == 1)

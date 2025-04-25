@@ -60,7 +60,7 @@ class UserView extends Model
             ->first();
         if ($existingView) {
             // Update the existing record's view count or date if necessary
-            $existingView->update($data);
+            //$existingView->update($data);
         } else {
             // Create a new record for the view
             UserView::create($data);
