@@ -7,9 +7,11 @@
                 @include('elements.alert_message')
                     
                 <div class="title-with-link-wrapper justify-content-start chat-user-profile">
-                    <div class="user-profile-img">
-                        <img src="{{ asset('storage/' . $enquiry->sender->profile_image) }}" alt="{{ $enquiry->sender->username }}'s Profile Image" >
+                    @if (Storage::exists('public/'.$enquiry->sender->profile_image)) 
+                    <div class="user-profile-img p-2">
+                        <img width="100px" src="{{ asset('storage/' . $enquiry->sender->profile_image) }}" alt="{{ $enquiry->sender->username }}'s Profile Image" >
                     </div>
+                    @endif
                     <h3>Enquiry to <a href="{{ route('tutor', ['id' => $enquiry->sender->id]) }}"> {{ $enquiry->sender->username }}</a></h3>
                 </div>
                 <div class="profileblock">
@@ -38,7 +40,7 @@
                     </div>
                     <div class="profileline row">
                         <div class="col-12 col-md-4 text-primary">
-                            {{ @$enquiry->subject_tutor->subject->title;}} ({{ @$enquiry->subject_tutor->level->title }})
+                            {{ @$enquiry->subject_tutor->subject->title;}} {{ !empty($enquiry->subject_tutor->level->title) ? '('.$enquiry->subject_tutor->level->title.')' : '' }}
                         </div>
                         <div class="col-12 col-md-4 text-center">
                         </div>

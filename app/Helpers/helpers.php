@@ -861,3 +861,35 @@ function getGeneralStatus($key){
 
 	return $generalStatus;
 }
+
+
+function getUserLessonData($tutor_id){
+	$summary = 	\App\Models\Payment::with('booking')
+		->where('tutor_id', $tutor_id)
+		->where('status', 'paid')
+		->get()
+		->groupBy('tutor_id')
+		->map(function ($payments, $tutorId) {
+			$totalDuration = 0;
+			$studentPairs = [];
+
+			foreach ($payments as $payment) {
+				if ($payment->booking) {
+					$totalDuration += $payment->booking->duration ?? 0;
+				}
+
+				$key = $payment->tutor_id . '_' . $payment->student_id;
+				$studentPairs[$key] = ($studentPairs[$key] ?? 0) + 1;
+			}
+
+			$repeatedLessons = collect($studentPairs)->filter(fn($count) => $count > 1)->count();
+
+			return [
+				'tutor_id'         => $tutorId,
+				'total_hours'      => round($totalDuration / 60, 2),
+				'repeated_lessons' => $repeatedLessons,
+			];
+		})->toArray();
+
+	return reset($summary);
+}

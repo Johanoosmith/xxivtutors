@@ -22,7 +22,7 @@
                 value="{{ old('subject_title', request('subject_title')) }}">
             <input type="hidden" name="subject_id" id="FilterSubjectValue"
                 value="{{ old('subject_id', request('subject_id')) }}">
-            <input type="hidden" name="slug" id="FilterSubjectslug" value="{{ old('slug', request('slug')) }}">
+            <input type="hidden" name="subject" id="FilterSubjectslug" value="{{ old('subject', request('subject')) }}">
         </div>
 		<div class="field select-field">
             <select id="type" name="type" class="select">
