@@ -73,10 +73,10 @@ class PageController extends Controller
     public function display(Request $request, $slug)
     {
         //Testing
-        if(isset($_GET['test']) && $_GET['test'] == 'test-mail') {
-            sendMail('khelesh.mehra@dotsquares.com', [], 'TUTOR_REGISTRATION');    
+        if (isset($_GET['test']) && $_GET['test'] == 'test-mail') {
+            sendMail('khelesh.mehra@dotsquares.com', [], 'TUTOR_REGISTRATION');
         }
-        
+
 
         $arr = array();
 
@@ -169,6 +169,7 @@ class PageController extends Controller
             'lastname' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'message' => 'required|string',
+            'phonenumber' => ['required', 'string', 'regex:/^\d{10,15}$/']
         ]);
 
         // Store the contact data in the database
@@ -210,28 +211,28 @@ class PageController extends Controller
 
     public function tutorFilter(Request $request, $course_id = null)
     {
-        
+
         $course_id = $request->course_id ?? $course_id;
         $arr['course_id'] = $course_id;
 
         $query = User::query();
-        
+
         $input = $request->all();
         $arr['type'] = $input['type'] ?? 'tutor';
-        
-        if($arr['type'] == 'student') {
+
+        if ($arr['type'] == 'student') {
             $query = $this->getStudentQuery($request, $query);
         } else {
             $query = $this->getTutorQuery($request, $query);
         }
-        
+
         //\DB::connection()->enableQueryLog();
 
         $arr['users'] = $query->paginate(10);
 
         // $queries = \DB::getQueryLog();
         // $finalQuery = finalQuery($queries);
-         //dd($finalQuery);
+        //dd($finalQuery);
         //dd($arr['users']);
 
         $page = Page::find(1);
@@ -249,7 +250,8 @@ class PageController extends Controller
         return view('front.tutor')->with($arr);
     }
 
-    function getStudentQuery($request, $query){
+    function getStudentQuery($request, $query)
+    {
 
         $query->where('role_id', config('constants.ROLE.STUDENT'))->with('student');
 
@@ -274,7 +276,7 @@ class PageController extends Controller
                 $q->where('level_id', $request->level);
             });
         }
-        
+
         if ($request->postcode != null) {
             $query->where('postcode', $request->postcode);
         }
@@ -289,10 +291,11 @@ class PageController extends Controller
         return $query;
     }
 
-    function getTutorQuery($request, $query){
+    function getTutorQuery($request, $query)
+    {
 
         $query->where('role_id', config('constants.ROLE.TUTOR'))->with('tutor');
-        
+
         $query->with('tutor.tutor_subjects');
 
         $subject_user_ids = [];
@@ -340,12 +343,11 @@ class PageController extends Controller
 
 
         if (
-                $request->min_price != null 
-                || $request->max_price != null 
-                || $request->distance != null 
-                ||  $request->min_rating != '0'
-        )
-        {
+            $request->min_price != null
+            || $request->max_price != null
+            || $request->distance != null
+            ||  $request->min_rating != '0'
+        ) {
 
             $subject_tutors = SubjectTutor::query();
             
@@ -395,10 +397,9 @@ class PageController extends Controller
         }   
 
         return $query;
-
     }
 
-  
+
 
 
     public function student(Request $request)

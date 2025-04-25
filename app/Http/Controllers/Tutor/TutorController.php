@@ -207,7 +207,11 @@ class TutorController extends Controller
         ]);
 
         // Find the tutor and ensure it belongs to the authenticated user
-        $tutor = Tutor::findOrFail($id);
+        $tutor = Tutor::where('user_id', $id)->firstOrFail();
+
+        if(!$tutor){
+            return redirect()->back()->with('error', 'Tutor Not Found');
+        }
 
         // Update tutor fields
         $tutor->short_description = $validatedData['short_description'];
@@ -337,6 +341,7 @@ class TutorController extends Controller
 
     public function updateProfile(Request $request)
     {
+        
         // Validate the form input
         $request->validate([
             'comments_about_tuition' => 'nullable|string|max:6500',
@@ -508,6 +513,8 @@ class TutorController extends Controller
             ->with(['qualification'])
             ->orderBy('qyear', 'DESC')
             ->get();
+            $userView = new UserView();
+            $userView->setViewCount($user_id);
 
         return view('tutor.tutor_profile', compact('user', 'tutor', 'inPlaceSubjects', 'onlineSubjects', 'availability', 'userQualifications')); // Pass user data to the profile view
     }

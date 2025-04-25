@@ -320,7 +320,7 @@ class CustomerController extends Controller
                 'distance' => $request->input('distance'),
             ]);
         }
-        return redirect()->back()->with('success', 'Profile updated successfully!');
+        return redirect()->back('customer.profile.view')->with('success', 'Profile updated successfully!');
     }
     public function showProfileStats()
     {

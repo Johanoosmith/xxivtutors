@@ -33,7 +33,8 @@ class SuggestedTutorController extends Controller
                 'subjects.title as subject_title',
                 'county.name as county',
                 'tutors.town',
-            )
+                'tutors.user_id as tutor_user_id'
+            )->whereNotNull('tutors.user_id')->distinct()
             ->get();
         // dd($tutors);
         return view('customer.student_suggestedtutor', compact('tutors'));

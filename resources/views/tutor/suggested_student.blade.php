@@ -22,8 +22,7 @@
                             @foreach ($students as $student)
                             <tr>
                                 <td>
-                                <a href="#" title="Send Message">
-
+                                <a href="{{ route('profile', ['id' => $student->student_user_id]) }}"  title="Send Message">
                                     <strong>{{ $student->level_title }} {{ $student->subject_title }}</strong>
                                     @if(!empty($student->town) && !empty($student->county))
                                     located in {{ $student->town }} {{ $student->county }}
@@ -31,7 +30,7 @@
                                 </a>
                                 </td>
                                 <td style="padding: 10px;">
-                                <a href="#" title="Send Message">
+                                <a href="{{ route('tutor.enquiries.create', ['user_id' => $student->student_user_id]) }}" title="Send Message">
                                 <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Message" style="width: 20px; height: 20px;">
                                 </a> </td>
                             </tr>
