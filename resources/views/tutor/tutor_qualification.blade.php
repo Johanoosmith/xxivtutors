@@ -45,7 +45,7 @@
                                     @if ($userQualification->status == 1)
                                     <span class="status bg-success text-white">Approved</span>
                                     @elseif ($userQualification->status == 2)
-                                    <span class="status bg-warning">Awaiting Approval</span>
+                                    <span class="status bg-warning">Pending</span>
                                     @else
                                     <span class="status bg-danger text-white">Rejected</span>
                                     @endif
