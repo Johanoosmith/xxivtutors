@@ -338,13 +338,25 @@ class PageController extends Controller
                 ||  $request->min_rating != '0'
         )
         {
+
+            // $subjec_tutors = SubjectTutor::where('subject_id', $request->subject_id)
+            //     ->where('level_id', $request->level)
+            //     ->pluck('user_id');
+            // if ($request->min_price != null && $request->max_price != null) {
+            //     $q->whereBetween('tutors.tutor_subjects.lesson_rate', [$request->min_price, $request->max_price]);
+            // } elseif ($request->min_price != null) {
+            //     $q->where('tutors.tutor_subjects.lesson_rate', '>=', $request->min_price);
+            // } elseif ($request->max_price != null) {
+            //     $q->where('tutors.tutor_subjects.lesson_rate', '<=', $request->max_price);
+            // }
+
             $query->whereHas('tutor', function ($q) use ($request) {
                 if ($request->min_price != null && $request->max_price != null) {
-                    $q->whereBetween('tutors.rate', [$request->min_price, $request->max_price]);
+                    $q->whereBetween('tutor.subject_tutors.lesson_rate', [$request->min_price, $request->max_price]);
                 } elseif ($request->min_price != null) {
-                    $q->where('tutors.rate', '>=', $request->min_price);
+                    $q->where('tutor.subject_tutors.lesson_rate', '>=', $request->min_price);
                 } elseif ($request->max_price != null) {
-                    $q->where('tutors.rate', '<=', $request->max_price);
+                    $q->where('tutor.subject_tutors.lesson_rate', '<=', $request->max_price);
                 }
 
                 if ($request->distance != null) {

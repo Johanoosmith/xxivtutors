@@ -42,6 +42,7 @@ class EnquiryController extends Controller
 
         return view('customer.enquiries.index', compact('enquiries'));
     }
+
     public function showEnquire($enquiry_id, $booking_id = null)
     {
         $user               = Auth::user();
@@ -110,12 +111,19 @@ class EnquiryController extends Controller
 
         $parent_id = (!empty($last_enquiry_comment->id)) ? $last_enquiry_comment->id : 0;
 
+        $message = $request->content;
+        $isContractSigned = \App\Models\Contract::isContractSigned($user->id, $enquiry->sender_id);
+
+        if(!$isContractSigned){
+            $message = sanitizeMessage($request->content);    
+        }
+
         EnquiryComment::create([
             'parent_id'     => $parent_id,
             'enquiry_id'    => $enquiry->id,
             'sender_id'     => Auth::id(),
-            'receiver_id'   => $enquiry->sender_id,
-            'content'       => $request->content,
+            'receiver_id'   => $enquiry->sender_id, // sender is tutor
+            'content'       => $message,
             'status'        => 'unread'
         ]);
 
