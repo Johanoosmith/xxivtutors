@@ -46,6 +46,12 @@ Route::get('/clear', function () {
 	return 'All cache cleared';
 });
 
+Route::get('/schedule-run', function () {
+	
+	Artisan::call('schedule:run');
+	return 'Schedule Run';
+});
+
 Route::get('/storage-link', function () {
 	
 	Artisan::call('storage:link');

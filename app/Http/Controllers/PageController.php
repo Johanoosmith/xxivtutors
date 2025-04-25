@@ -72,7 +72,11 @@ class PageController extends Controller
 
     public function display(Request $request, $slug)
     {
-
+        //Testing
+        if(isset($_GET['test']) && $_GET['test'] == 'test-mail') {
+            sendMail('khelesh.mehra@dotsquares.com', [], 'TUTOR_REGISTRATION');    
+        }
+        
 
         $arr = array();
 
@@ -198,14 +202,87 @@ class PageController extends Controller
             'page' => $page,
         ]);
     }
+
     public function tutorFilter(Request $request, $course_id = null)
     {
-        // dd($request->all());
+        
         $course_id = $request->course_id ?? $course_id;
         $arr['course_id'] = $course_id;
 
         $query = User::query();
-        $query->where('role_id', 2)->with('tutor');
+        
+        $input = $request->all();
+        $arr['type'] = $input['type'] ?? 'tutor';
+        
+        if($arr['type'] == 'student') {
+            $query = $this->getStudentQuery($request, $query);
+        } else {
+            $query = $this->getTutorQuery($request, $query);
+        }
+        
+        //\DB::connection()->enableQueryLog();
+
+        $arr['users'] = $query->paginate(10);
+
+        // $queries = \DB::getQueryLog();
+        // $finalQuery = finalQuery($queries);
+         //dd($finalQuery);
+        //dd($arr['users']);
+
+        $page = Page::find(1);
+        if (!$page) {
+            return view('errors.404');
+        }
+        $pagedata = Pagemeta::where('page_id', $page->id)
+            ->where('page_type', 'page')->get();
+
+        foreach ($pagedata as $meta) {
+            $page->{$meta->meta_key} = $meta->meta_value;
+        }
+        $arr['page'] = $page;
+
+        return view('front.tutor')->with($arr);
+    }
+
+    function getStudentQuery($request, $query){
+
+        $query->where('role_id', config('constants.ROLE.STUDENT'))->with('student');
+
+        if ($request->has('sort_by')) {
+            switch ($request->sort_by) {
+                case 'distance':
+                    $query->join('students', 'users.id', '=', 'students.user_id')
+                        ->orderBy('students.distance', 'asc')
+                        ->select('users.*');
+                    break;
+            }
+        }
+
+        if ($request->slug != null) {
+            $query->whereHas('student.subject_students', function ($q) use ($request) {
+                $q->where('slug', $request->slug);
+            });
+        }
+
+        if ($request->level != null) {
+            $query->whereHas('student.subject_students', function ($q) use ($request) {
+                $q->where('level_id', $request->level);
+            });
+        }
+        
+        if ($request->postcode != null) {
+            $query->where('postcode', $request->postcode);
+        }
+        
+
+        return $query;
+    }
+
+    function getTutorQuery($request, $query){
+
+        $query->where('role_id', config('constants.ROLE.TUTOR'))->with('tutor');
+        
+        $query->with('tutor.tutor_subjects');
 
         if ($request->has('sort_by')) {
             switch ($request->sort_by) {
@@ -217,9 +294,6 @@ class PageController extends Controller
             }
         }
 
-
-        $input = $request->all();
-
         if ($request->has('keyword') && $request->keyword != '') {
             $keyword = $request->keyword;
             $query->where(function ($q) use ($keyword) {
@@ -229,9 +303,12 @@ class PageController extends Controller
             });
         }
 
-
-
-        if ($request->slug != null || $request->level != 'All Levels' || $request->subject_title != null || $request->postcode != null) {
+        if (
+            $request->slug != null 
+            || $request->level != 'All Levels' 
+            || $request->subject_title != null 
+            || $request->postcode != null) 
+        {
             if ($request->slug != null) {
                 $query->whereHas('tutor.subject_tutors', function ($q) use ($request) {
                     $q->where('slug', $request->slug);
@@ -243,15 +320,19 @@ class PageController extends Controller
                 });
             }
 
-
-
             if ($request->postcode != null && $request->subject_id != null || $request->postcode != null && $request->level != 'All Levels') {
                 $query->where('postcode', $request->postcode);
             }
         }
 
 
-        if ($request->min_price != null || $request->max_price != null || $request->distance != null ||  $request->min_rating != '0') {
+        if (
+                $request->min_price != null 
+                || $request->max_price != null 
+                || $request->distance != null 
+                ||  $request->min_rating != '0'
+        )
+        {
             $query->whereHas('tutor', function ($q) use ($request) {
                 if ($request->min_price != null && $request->max_price != null) {
                     $q->whereBetween('tutors.rate', [$request->min_price, $request->max_price]);
@@ -270,8 +351,6 @@ class PageController extends Controller
             });
         }
 
-
-
         if ($request->gender != null) {
             $query->where('gender', $request->gender);
         }
@@ -281,26 +360,10 @@ class PageController extends Controller
             $query->where('postcode', $request->postcode);
         }
 
+        return $query;
 
-
-        $arr['tutors'] = $query->paginate(10);
-
-        $page = Page::find(1);
-        if (!$page) {
-            return view('errors.404');
-        }
-
-        $pagedata = Pagemeta::where('page_id', $page->id)
-            ->where('page_type', 'page')->get();
-
-        foreach ($pagedata as $meta) {
-            $page->{$meta->meta_key} = $meta->meta_value;
-        }
-
-        $arr['page'] = $page;
-
-        return view('front.tutor')->with($arr);
     }
+
   
 
 

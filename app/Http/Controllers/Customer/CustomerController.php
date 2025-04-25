@@ -176,6 +176,7 @@ class CustomerController extends Controller
             if ($userData['role'] === 'tutor') {
                 Tutor::create([
                     'user_id' => $user->id,
+                    'title' => $userData['title'],
                     'town' => $userData['town'],
                     'county' => $userData['county'],
                     'country' => $userData['country'],

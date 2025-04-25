@@ -51,6 +51,19 @@ function getSiteVariable(){
 	];
 }
 
+function finalQuery($queries){
+    $finalQuery = [];
+    foreach ($queries as $key => $query){
+        /* Bind the parameters to the query */
+        foreach ($query['bindings'] as $parameter) {
+            $pos = strpos($query['query'], '?');
+            $query['query'] = substr_replace($query['query'], "'$parameter'", $pos, 1);
+        }
+        $finalQuery[$key] = $query['query']; 
+    }
+
+    return $finalQuery;
+}
 
 
 

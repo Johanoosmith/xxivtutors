@@ -38,7 +38,7 @@
                             @foreach($qualifications as $index => $qualification)
                             <tr>
                                 <td>{{ $qualifications->firstItem() + $index }}</td>
-                                <td>{{ $qualification->user->username }}</td>
+                                <td>{{ $qualification->user->full_name }}</td>
                                 <td>{{ $qualification->qualification->qualification }}</td>
                                 <td>{{ $qualification->institute_name }}</td>
                                 <td>{{ $qualification->subject }}</td>

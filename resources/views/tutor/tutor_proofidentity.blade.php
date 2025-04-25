@@ -62,7 +62,7 @@
                                         <label for="expire_date">Expiry Date</label>
                                         <input type="date" name="expire_date" id="expire_date" class="form-control" value="{{ old('expire_date') }}" required>
                                     </div>
-                                    <div class="col-12 form-field uploadContainer">
+                                    <div class="col-12 form-field uploadContainer mt-4">
                                         <!-- Hidden Input for File Upload -->
                                         <input type="file" name="file" id="file" style="display: none;" onchange="handleFileChange(event)">
                                         <!-- Drag and Drop Container -->

@@ -36,6 +36,11 @@ class Tutor extends Authenticatable
         return $this->belongsToMany(Subject::class, 'subject_tutors', 'user_id', 'subject_id');
     }
 
+    public function tutor_subjects()
+    {
+        return $this->hasMany(SubjectTutor::class, 'user_id');
+    }
+
     public function notification()
     {
         return $this->hasOne(Notification::class, 'user_id');
