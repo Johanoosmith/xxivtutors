@@ -16,10 +16,10 @@
             <input type="hidden" id="maxPrice" name="max_price" value="{{ request('max_price', 500) }}">
         </div>
         
-        <div class="form-group">
+        <div class="form-group d-flex">
         <label for="ratingSelect">Tutor Rating:</label><br>
-        <select id="ratingSelect" name="min_rating" class="m-2" style="width: 60px;">
-            <option value="0" {{ request('min_rating', 0) == 0 ? 'selected' : '' }}>0+</option>
+        <select id="ratingSelect" class="form-control m-2 mt-0" name="min_rating" class="m-2" style="width: 150px;">
+            <option value="" >Rating</option>
             <option value="1" {{ request('min_rating', 0) == 1 ? 'selected' : '' }}>1+</option>
             <option value="2" {{ request('min_rating', 0) == 2 ? 'selected' : '' }}>2+</option>
             <option value="3" {{ request('min_rating', 0) == 3 ? 'selected' : '' }}>3+</option>
@@ -32,7 +32,7 @@
         <input type="text" name="postcode" id="postcode" value="{{ request()->postcode }}" placeholder="Enter Postcode">
 
         <label for="distance">Show Tutors Within 15 Miles:</label>
-        <input type="number" name="distance" id="distance" value="{{ request('distance', 15) }}">
+        <input type="number" name="distance" id="distance" value="{{ request('distance') }}">
         <label for="distance">Keyword:</label>
         <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword" value="{{ request('keyword') }}">
 

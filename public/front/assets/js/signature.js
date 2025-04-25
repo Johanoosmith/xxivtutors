@@ -64,10 +64,10 @@ http://dojofoundation.org/license for more information.
 
         
 
-        chops.push('<input type="button" id="GetImageData" disabled class="btn btn-yellow" value="Confirm Signature" />')
+        $('<div class="button-group my-4"><input type="button" id="GetImageData" disabled class="btn btn-yellow" value="Confirm Signature" /><input type="button" id="ResetButton" class="btn btn-danger" value="Reset"></div>').appendTo($tools);
         
         //$(chops.join('')).bind('change', function(e){
-            $(chops.join('')).bind('click', function(e){
+            $('#GetImageData').bind('click', function(e){
                 
             //if (e.target.value !== ''){
                 //var data = $sigdiv.jSignature('getData', e.target.value)
@@ -87,19 +87,19 @@ http://dojofoundation.org/license for more information.
                     }
                 }
             //}
-        }).appendTo($tools)
+        });
     
          
         $sigdiv.find('canvas').on('mousedown touchstart', function () {
             jQuery(document).find('#GetImageData').attr('disabled', false);
         });
         
-        $('<input type="button" class="btn btn-danger" value="Reset">').bind('click', function(e){
+        $('#ResetButton').bind('click', function(e){
             $sigdiv.jSignature('reset')
-        }).appendTo($tools)
+            jQuery(document).find('#GetImageData').attr('disabled', true);
+            jQuery(document).find('#SignatureSubmit').attr('disabled', true);
+        });
 
-        
-        
         $('<div><textarea name="signature" style="display:none;width:100%;height:7em;"></textarea></div>').appendTo($tools)
         
         $.subscribe(pubsubprefix + 'formatchanged', function(){

@@ -65,6 +65,16 @@ function finalQuery($queries){
     return $finalQuery;
 }
 
+function sanitizeMessage($message)
+{
+    // Remove or replace email addresses
+    $message = preg_replace('/[a-z0-9_\.\-]+@[a-z0-9\-]+\.[a-z\.]+/i', '[Email Hidden]', $message);
+
+    // Remove or replace phone numbers (basic patterns)
+    $message = preg_replace('/\+?\d{1,4}[\s-]?\(?\d{2,4}\)?[\s-]?\d{3,4}[\s-]?\d{3,4}/', '[Phone Hidden]', $message);
+
+    return $message;
+}
 
 
 

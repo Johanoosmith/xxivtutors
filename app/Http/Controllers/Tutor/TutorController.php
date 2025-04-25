@@ -1136,16 +1136,23 @@ class TutorController extends Controller
         }
 
         $last_enquiry_comment = EnquiryComment::where('enquiry_id', $request->enquiry_id)->orderBy('id', 'DESC')->first();
-
-
+        
         $parent_id = (!empty($last_enquiry_comment->id)) ? $last_enquiry_comment->id : 0;
+
+        $message = $request->content;
+
+        $isContractSigned = \App\Models\Contract::isContractSigned($enquiry->receiver_id, $user->id);
+
+        if(!$isContractSigned){
+            $message = sanitizeMessage($request->content);    
+        }
 
         EnquiryComment::create([
             'parent_id'     =>  $parent_id,
             'enquiry_id'    => $enquiry->id,
             'sender_id'     => Auth::id(),
             'receiver_id'   => $enquiry->receiver_id,
-            'content'       => $request->content,
+            'content'       => $message,
             'status'        => 'unread'
         ]);
         $user = User::find($enquiry->receiver_id);
