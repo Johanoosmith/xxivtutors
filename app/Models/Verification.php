@@ -19,6 +19,7 @@ class Verification extends Model
         'file',
         'status',
         'reject_reason',
+        'verification_type'
     ];
 
     public function user()

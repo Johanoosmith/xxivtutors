@@ -13,20 +13,15 @@
 				</div>
                 <div class="card-body table-border-style mb-2">
 				    <!-- Filter Form -->
-                    <form action="{{ route('admin.courses.index') }}" method="GET" id="filter-form">
+                    <form action="{{ route('admin.contact-us.index') }}" method="GET" id="filter-form">
                         <div class="row mb-4">
                             <div class="col-md-4">
-                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by title">
+                            <input type="text" name="name" value="{{ request('name') }}" placeholder="Search by name">
 
                             </div>
                             <div class="col-md-3">
-                                <!-- Add the Level Filter -->
-                                <select name="level" class="form-control">
-                                <option value="">All Levels</option>
-                                <option value="beginner" {{ request('level') == 'beginner' ? 'selected' : '' }}>Beginner</option>
-                                <option value="intermediate" {{ request('level') == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
-                                <option value="expert" {{ request('level') == 'expert' ? 'selected' : '' }}>Expert</option>
-                                </select>
+                            <input type="text" name="email" value="{{ request('email') }}" placeholder="Search by email">
+
                             </div>
                             <div class="col-md-3 fiter-btn-pd">
                                 <button type="submit" class="btn btn-sm custom_btn btn-primary filter-btn">
@@ -34,7 +29,7 @@
                                         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                                     </svg>
                                 </button>
-                                <a href="{{ route('admin.courses.index') }}" class="btn btn-dark btn-sm reset-btn">
+                                <a href="{{ route('admin.contact-us.index') }}" class="btn btn-dark btn-sm reset-btn">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw">
                                     <polyline points="1 4 1 10 7 10"></polyline>
                                     <polyline points="23 20 23 14 17 14"></polyline>
@@ -66,7 +61,6 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Phone Number</th>
                             <th>Message</th>
                             <th class="text-right">Action</th>
                         </tr>
@@ -77,7 +71,6 @@
                     <td>{{ $contact->id }}</td>
                     <td>{{ $contact->firstname }} {{ $contact->lastname }}</td>
                     <td>{{ $contact->email }}</td>
-                    <td>{{ $contact->phonenumber }}</td>
                     <td>{{ $contact->message }}</td>
                     <td class="noselect text-right">	
                                 <div class="action-tools">

@@ -173,8 +173,13 @@ class PageController extends Controller
 
         // Store the contact data in the database
         ContactUs::create($validatedData);
-
-        // Redirect back with a success message
+        $data = [
+            'first_name' => $validatedData['firstname'],
+            'last_name' => $validatedData['lastname'],
+            'email' => $validatedData['email'],
+            'message' => $validatedData['message'],
+        ];
+        // sendMail(config('constants.SITE.EMAIL'), $data, 'CONTACT_US');
         return redirect()->back()->with('success', 'Thank you for contacting us! We will get back to you soon.');
     }
     public function filterByCourse($course_id)

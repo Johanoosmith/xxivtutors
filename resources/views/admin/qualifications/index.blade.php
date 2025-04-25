@@ -52,16 +52,20 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($qualification->status == 1)
+                                    @if ($qualification->status == 2)
                                     <form method="POST" action="{{ route('admin.tutors.qualifications.approve', $qualification->id) }}" style="display:inline;">
                                         @csrf
                                         <button type="submit" class="btn btn-success btn-sm">Approve</button>
                                     </form>
+                                    @endif
+
+                                    @if ($qualification->status !== 3)
 
                                     <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $qualification->id }}">
                                         Reject
                                     </button>
-                                    @elseif ($qualification->status == 3)
+                                    @endif
+                                    @if ($qualification->status == 3)
                                     <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#viewReasonModal{{ $qualification->id }}">
                                         View Reason
                                     </button>

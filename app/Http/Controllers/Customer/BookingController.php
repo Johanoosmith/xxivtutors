@@ -167,7 +167,7 @@ class BookingController extends Controller
 		}
 	}
 
-	public function confirmed(Request $request)
+	public function confirmed(Request $request,$id)
 	{
 
 		$user_id = Auth::user()->id;
@@ -175,7 +175,6 @@ class BookingController extends Controller
 		// 				->where('start_date','>=',Carbon::now()->toDateString())
 		// 				->where('start_time','>',Carbon::now()->toTimeString())
 		// 				->findOrFail($request->id);
-
 		$booking = Booking::where('student_id', $user_id)
 			->where(function ($query) {
 				$query->where('start_date', '>', Carbon::now()->toDateString())  // Start date is in the future
@@ -184,7 +183,7 @@ class BookingController extends Controller
 							->where('start_time', '>', Carbon::now()->toTimeString());  // Start time is in the future today
 					});
 			})
-			->find($request->booking_id);
+			->find($id);
 		if ($booking) {
 			$booking->status = 2; // Confirm Booking
 			$booking->save();
