@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,7 +41,11 @@ class UserView extends Model
             return; // Ensure the user is authenticated
         }
         $authLoginId = $authUser->id;
-        
+
+
+        if ($user_id == $authLoginId) {
+            return; // Prevent self-view from being counted
+        }
         // Find the user being viewed by their username
         $user = \App\Models\User::where('id', $user_id)->first();
         if (!$user) {
@@ -52,18 +57,14 @@ class UserView extends Model
             'user_id' => $user->id,
             'viewer_id' => $authLoginId,
             'view' => 1,
-            'date' => now(), 
+            'date' => now(),
         ];
         // Check if a record already exists for the same user and viewer
-        $existingView = UserView::where('user_id', $user->id)
-            ->where('viewer_id', $authLoginId)
-            ->first();
-        if ($existingView) {
+      
             // Update the existing record's view count or date if necessary
-            $existingView->update($data);
-        } else {
-            // Create a new record for the view
+            // $existingView->update($data);
             UserView::create($data);
-        }
+
+       
     }
 }

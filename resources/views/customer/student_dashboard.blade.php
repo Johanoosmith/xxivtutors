@@ -159,7 +159,7 @@
                 <div class="row">
                     <div class="col-md-4">
                     <h2>Student Account</h2>
-                    <p class="small">Last Logged in: {{ \Carbon\Carbon::parse($user->last_login)->format('d-m-Y H:i:s') }}</p>
+                    <p class="small">Last Logged in: {{ \Carbon\Carbon::parse($user->last_login)->format('d-m-Y H:i:s') ?? '' }}</p>
                     </div>
                     <div class="col-md-4">
                         <h4>Your Profile is Online</h4>

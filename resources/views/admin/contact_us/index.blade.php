@@ -60,6 +60,7 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            <th>Mobile Number</th>
                             <th>Email</th>
                             <th>Message</th>
                             <th class="text-right">Action</th>
@@ -70,6 +71,7 @@
                 <tr>
                     <td>{{ $contact->id }}</td>
                     <td>{{ $contact->firstname }} {{ $contact->lastname }}</td>
+                    <td>{{ $contact->phonenumber ?? "NA" }}</td>
                     <td>{{ $contact->email }}</td>
                     <td>{{ $contact->message }}</td>
                     <td class="noselect text-right">	

@@ -37,7 +37,7 @@
                                 </svg>
                                 @php
                                     $countryId = $tutor->country;
-                                    $countryName = \App\Models\Country::find($countryId)?->name ?? 'Country not found';
+                                    $countryName = \App\Models\Country::find($countryId)?->name ?? '';
                                 @endphp
                                 {{ $tutor->town }}, {{ $countryName }} 
                             </div>
@@ -45,6 +45,9 @@
                                 <p><strong>Member Since: </strong> {{ $user->created_at->format('d M Y') }}</p>
                                 <p><strong>Last Login: </strong> {{ $user->last_login ? $user->last_login->diffForHumans() : 'Never logged in' }}</p>
                                 <p><strong>Home Town: </strong>{{ $tutor->town }}</p>
+                                @if(privacySetting($user->id,'display_postcode'))
+                                <p><strong>Post Code: </strong>{{ $user->postcode ?? ''}}</p>
+                                @endif
                             </div>
                             <div class="student-editprofile">
                                 <a href="{{ route('customer.personalinfo')}}" class="user-btn">
@@ -126,7 +129,7 @@
                                             <tr>
                                                 <th>Subject</th>
                                                 @foreach ($inPlaceSubjects['levels'] as $level)
-                                                    <th>{{ $level }}</th> <!-- Dynamically adding table headers -->
+                                                    <th>{{ $level ?? "-"}}</th> <!-- Dynamically adding table headers -->
                                                 @endforeach
                                             </tr>
                                         </thead>
@@ -135,7 +138,7 @@
                                             <tr>
                                                 <td>{{ $subject['title'] }}</td>
                                                 @foreach ($inPlaceSubjects['levels'] as $level)
-                                                    <td>{{ $subject[$level] }}</td> <!-- Display checkmark or '-' dynamically -->
+                                                    <td>{{ $subject[$level] ?? "-"}}</td> <!-- Display checkmark or '-' dynamically -->
                                                 @endforeach
                                             </tr>
                                             @endforeach
@@ -150,7 +153,7 @@
                                             <tr>
                                                 <th>Subject</th>
                                                 @foreach ($onlineSubjects['levels'] as $level)
-                                                    <th>{{ $level }}</th> <!-- Dynamically adding table headers -->
+                                                    <th>{{ $level ?? "-"}}</th> <!-- Dynamically adding table headers -->
                                                 @endforeach
                                             </tr>
                                         </thead>
@@ -159,7 +162,7 @@
                                             <tr>
                                                 <td>{{ $subject['title'] }}</td>
                                                 @foreach ($onlineSubjects['levels'] as $level)
-                                                    <td>{{ $subject[$level] }}</td> <!-- Display checkmark or '-' dynamically -->
+                                                    <td>{{ $subject[$level] ?? "-" }}</td> <!-- Display checkmark or '-' dynamically -->
                                                 @endforeach
                                             </tr>
                                             @endforeach
@@ -214,7 +217,7 @@
                             </table>
                         @endif
 
-                        @if($userQualifications->isNotEmpty())
+                        @if($userQualifications->isNotEmpty() && privacySetting($user->id,'display_qualification'))
                         <br>
                         <h5>Qualification</h5>
                         <br>

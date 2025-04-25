@@ -42,7 +42,7 @@
                         @foreach ($tutors as $tutor)
                             <tr>
                                 <td>
-                                <a href="#" title="Send Message">
+                                <a href="{{ route('tutor', ['id' => $tutor->tutor_user_id]) }}" title="Send Message">
                                     <strong>{{ $tutor->level_title }} {{ $tutor->subject_title }}</strong>
                                     @if(!empty($tutor->town) && !empty($tutor->county))
                                     located in {{ $tutor->town }} {{ $tutor->county }}

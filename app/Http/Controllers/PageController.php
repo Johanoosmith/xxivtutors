@@ -73,10 +73,10 @@ class PageController extends Controller
     public function display(Request $request, $slug)
     {
         //Testing
-        if(isset($_GET['test']) && $_GET['test'] == 'test-mail') {
-            sendMail('khelesh.mehra@dotsquares.com', [], 'TUTOR_REGISTRATION');    
+        if (isset($_GET['test']) && $_GET['test'] == 'test-mail') {
+            sendMail('khelesh.mehra@dotsquares.com', [], 'TUTOR_REGISTRATION');
         }
-        
+
 
         $arr = array();
 
@@ -169,6 +169,7 @@ class PageController extends Controller
             'lastname' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'message' => 'required|string',
+            'phonenumber' => ['required', 'string', 'regex:/^\d{10,15}$/']
         ]);
 
         // Store the contact data in the database
@@ -210,28 +211,28 @@ class PageController extends Controller
 
     public function tutorFilter(Request $request, $course_id = null)
     {
-        
+
         $course_id = $request->course_id ?? $course_id;
         $arr['course_id'] = $course_id;
 
         $query = User::query();
-        
+
         $input = $request->all();
         $arr['type'] = $input['type'] ?? 'tutor';
-        
-        if($arr['type'] == 'student') {
+
+        if ($arr['type'] == 'student') {
             $query = $this->getStudentQuery($request, $query);
         } else {
             $query = $this->getTutorQuery($request, $query);
         }
-        
+
         //\DB::connection()->enableQueryLog();
 
         $arr['users'] = $query->paginate(10);
 
         // $queries = \DB::getQueryLog();
         // $finalQuery = finalQuery($queries);
-         //dd($finalQuery);
+        //dd($finalQuery);
         //dd($arr['users']);
 
         $page = Page::find(1);
@@ -249,7 +250,8 @@ class PageController extends Controller
         return view('front.tutor')->with($arr);
     }
 
-    function getStudentQuery($request, $query){
+    function getStudentQuery($request, $query)
+    {
 
         $query->where('role_id', config('constants.ROLE.STUDENT'))->with('student');
 
@@ -274,19 +276,20 @@ class PageController extends Controller
                 $q->where('level_id', $request->level);
             });
         }
-        
+
         if ($request->postcode != null) {
             $query->where('postcode', $request->postcode);
         }
-        
+
 
         return $query;
     }
 
-    function getTutorQuery($request, $query){
+    function getTutorQuery($request, $query)
+    {
 
         $query->where('role_id', config('constants.ROLE.TUTOR'))->with('tutor');
-        
+
         $query->with('tutor.tutor_subjects');
 
         if ($request->has('sort_by')) {
@@ -309,11 +312,11 @@ class PageController extends Controller
         }
 
         if (
-            $request->slug != null 
-            || $request->level != 'All Levels' 
-            || $request->subject_title != null 
-            || $request->postcode != null) 
-        {
+            $request->slug != null
+            || $request->level != 'All Levels'
+            || $request->subject_title != null
+            || $request->postcode != null
+        ) {
             if ($request->slug != null) {
                 $query->whereHas('tutor.subject_tutors', function ($q) use ($request) {
                     $q->where('slug', $request->slug);
@@ -332,12 +335,11 @@ class PageController extends Controller
 
 
         if (
-                $request->min_price != null 
-                || $request->max_price != null 
-                || $request->distance != null 
-                ||  $request->min_rating != '0'
-        )
-        {
+            $request->min_price != null
+            || $request->max_price != null
+            || $request->distance != null
+            ||  $request->min_rating != '0'
+        ) {
 
             // $subjec_tutors = SubjectTutor::where('subject_id', $request->subject_id)
             //     ->where('level_id', $request->level)
@@ -378,10 +380,9 @@ class PageController extends Controller
         }
 
         return $query;
-
     }
 
-  
+
 
 
     public function student(Request $request)
