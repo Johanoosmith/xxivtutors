@@ -11,8 +11,8 @@
     </script>
 
     <ul class="search-tabs" id="SiteSearchTab">
-        <li class="active" data-rel="in-person">In-person</li>
-        <li data-rel="online">Online</li>
+        <li class="{{ (request('teach_type') != 'online') ? 'active' : '' }}"  data-rel="in-person">In-person</li>
+        <li class="{{ (request('teach_type') == 'online') ? 'active' : '' }}" data-rel="online">Online</li>
     </ul>
     <div class="search-field-group" id="SiteSearchTabContent">
         <input type="hidden" name="teach_type" id="in-person">
