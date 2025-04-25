@@ -267,7 +267,7 @@ class PageController extends Controller
 
         if ($request->subject != null) {
             $query->whereHas('student.subject_students', function ($q) use ($request) {
-                $q->where('subject', $request->subject);
+                $q->where('slug', $request->subject);
             });
         }
 

@@ -89,7 +89,7 @@
 
                     <div class="form-field">
                         <textarea name="message" id="message" class="form-control"
-                            placeholder="Your message..." rows="5" required>{{ old('message') }}</textarea>
+                            placeholder="Your message...*" rows="5" required>{{ old('message') }}</textarea>
                     </div>
 
                     <div class="form-submit">
