@@ -112,9 +112,7 @@ class Payment extends Model
 							// 1. Send email to tutor and student
 							$bookingMail = new BookingMailController();
 							$bookingMail->sendTutorBookingRelatedMail($booking, 'BOOKING_CANCELLATION_UNPAID');
-							if (privacySetting($booking->tutor_id, 'feedback_email')) {
-								$bookingMail->sendTutorBookingRelatedMail($booking, 'TUTOR_FEEDBACK');
-							}
+							
 							$bookingMail->sendStudentBookingRelatedMail($booking, 'STRIPE_ISSUE');
 						
 							// 2. Cancel (delete) all upcoming lessons between same tutor and student

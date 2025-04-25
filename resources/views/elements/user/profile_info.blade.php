@@ -67,8 +67,8 @@
 				{{ old('consent') ? 'checked' : '' }}>
 			<label class="form-check-label" for="agreeTerms">
 				I agree to Tuition's
-				<a href="{{ url('/privacy-policy') }}" target="_blank">Terms & Conditions</a> and
-				<a href="{{ url('/safe-guarding-policies') }}" target="_blank">Privacy Policy</a>
+				<a href="{{ url('/safe-guarding-policies') }}" target="_blank">Terms & Conditions</a> and
+				<a href="{{ url('/privacy-policy') }}" target="_blank">Privacy Policy</a>
 			</label>
 		</div>
 	</div>
