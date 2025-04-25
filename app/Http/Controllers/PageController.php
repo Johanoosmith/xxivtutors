@@ -265,9 +265,9 @@ class PageController extends Controller
             }
         }
 
-        if ($request->slug != null) {
+        if ($request->subject != null) {
             $query->whereHas('student.subject_students', function ($q) use ($request) {
-                $q->where('slug', $request->slug);
+                $q->where('subject', $request->subject);
             });
         }
 
@@ -281,6 +281,12 @@ class PageController extends Controller
             $query->where('postcode', $request->postcode);
         }
 
+        if ($request->town != null) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('students.town', 'like', '%'.$request->town.'%');
+            });
+        }     
+        
 
         return $query;
     }
@@ -291,6 +297,8 @@ class PageController extends Controller
         $query->where('role_id', config('constants.ROLE.TUTOR'))->with('tutor');
 
         $query->with('tutor.tutor_subjects');
+
+        $subject_user_ids = [];
 
         if ($request->has('sort_by')) {
             switch ($request->sort_by) {
@@ -312,14 +320,14 @@ class PageController extends Controller
         }
 
         if (
-            $request->slug != null
-            || $request->level != 'All Levels'
-            || $request->subject_title != null
-            || $request->postcode != null
-        ) {
-            if ($request->slug != null) {
+            $request->slug != null 
+            || $request->level != 'All Levels' 
+            || $request->subject_title != null 
+            || $request->postcode != null) 
+        {
+            if ($request->subject != null) {
                 $query->whereHas('tutor.subject_tutors', function ($q) use ($request) {
-                    $q->where('slug', $request->slug);
+                    $q->where('slug', $request->subject);
                 });
             }
             if ($request->level != null) {
@@ -341,26 +349,25 @@ class PageController extends Controller
             ||  $request->min_rating != '0'
         ) {
 
-            // $subjec_tutors = SubjectTutor::where('subject_id', $request->subject_id)
-            //     ->where('level_id', $request->level)
-            //     ->pluck('user_id');
-            // if ($request->min_price != null && $request->max_price != null) {
-            //     $q->whereBetween('tutors.tutor_subjects.lesson_rate', [$request->min_price, $request->max_price]);
-            // } elseif ($request->min_price != null) {
-            //     $q->where('tutors.tutor_subjects.lesson_rate', '>=', $request->min_price);
-            // } elseif ($request->max_price != null) {
-            //     $q->where('tutors.tutor_subjects.lesson_rate', '<=', $request->max_price);
-            // }
+            $subject_tutors = SubjectTutor::query();
+            
+            if ($request->min_price != null && $request->max_price != null) {
+                $subject_tutors->whereBetween('lesson_rate', [$request->min_price, $request->max_price]);
+            } elseif ($request->min_price != null) {
+                $subject_tutors->where('lesson_rate', '>=', $request->min_price);
+            } elseif ($request->max_price != null) {
+                $subject_tutors->where('lesson_rate', '<=', $request->max_price);
+            }
+
+            if(!empty($request->level)){
+                $subject_tutors->where('level_id', $request->level);
+            }
+
+            $subject_user_ids = $subject_tutors->pluck('user_id')->toArray();
+            $subject_user_ids = array_unique($subject_user_ids);
+            
 
             $query->whereHas('tutor', function ($q) use ($request) {
-                if ($request->min_price != null && $request->max_price != null) {
-                    $q->whereBetween('tutor.subject_tutors.lesson_rate', [$request->min_price, $request->max_price]);
-                } elseif ($request->min_price != null) {
-                    $q->where('tutor.subject_tutors.lesson_rate', '>=', $request->min_price);
-                } elseif ($request->max_price != null) {
-                    $q->where('tutor.subject_tutors.lesson_rate', '<=', $request->max_price);
-                }
-
                 if ($request->distance != null) {
                     $q->whereBetween('tutors.distance', [0, $request->distance]);
                 }
@@ -378,6 +385,16 @@ class PageController extends Controller
         if ($request->postcode != null) {
             $query->where('postcode', $request->postcode);
         }
+
+        if(!empty($subject_user_ids)){
+            $query->whereIn('users.id', $subject_user_ids);
+        }
+
+        if ($request->town != null) {
+            $query->whereHas('tutor', function ($q) use ($request) {
+                $q->where('tutors.town', 'like', '%'.$request->town.'%');
+            });
+        }   
 
         return $query;
     }

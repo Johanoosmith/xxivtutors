@@ -97,25 +97,35 @@
                         @endif
 
                         <div class="tutoe-meta">
+                            @php 
+                                $lessonData = getUserLessonData($user->id);
+                            @endphp
+                            @if(!empty($lessonData['repeated_lessons']))
+                                <div class="repeat"><span>{{ $lessonData['repeated_lessons'] .' Repeat Lessons' }}</span></div>
+                            @else
+                                <div class="repeat"><span>{{ 'No Repeat Lessons' }}</span></div>
+                            @endif
+                            
+                            @if(!empty($lessonData['total_hours']))
+                                <div class="hours"><span>{{ $lessonData['total_hours'] . ' Hours Taught' }}</span></div>
+                            @else
+                                <div class="hours"><span>{{ 'No Lessons Taught' }}</span></div>    
+                            @endif
 
-                            <div class="repeat"><span>{{ @$user->tutor->qualification_1 }}</span></div>
-                            <div class="hours"><span>{{ @$user->tutor->qualification_2 }}</span></div>
-                            <div class="travels"><span>{{ @$user->tutor->qualification_3 }}</span></div>
+                            
                             <div class="response"><span>{{ @$user->tutor->qualification_4 }}</span></div>
-                            <div class="member"><span>{{ @$user->tutor->experience }}</span></div>
+                            
 
                             @if($user->tutor->distance)
-                                <div class="repeat"><span>Travel {{ @$user->tutor->distance }} Miles</span></div>
+                                <div class="travels"><span>Travel {{ @$user->tutor->distance }} Miles</span></div>
+                            @else
+                                <div class="travels"><span>Travel Miles</span></div>
                             @endif
 
                             @if($user->member_since)
-                            <div class="travels"><span>Member for {{ @$user->member_since }}</span></div>
+                            <div class="member"><span>Member for {{ @$user->member_since }}</span></div>
                             @endif
-                            <!--<div class="repeat"><span>{{ @$user->tutor->qualification_1 }}</span></div>
-                            <div class="hours"><span>{{ @$user->tutor->qualification_2 }}</span></div>
-                            <div class="travels"><span>{{ @$user->tutor->qualification_3 }}</span></div>
-                            <div class="response"><span>{{ @$user->tutor->qualification_4 }}</span></div>
-                            <div class="member"><span>{{ @$user->tutor->experience }}</span></div>-->
+                           
                         </div>
                     </div>
                 </div>
