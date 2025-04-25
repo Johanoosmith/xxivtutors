@@ -36,7 +36,9 @@ class SendLessonReminderEmails extends Command
                 $bookingMail = new BookingMailController();
                 // $bookingMail->sendTutorBookingRelatedMail($booking, 'tutor-lesson-reminder');
                 $bookingMail->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_REMINDER');
-
+                if (privacySetting($booking->tutor_id, 'lesson_reminder_email')) {
+                $bookingMail->sendTutorBookingRelatedMail($booking, 'TUTOR_LESSON_REMINDER');
+                }
                 Log::channel('booking')->info("Sent reminder emails for booking ID: {$booking->id}");
             } catch (\Exception $e) {
                 Log::channel('booking')->error("Failed to send reminder for booking ID: {$booking->id}. Error: " . $e->getMessage());

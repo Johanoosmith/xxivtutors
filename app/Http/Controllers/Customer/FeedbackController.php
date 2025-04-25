@@ -72,6 +72,13 @@ class FeedbackController extends Controller
             'status' => 'pending',
         ]);
 
+        
+    $user= User::find($request->tutor_id);
+    $data['tutor_name']=$user->username;
+
+        if ($user && privacySetting($user->id, 'feedback_email')) {
+            sendMail($user['email'], $data, 'TUTOR_FEEDBACK');
+        }
 
         return redirect()->route('student.feedback')->with('success', 'Feedback submitted successfully.');
     }

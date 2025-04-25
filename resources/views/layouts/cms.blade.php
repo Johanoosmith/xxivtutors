@@ -3,8 +3,9 @@
     <head> 
         @include('includes.front.head')  
         
+		<link rel="icon" href="{{ asset('uploads/logos/favicon.ico') }}" type="image/x-icon" />
 
-		<link rel="icon" href="{{ asset(config('settings.favicon', 'uploads/logos/favicon.ico')) }}" type="image/x-icon">
+		<!-- <link rel="icon" href="{{ asset(config('settings.favicon', 'uploads/logos/favicon.ico')) }}" type="image/x-icon"> -->
 		<link rel="shortcut icon" href="{{ asset(config('settings.favicon', 'uploads/logos/favicon.ico')) }}" type="image/x-icon">
 		<!-- <link rel="icon" href="{{asset('front/assets/images/favicon.ico')}}"> -->
 		<!-- Bundle -->

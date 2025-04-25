@@ -948,8 +948,10 @@ class TutorController extends Controller
     {
         $userid = Auth::id();
         // Check if the tutor exists and belongs to the authenticated user
-        $tutor = Tutor::where('id',  $userid)->where('user_id', $userid)->firstOrFail();
-
+        $tutor = Tutor::where('user_id', $userid)->first() ?? null;
+        if (!$tutor) {
+            return redirect()->back()->withErrors('Tutor not found or unauthorized.');
+        }
         // Fetch the headline for this tutor, if it exists
         $headline = Headline::where('user_id', $userid)->first();
 
