@@ -176,6 +176,7 @@ class CustomerController extends Controller
             if ($userData['role'] === 'tutor') {
                 Tutor::create([
                     'user_id' => $user->id,
+                    'title' => $userData['title'],
                     'town' => $userData['town'],
                     'county' => $userData['county'],
                     'country' => $userData['country'],
@@ -218,7 +219,7 @@ class CustomerController extends Controller
             
             if ($userData['role'] === 'student') {
                 session()->flash('message', 'Registration successful! Log in to explore your dashboard and start learning.');
-            } elseif ($user->role === 'tutor') {
+            } elseif ($userData['role'] === 'tutor') {
                 session()->flash('message', 'Registration successful! Once approved, you’ll be ready to start tutoring.');
             }
                         // Optionally, you can clear the session data after saving

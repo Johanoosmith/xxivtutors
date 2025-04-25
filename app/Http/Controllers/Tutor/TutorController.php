@@ -266,7 +266,7 @@ class TutorController extends Controller
             'grade' => $request->grade,
             'qyear' => $request->qualification_year,
             'qdocument' => $filePath,
-            'status' => 1,
+            'status' => 2,
 
         ]);
         return redirect()->route('tutor.qualification')->with('success', 'Qualification added successfully!');
@@ -833,16 +833,17 @@ class TutorController extends Controller
             'country_id'        => $request->country_id,
             'expire_date'       => date('Y-m-d', strtotime($request->expire_date)),
             'status'            => 2, // Pending by default
-            'verification_type' => 1
+            'verification_type' => 2
         ];
 
         if(!empty($filePath)){
             $vf_record['file'] = $filePath;
         }
-
-        // Update existing record or create a new one
         Verification::updateOrCreate(
-            ['user_id' => $user_id], // Condition to check existing data
+            [
+                'user_id' => $user_id,
+                'verification_type' => 2
+            ],
             $vf_record
         );
 

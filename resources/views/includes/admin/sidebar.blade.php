@@ -205,9 +205,7 @@
                         <span class="pc-micon"><i class="material-icons-two-tone">help</i></span>
                         <span class="pc-mtext">Manage Questions</span>
                     </a>
-                </li>
-                
-                
+                </li>        
             </ul>
         </div>
     </div>

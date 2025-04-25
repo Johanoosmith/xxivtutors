@@ -72,7 +72,7 @@ class VerificationController extends Controller
     }
 
     public function references(Request $request){
-       $ref_Obj = \App\Models\User::whereHas('references')->withCount('references');
+       $ref_Obj = \App\Models\User::whereHas('references')->with('references')->withCount('references');
        
         if ($request->filled('user')) {
             $search = $request->input('user');
@@ -92,6 +92,7 @@ class VerificationController extends Controller
         $perPage = $request->input('per_page', 10);
 
         $references = $ref_Obj->paginate($perPage);
+        //dd($references);
         
         return view('admin.verifications.references', compact('references'));
     }

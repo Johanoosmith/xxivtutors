@@ -33,7 +33,6 @@ class SuggestedStudentController extends Controller
                     'students.town'
                 )
                 ->get();
-            dd($students);
         return view('tutor.suggested_student', compact('students'));
     }
 }

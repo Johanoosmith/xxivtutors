@@ -33,9 +33,8 @@
                                 </td>
                                 <td>{{ $feedback->content }}</td>
                                 <td>{{ $feedback->tutor_rating }} / 5</td>
-                                <td>Awaiting Approval</td>
+                                <td>{{ $feedback->status }}</td>
                                 <td>{{ optional($feedback->created_at)->format('d/m/Y') ?? 'N/A' }}</td>
-                               
                             </tr>
                             @endforeach
                         </tbody>
