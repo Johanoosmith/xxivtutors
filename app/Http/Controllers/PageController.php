@@ -96,6 +96,7 @@ class PageController extends Controller
             }
         }
         $page_templates = $page->template;
+        //dd($page_templates);
 
 
         $arr['cities'] = City::where('status', 1)->orderBy('name', 'asc')->get();
