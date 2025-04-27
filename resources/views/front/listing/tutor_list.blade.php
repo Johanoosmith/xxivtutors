@@ -31,7 +31,7 @@
         <label for="distance">Online Tutor Proximity</label>
         <input type="text" name="postcode" id="postcode" value="{{ request()->postcode }}" placeholder="Enter Postcode">
 
-        <label for="distance">Show Tutors Within 15 Miles:</label>
+        <label for="distance">Show Tutors Travels in Miles:</label>
         <input type="number" name="distance" id="distance" value="{{ request('distance') }}">
         <label for="distance">Keyword:</label>
         <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword" value="{{ request('keyword') }}">
