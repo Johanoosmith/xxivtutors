@@ -85,7 +85,7 @@
 
                 <!-- Modals (placed outside the table loop) -->
                 @foreach($qualifications as $qualification)
-                @if ($qualification->status == 1)
+                @if ($qualification->status !== 3)
                 <!-- Reject Modal -->
                 <div class="modal fade" id="rejectModal{{ $qualification->id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">

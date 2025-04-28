@@ -53,7 +53,7 @@
                     <br>
                 <div class="table-responsive">
                 @if($contacts->isEmpty())
-                <p>No Course found.</p>
+                <p>No Contact Us found.</p>
                 @else
                 <table class="table table-hover">
                     <thead>
@@ -67,9 +67,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @forelse($contacts as $contact)
+                    @forelse($contacts as $index =>  $contact)
                 <tr>
-                    <td>{{ $contact->id }}</td>
+                    <td>{{ $index + 1 }}</td>
                     <td>{{ $contact->firstname }} {{ $contact->lastname }}</td>
                     <td>{{ $contact->phonenumber ?? "NA" }}</td>
                     <td>{{ $contact->email }}</td>

@@ -92,7 +92,7 @@
                                     @if($student->user->status == '1')
                                         <label class="badge bg-light-success">Active</label>  <!-- Green badge for active status -->
                                     @elseif($student->user->status == '0')
-                                        <label class="badge bg-light-danger">Deactive</label>  <!-- Red badge for inactive status -->
+                                        <label class="badge bg-light-danger">Inactive</label>  <!-- Red badge for inactive status -->
                                     @else
                                         <label class="badge bg-light-warning">{{ ucfirst($student->user->status ?? '') }}</label>  <!-- Yellow badge for any other status -->
                                     @endif

@@ -217,11 +217,22 @@
 		});
 	}
 	
-	jQuery(document).on('blur', '.level-hourly-rate', function(){
-		var level_key			= jQuery(this).data('key');
-		var level_hourly_rate	= jQuery(this).val();
-		var level_student_rate	= parseInt(level_hourly_rate * student_rate_interger); //increase 25%
-		jQuery('#LevelLessonRate_'+level_key).val(level_student_rate);
-	});
+	// jQuery(document).on('blur', '.level-hourly-rate', function(){
+	// 	var level_key			= jQuery(this).data('key');
+	// 	var level_hourly_rate	= jQuery(this).val();
+	// 	var level_student_rate	= parseInt(level_hourly_rate * student_rate_interger); //increase 25%
+	// 	jQuery('#LevelLessonRate_'+level_key).val(level_student_rate);
+	// });
+	jQuery(document).on('blur', '.level-hourly-rate', function() {
+    var level_key = jQuery(this).data('key');
+    var level_hourly_rate = parseFloat(jQuery(this).val());
+
+    if (level_hourly_rate > 0) {
+        var level_student_rate = parseInt(level_hourly_rate * student_rate_interger); // Increase 25%
+        jQuery('#LevelLessonRate_' + level_key).val(level_student_rate);
+    } else {
+        jQuery('#LevelLessonRate_' + level_key).val(''); // Optionally clear the field if not > 0
+    }
+});
 </script>
 @endsection

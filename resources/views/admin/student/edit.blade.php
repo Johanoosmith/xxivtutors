@@ -38,8 +38,8 @@
                 <div class="form-group">
                     <label for="status">Status</label>
                     <select name="status" id="status" class="form-control">
-                        <option value="1" {{ old('status', $student->status ?? '') == 'active' ? 'selected' : '' }}>Active</option>
-                        <option value="0" {{ old('status', $student->status ?? '') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                        <option value="1" {{ old('status', $student->user->status ?? '') == 1 ? 'selected' : '' }}>Active</option>
+                        <option value="0" {{ old('status', $student->user->status ?? '') == 0 ? 'selected' : '' }}>Inactive</option>
                     </select>
                 </div>
 

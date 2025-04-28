@@ -63,9 +63,7 @@ class SubjectController extends Controller
 		if(!empty($subject->cities)){
 			$subject->cities  =  explode(",",$subject->cities);
 		}
-		
-		
-		
+				
         return view('admin.subjects.edit', compact('subject','courses', 'cities'));
     }
 
@@ -78,6 +76,9 @@ class SubjectController extends Controller
 		
 		$data = $request->all();
 		$data['status'] = (!empty($data['status'])) ? 1 : 0;
+        $data['featured'] = (!empty($data['featured'])) ? 1 : 0;
+
+
 		
 		if(!empty($data['cities'])){
             $data['cities']    =  implode(",",$data['cities']);
