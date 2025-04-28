@@ -66,7 +66,7 @@ class SubjectController extends Controller
     
     public function store(Request $request)
     {
-		//dd($request->all());
+		// dd($request->all());
 		$user_id = Auth::user()->id;
         if ($request->has('level')) {
 			

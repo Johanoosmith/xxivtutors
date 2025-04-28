@@ -883,17 +883,26 @@ class TutorController extends Controller
         $filePath = $request->hasFile('file')
             ? $request->file('file')->store('identification_files', 'public')
             : null;
-
-        // Insert new record into the Verification table
-        Verification::create([
-            'user_id'           => Auth::id(), 
-            'verification_type' => 3, /* For DBS */ 
-            'document_type'=>'other',
+        $data = [
+            'document_type' => 'other',
             'dbs_number' => $request->dbs_number,
-            'expire_date' => date('Y-m-d',strtotime($request->expire_date)),
-            'file' => $filePath,
-            'status' => 2, 
-        ]);
+            'expire_date' => date('Y-m-d', strtotime($request->expire_date)),
+            'status' => 2,
+            'verification_type' => 3, /* For DBS */ 
+
+        ];   
+        if ($filePath) {
+            $data['file'] = $filePath;
+        }
+     
+        // Update or create the Verification record
+        Verification::updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'verification_type' => 3,
+            ],
+            $data
+        );
 
         return redirect()->route('tutor.verification')->with('success', 'Proof of Identification Submitted Successfully');
     }

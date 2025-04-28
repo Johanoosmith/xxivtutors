@@ -14,9 +14,8 @@ class Tutor extends Authenticatable
         'email', 'password', 'firstname', 'lastname', 'rating','mobile', 
         'address', 'profile_image', 'short_description', 'full_description',
         'qualification_1', 'qualification_2', 'qualification_3', 'qualification_4',
-        'experience', 'rate', 'status','tutor_specializations', 'user_id', 'user_id', 'title', 'town', 'county', 'country',
-        'list_in_directory',
-        'profile_status',
+        'experience', 'rate', 'status','tutor_specializations', 'user_id','title', 'town', 'county', 'country',
+        'list_in_directory','language','profile_status',
     ];
     public function specialization()
     {
