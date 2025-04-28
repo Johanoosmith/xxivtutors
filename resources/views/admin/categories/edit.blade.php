@@ -56,9 +56,10 @@
                 <div class="col-sm-6">
                     <label class="form-label">Status</label>
                     <select class="form-control" name="status" id="status">
-                        <option value="1" {{ $category->status == 'Active' ? 'selected' : '' }}>Active</option>
-                        <option value="0" {{ $category->status == 'Inactive' ? 'selected' : '' }}>Inactive</option>
+                        <option value="1" {{ old('status',$category->status ?? '')  == 1 ? 'selected' : '' }}>Active</option>
+                        <option value="0" {{ old('status',$category->status ?? '') == 0 ? 'selected' : '' }}>Inactive</option>
                     </select>
+                  
                 </div>
             </div>
             <!-- SEO Fields -->
