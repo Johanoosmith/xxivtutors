@@ -58,20 +58,20 @@
                 <div class="tutor-block">
                     @if(!empty($user->profile_image) && file_exists(public_path('storage/'.$user->profile_image)))
                     <div class="tutor-img">
-                            <a href="{{route('tutors.show', $user->id)}}" class="media">
+                            <a href="{{route('tutor', $user->id)}}" class="media">
                                 <img src="{{ asset('storage/' . $user->profile_image) }}" alt="{{ $user->firstname }}">
                             </a>
                     </div>
                     @else
                     <div class="tutor-img">
-                        <a href="{{route('tutors.show', $user->id)}}" class="media">
+                        <a href="{{route('tutor', $user->id)}}" class="media">
                         <img src="{{ asset('storage/tutors/businessman-avatar-ilustration-free-vector.jpg') }}" alt="{{ $user->firstname }}">
                         </a>
                     </div>
                     @endif
                     <div class="tutor-block-content">
                         <div class="tutor-title">
-                            <h3><a href="{{route('tutors.show', $user->id)}}">{{ $user->full_name }}</a></h3>
+                            <h3><a href="{{route('tutor', $user->id)}}">{{ $user->full_name }}</a></h3>
 
                             @if(!empty($user->tutor->tutor_subjects) && $user->tutor->tutor_subjects->isNotEmpty())
                                 @php
