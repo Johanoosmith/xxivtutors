@@ -38,19 +38,19 @@ class TutorController extends Controller
 {
     public function index()
     {
-        
+
         $user = Auth::user(); // Get the currently logged-in user
         $userId = $user->id;
         $tutorsdata = DB::table('tutors')->where('user_id', $userId)->get();
         $languages = Language::orderBy('name', 'ASC')->select('name', 'id')->get()->pluck('name', 'id');
-        if ($user->role_id == 1) {
+        if ($user->role_id == config('constants.ROLE.STUDENT')) {
             $roleText = 'Student';
-        } elseif ($user->role_id == 2) {
+        } elseif ($user->role_id == config('constants.ROLE.TUTOR')) {
             $roleText = 'Tutor';
         } else {
             $roleText = 'Unknown Role';
         }
-        if ($user->role_id == 1) {
+        if ($user->role_id == config('constants.ROLE.STUDENT')) {
             return view('customer.student_dashboard', compact('user', 'roleText'));
         } else {
             return view('tutor.dashboard', compact('user', 'roleText', 'tutorsdata', 'languages'));
@@ -209,7 +209,7 @@ class TutorController extends Controller
         // Find the tutor and ensure it belongs to the authenticated user
         $tutor = Tutor::where('user_id', $id)->firstOrFail();
 
-        if(!$tutor){
+        if (!$tutor) {
             return redirect()->back()->with('error', 'Tutor Not Found');
         }
 
@@ -341,7 +341,7 @@ class TutorController extends Controller
 
     public function updateProfile(Request $request)
     {
-        
+
         // Validate the form input
         $request->validate([
             'comments_about_tuition' => 'nullable|string|max:6500',
@@ -481,19 +481,19 @@ class TutorController extends Controller
         $user->save();
 
         /* Verfication Added */
-        $ver_obj  = Verification::where('user_id', $user->id)->where('verification_type',1)->first();
-        
-        if(empty($ver_obj)){
+        $ver_obj  = Verification::where('user_id', $user->id)->where('verification_type', 1)->first();
+
+        if (empty($ver_obj)) {
             $ver_obj = new Verification();
             $ver_obj->user_id = $user->id;
             $ver_obj->verification_type = 1;
             $ver_obj->document_type = 'other';
         }
-        
+
         $ver_obj->file   = $path;
         $ver_obj->status = 2;
         $ver_obj->save();
-        
+
         /* Verfication Added END */
 
 
@@ -513,8 +513,8 @@ class TutorController extends Controller
             ->with(['qualification'])
             ->orderBy('qyear', 'DESC')
             ->get();
-            $userView = new UserView();
-            $userView->setViewCount($user_id);
+        $userView = new UserView();
+        $userView->setViewCount($user_id);
 
         return view('tutor.tutor_profile', compact('user', 'tutor', 'inPlaceSubjects', 'onlineSubjects', 'availability', 'userQualifications')); // Pass user data to the profile view
     }
@@ -571,14 +571,14 @@ class TutorController extends Controller
 
 
     public function tutorMyClients(Request $request)
-    { 
+    {
         $user = Auth::user();
-        
-        $contracts = \App\Models\Contract::where('tutor_id',$user->id)
-                                ->with(['student','tutor'])
-                                ->orderBy('created_at', 'DESC')
-                                ->get();
-        
+
+        $contracts = \App\Models\Contract::where('tutor_id', $user->id)
+            ->with(['student', 'tutor'])
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
 
         /*
         $paidBookings = Booking::where('tutor_id',$user->id)
@@ -586,7 +586,7 @@ class TutorController extends Controller
                                 $query->where('status', 'paid');
                             })->with(['student','booking_enquiry'])->get();
         */
-        
+
         /*
         $enquiries = Enquiry::whereIn('id', function ($query) use ($user) {
             $query->selectRaw('MAX(id)')
@@ -598,7 +598,7 @@ class TutorController extends Controller
         ->latest()
         ->get();
         */
-            
+
         return view('tutor.tutor_myclient', compact('contracts'));
     }
     public function turorContract($id)
@@ -607,27 +607,27 @@ class TutorController extends Controller
         $user = Auth::user();
 
         $contractObj = \App\Models\Contract::where('tutor_id', $user->id)
-                                            ->where('id', $id)
-                                            ->with(['tutor','student'])->first();
+            ->where('id', $id)
+            ->with(['tutor', 'student'])->first();
 
-        if(empty($contractObj)){
+        if (empty($contractObj)) {
             return redirect()->back()->with('error', 'Contract not found.');
         }
         $booking_contract = \App\Models\BookingContract::where('contract_id', $id)->first();
         $booking = Booking::where('id', $booking_contract->booking_id)->first();
 
-        if($contractObj->status == 'pending'){
-            
+        if ($contractObj->status == 'pending') {
+
             $placeholders = ['{site_name}', '{hourly_rate}', '{student_name}', '{user_title}'];
             $values = [
-                        config('constants.SITE.TITLE'), 
-                        getAmount($booking->hourly_rate), 
-                        $contractObj->student->firstname,
-                        $contractObj->student->student->title ?? '', 
-                    ];
+                config('constants.SITE.TITLE'),
+                getAmount($booking->hourly_rate),
+                $contractObj->student->firstname,
+                $contractObj->student->student->title ?? '',
+            ];
 
             $contractObj->cd_1 = str_replace($placeholders, $values, config('settings.contract_declaration_1'));
-            
+
             /*
             $contractObj->cd_2 = str_replace($placeholders, $values, 'I understand that, Lauren (Miss) has agreed to pay an <strong>hourly rate of
                                         {hourly_rate}</strong> which includes {site_name}/\'/s commission.');
@@ -640,28 +640,28 @@ class TutorController extends Controller
             $contractObj->cd_5 = str_replace($placeholders, $values, config('settings.contract_declaration_5'));
         }
 
-        if($request->isMethod('post')){
-            
+        if ($request->isMethod('post')) {
+
             $signature = $request->input('signature'); // data:image/png;base64,...
 
             // Extract the actual base64 data
             if (preg_match('/^data:image\/(\w+);base64,/', $signature, $type)) {
                 $data = substr($signature, strpos($signature, ',') + 1);
                 $extension = strtolower($type[1]); // jpg, png, gif, etc.
-        
+
                 // Decode
                 $data = base64_decode($data);
-        
+
                 if ($data === false) {
                     return redirect()->back()->with('error', 'Base64 decode failed.');
                 }
             } else {
                 return redirect()->back()->with('error', 'Invalid image data.');
             }
-            
+
 
             $request->validate([
-             'signature' => 'required',
+                'signature' => 'required',
             ]);
 
             // Generate a unique file name
@@ -674,14 +674,14 @@ class TutorController extends Controller
             $contractObj->signed_date = date('Y-m-d H:i:s');
             $contractObj->status      = 'signed';
             $contractObj->signature   = $fileName;
-            if($contractObj->save()){
+            if ($contractObj->save()) {
                 return redirect()->route('tutor.contract', $id)->with('success', 'Contract is signed successfully.');
             }
         }
 
-        
 
-        return view('tutor.turor_contract',compact('booking', 'contractObj'));
+
+        return view('tutor.turor_contract', compact('booking', 'contractObj'));
     }
     // public function tutorprivacy()
     // { 
@@ -785,12 +785,12 @@ class TutorController extends Controller
 
         $verification   = Verification::where('user_id', $user_id)->first();
         $references     = Reference::where('user_id', $user_id)->get();
-      
-        $profile_image_verify  = Verification::where('user_id', $user_id)->where('verification_type',1)->first();
-        $identity_id_verify    = Verification::where('user_id', $user_id)->where('verification_type',2)->first();
-        $dbs_verify            = Verification::where('user_id', $user_id)->where('verification_type',3)->first();
-        
-                
+
+        $profile_image_verify  = Verification::where('user_id', $user_id)->where('verification_type', 1)->first();
+        $identity_id_verify    = Verification::where('user_id', $user_id)->where('verification_type', 2)->first();
+        $dbs_verify            = Verification::where('user_id', $user_id)->where('verification_type', 3)->first();
+
+
         if ($references->isEmpty()) {
             $references = collect(); // Ensure it's an empty collection instead of null/false
         }
@@ -801,14 +801,14 @@ class TutorController extends Controller
             3 => 'Rejected',
         ];
         $user = Auth::user();
-        
-        return view('tutor.tutor_verification', compact('user', 'verification', 'statusLabels', 'references','profile_image_verify','identity_id_verify','dbs_verify'));
+
+        return view('tutor.tutor_verification', compact('user', 'verification', 'statusLabels', 'references', 'profile_image_verify', 'identity_id_verify', 'dbs_verify'));
     }
     public function proofidentity()
     {
         $user      = Auth::user();
         $countries = Country::getList();
-        return view('tutor.tutor_proofidentity', compact('user','countries'));
+        return view('tutor.tutor_proofidentity', compact('user', 'countries'));
     }
     public function proofstore(Request $request)
     {
@@ -817,12 +817,12 @@ class TutorController extends Controller
         $request->validate([
             'document_type'   => 'required|in:passport,national_id,driver_license',
             'lastname_on_doc' => 'required|string|max:255',
-            'firstname_on_doc'=> 'required|string|max:255',
+            'firstname_on_doc' => 'required|string|max:255',
             'country_id' => 'required|exists:countries,id',
             'expire_date' => 'required|date',
             'file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
-        
+
 
         $user_id = Auth::id();
 
@@ -841,7 +841,7 @@ class TutorController extends Controller
             'verification_type' => 2
         ];
 
-        if(!empty($filePath)){
+        if (!empty($filePath)) {
             $vf_record['file'] = $filePath;
         }
         Verification::updateOrCreate(
@@ -888,13 +888,13 @@ class TutorController extends Controller
             'dbs_number' => $request->dbs_number,
             'expire_date' => date('Y-m-d', strtotime($request->expire_date)),
             'status' => 2,
-            'verification_type' => 3, /* For DBS */ 
+            'verification_type' => 3, /* For DBS */
 
-        ];   
+        ];
         if ($filePath) {
             $data['file'] = $filePath;
         }
-     
+
         // Update or create the Verification record
         Verification::updateOrCreate(
             [
@@ -1030,7 +1030,7 @@ class TutorController extends Controller
         $user = Auth::user();
         $booking = [];
 
-        $isContractSigned= false;
+        $isContractSigned = false;
 
         // Fetch all chats between the logged-in tutor and the specific sender
         $enquiry = Enquiry::where('id', $enquiry_id)
@@ -1043,13 +1043,13 @@ class TutorController extends Controller
             ->orderBy('created_at', 'asc')
             ->first();
 
-        if(empty($booking_id)){
+        if (empty($booking_id)) {
             $booking_id = !empty($enquiry->booking_enquiry[0]) ? $enquiry->booking_enquiry[0]->booking_id : 0;
         }
 
-        if(!empty($booking_id)){
-            $booking = Booking::where('id',$booking_id)->first();
-            
+        if (!empty($booking_id)) {
+            $booking = Booking::where('id', $booking_id)->first();
+
             /* get Contract is available */
             $isContractSigned = \App\Models\Contract::isContractSigned($booking->student_id, $booking->tutor_id);
         }
@@ -1067,51 +1067,51 @@ class TutorController extends Controller
         $auth_user = Auth::user();
 
         $user  = User::where('id', $user_id)
-                            ->with(['student'])
-                            ->first(); // Fetch the sender (student)
+            ->with(['student'])
+            ->first(); // Fetch the sender (student)
 
-        if($auth_user->role_id == $user->role_id){
+        if ($auth_user->role_id == $user->role_id) {
             return redirect()->back()->with('error', 'As per security guideline you can not connect same role user.');
         }
 
         $monthlyEnquiryCount = getMonthlyEnquiryCount($auth_user->id);
-        
-        if($monthlyEnquiryCount >= config('constants.SITE.ENQUIRY_LIMIT')){
-            return redirect()->back()->with('error', 'You have exceed enquiry '.config('constants.SITE.ENQUIRY_LIMIT').' limit for this month.');
+
+        if ($monthlyEnquiryCount >= config('constants.SITE.ENQUIRY_LIMIT')) {
+            return redirect()->back()->with('error', 'You have exceed enquiry ' . config('constants.SITE.ENQUIRY_LIMIT') . ' limit for this month.');
         }
 
         /* Check existing latest enquiry with this user : Start */
         $enquiry = Enquiry::where('receiver_id', $user_id)
-                            ->where('sender_id',$auth_user->id)
-                            ->latest()
-                            ->first();   
-        
-        if(!empty($enquiry)){
-            return redirect()->route('tutor.enquiries.chat',$enquiry->id);
+            ->where('sender_id', $auth_user->id)
+            ->latest()
+            ->first();
+
+        if (!empty($enquiry)) {
+            return redirect()->route('tutor.enquiries.chat', $enquiry->id);
         }
         /* Check existing latest enquiry with this user : END */
 
-        
-        if($request->isMethod('post')){
 
-            if(empty($request->content)){
+        if ($request->isMethod('post')) {
+
+            if (empty($request->content)) {
                 return redirect()->back()->with('error', 'Enquiry message is required.');
             }
 
             $enquiry = [
-                'sender_id'			=> $auth_user->id,
-                'receiver_id'		=> $user_id,
-                'status'		    => 1,
-                'content'		    => 'Tutor enquiry for student.',
-                'is_read'		    => 0,
+                'sender_id'            => $auth_user->id,
+                'receiver_id'        => $user_id,
+                'status'            => 1,
+                'content'            => 'Tutor enquiry for student.',
+                'is_read'            => 0,
             ];
 
             $createdEnquiry = Enquiry::create($enquiry);
 
-            if(!empty($createdEnquiry->id)){
+            if (!empty($createdEnquiry->id)) {
 
                 EnquiryComment::create([
-                    'parent_id'     =>  0, 
+                    'parent_id'     =>  0,
                     'enquiry_id'    => $createdEnquiry->id,
                     'sender_id'     => $auth_user->id,
                     'receiver_id'   => $user_id,
@@ -1119,13 +1119,13 @@ class TutorController extends Controller
                     'status'        => 'unread'
                 ]);
 
-                return redirect()->route('tutor.enquiries.chat',$createdEnquiry->id);
-            }else{
+                return redirect()->route('tutor.enquiries.chat', $createdEnquiry->id);
+            } else {
                 return redirect()->back()->with('error', 'Enquiry not created.');
             }
         }
 
-        return view('tutor.enquiries.create', compact('user','auth_user'));
+        return view('tutor.enquiries.create', compact('user', 'auth_user'));
     }
 
     public function sendEnquiryMessage(Request $request)
@@ -1152,15 +1152,15 @@ class TutorController extends Controller
         }
 
         $last_enquiry_comment = EnquiryComment::where('enquiry_id', $request->enquiry_id)->orderBy('id', 'DESC')->first();
-        
+
         $parent_id = (!empty($last_enquiry_comment->id)) ? $last_enquiry_comment->id : 0;
 
         $message = $request->content;
 
         $isContractSigned = \App\Models\Contract::isContractSigned($enquiry->receiver_id, $user->id);
 
-        if(!$isContractSigned){
-            $message = sanitizeMessage($request->content);    
+        if (!$isContractSigned) {
+            $message = sanitizeMessage($request->content);
         }
 
         EnquiryComment::create([
@@ -1173,9 +1173,9 @@ class TutorController extends Controller
         ]);
         $user = User::find($enquiry->receiver_id);
         if ($user) {
-                $userArray['student_name'] = $user->firstname . ' ' . $user->lastname;
-                $emailSent = sendMail($user->email, $userArray, 'STUDENT_UNREAD_ENQUIRY');
-            }
+            $userArray['student_name'] = $user->firstname . ' ' . $user->lastname;
+            $emailSent = sendMail($user->email, $userArray, 'STUDENT_UNREAD_ENQUIRY');
+        }
 
         //return redirect()->route('tutor.enquiries.chats', ['enquiry_id' => $enquiry->id])
         return redirect()->back()->with('success', 'Message sent successfully.');
@@ -1238,17 +1238,26 @@ class TutorController extends Controller
         $tags = $user->tags ?? []; // Ensure an empty array if no tags exist
         return view('tutor.tags.index', compact('tags'));
     }
+
     public function history()
     {
         $user = Auth::user();
         $dailyViews = getUserViewCounts($user);
-        $user_views = UserView::where('user_id', $user->id)
-            ->with(['user:id,firstname,lastname', 'viewer:id,firstname,lastname,created_at'])
-            ->select('viewer_id')  // Add this to select the viewer_id
+
+        $views = UserView::with(['user' => function ($query) {
+            $query->select('id', 'username', 'firstname', 'lastname', 'role_id');
+        }])
+            ->where('viewer_id', $user->id)
+            ->orderBy('created_at', 'desc')
             ->get();
-        //dd( $user_views);
+
+        // Filter views only for users who are tutors
+        $user_views = $views->filter(function ($view) {
+            return $view->user && $view->user->role_id == config('constants.ROLE.STUDENT');
+        });
         return view('tutor.history', compact('dailyViews', 'user_views', 'user'));
     }
+
     public function articles()
     {
         $articles = Article::where('user_id', Auth::id())->latest()->paginate(10);
@@ -1326,33 +1335,33 @@ class TutorController extends Controller
         if (!is_array($request->reference) || empty($request->reference)) {
             return back()->with('error', 'No valid references provided.');
         }
-    
+
         // Filter out completely empty rows
         $validReferences = array_filter($request->reference, function ($ref) {
             return !empty($ref['firstname']) && !empty($ref['lastname']) &&
                 !empty($ref['email']) && !empty($ref['mobile']) &&
                 !empty($ref['profession']);
         });
-    
+
         if (empty($validReferences)) {
             return back()->with('error', 'No valid references provided.');
         }
-    
+
         // Dynamically build validation rules for valid references
         $rules = [];
         foreach ($validReferences as $index => $ref) {
             $rules["reference.$index.email"] = 'required|email';
             $rules["reference.$index.mobile"] = 'required|digits_between:10,15';
         }
-    
+
         $messages = [
             'reference.*.email.email' => 'Please enter a valid email address.',
             'reference.*.mobile.digits_between' => 'Mobile number must be between 10 and 15 digits.',
         ];
-    
+
         // Validate only the filtered valid rows
         $request->validate($rules, $messages);
-    
+
         // Store valid references and send email
         foreach ($validReferences as $ref) {
             $newReference = Reference::create([
@@ -1366,39 +1375,39 @@ class TutorController extends Controller
                 'status' => 'pending',
                 'mail_send' => 0,
             ]);
-    
+
             // Convert model to array before passing to mail function
             $referenceArray = $newReference->toArray();
             $referenceArray['username'] = $newReference->user->username;
-    
+
             // Send email
             $emailSent = sendMail($newReference->email, $referenceArray, 'REFERENCE_MAIL');
-    
+
             // Update mail_send if email was sent
             if ($emailSent) {
                 $newReference->update(['mail_send' => 1]);
             }
         }
-    
+
         return redirect()->back()->with('success', 'References added successfully!');
     }
 
     public function deleteReference(Request $request)
-{
-    $reference = Reference::where('id', $request->reference_id)
-        ->where('user_id', Auth::id())
-        ->first();
+    {
+        $reference = Reference::where('id', $request->reference_id)
+            ->where('user_id', Auth::id())
+            ->first();
 
-    if (!$reference) {
-        return back()->with('error', 'Reference not found or access denied.');
+        if (!$reference) {
+            return back()->with('error', 'Reference not found or access denied.');
+        }
+
+        $reference->delete();
+
+        return back()->with('success', 'Reference deleted successfully.');
     }
 
-    $reference->delete();
 
-    return back()->with('success', 'Reference deleted successfully.');
-}
-
-    
     public function resendEmail($id)
     {
         $reference = Reference::findOrFail($id);
@@ -1415,5 +1424,4 @@ class TutorController extends Controller
 
         return redirect()->back()->with('success', 'Email resent successfully.');
     }
-    
 }

@@ -15,7 +15,7 @@ class TutorDetailsController extends Controller
         // Fetch tutor with their specializations
         $navigation = Category::where('status', 1)->get();
 
-        $tutor = User::where('id', $id)->where('role_id', 2)->with('specialization')->firstOrFail();
+        $tutor = User::where('id', $id)->where('role_id', config('constants.ROLE.TUTOR'))->with('specialization')->firstOrFail();
 
         return view('front.tutors_details', compact('tutor' , 'navigation'));
     }

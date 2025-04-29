@@ -67,7 +67,7 @@ class AdminController extends Controller
             return redirect()->route('admin.login')->withErrors($validator)->withInput();
         } else {
             //check authentication of uname and password
-            $userInfo = array("email" => $input['email'], "password" => $input['password'], 'role_id' => '10');
+            $userInfo = array("email" => $input['email'], "password" => $input['password'], 'role_id' => config('constants.ROLE.ADMIN'));
             if (Auth::guard('admin')->attempt($userInfo, $remember_me)) {
                 $user = Auth::guard('admin')->user();
                 $return_url = (isset($input['return_url']) && !empty($input['return_url'])) ? $input['return_url'] : route('admin.dashboard');

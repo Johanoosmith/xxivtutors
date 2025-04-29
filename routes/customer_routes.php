@@ -20,6 +20,7 @@ use App\Http\Controllers\Customer\EnquiryController;
 use App\Http\Controllers\Customer\SubjectStudentController;
 use App\Http\Controllers\Customer\BookingController as BookingStudentController;
 use App\Http\Controllers\Customer\TagController as TagStudentController;
+use App\Http\Controllers\ToggleStatusController;
 
 
 #use App\Models\Enquiry;
@@ -232,6 +233,8 @@ Route::middleware(['auth'])->prefix('customer')->group(function () {
 
 /* Customer Without Auth */
 Route::get('profile/{id}', [CustomerController::class, 'show'])->prefix('customer')->where('id', '[0-9]+')->name('profile');
+
+Route::post('/toggle-status', [CustomerController::class, 'toggleStatus'])->middleware('auth');
 
 
 Route::match(['get','post'],'/stripe/refresh_url', [BookingStudentController::class, 'stripe_refresh_url'])->name('stripe.refresh_url');
