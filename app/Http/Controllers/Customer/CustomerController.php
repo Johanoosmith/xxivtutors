@@ -35,14 +35,14 @@ class CustomerController extends Controller
     {
         $user = Auth::user(); // Get the currently logged-in user
 
-        if ($user->role_id == 1) {
+        if ($user->role_id == config('constants.ROLE.STUDENT')) {
             $roleText = 'Student';
-        } elseif ($user->role_id == 2) {
+        } elseif ($user->role_id == config('constants.ROLE.TUTOR')) {
             $roleText = 'Tutor';
         } else {
             $roleText = 'Unknown Role';
         }
-        if ($user->role_id == 1) {
+        if ($user->role_id == config('constants.ROLE.STUDENT')) {
             return view('customer.student_dashboard', compact('user', 'roleText'));
         } else {
             return view('tutor.dashboard', compact('user', 'roleText'));
@@ -121,7 +121,7 @@ class CustomerController extends Controller
 
         // // Dump the data and stop further script execution
         // dd($step2);
-    
+
 
         if ($step < 3) {
             // Redirect to the next step
@@ -216,13 +216,13 @@ class CustomerController extends Controller
             // if($user && $user->role_id == config('constants.ROLE.TUTOR')){
             // 	$this->stripeAccountCreate($user->id);
             // }
-            
+
             if ($userData['role'] === 'student') {
                 session()->flash('message', 'Registration successful! Log in to explore your dashboard and start learning.');
             } elseif ($userData['role'] === 'tutor') {
                 session()->flash('message', 'Registration successful! Once approved, you’ll be ready to start tutoring.');
             }
-            
+
             // Optionally, you can clear the session data after saving
             $request->session()->forget('registration_form');
             // Redirect or return a response
@@ -475,17 +475,17 @@ class CustomerController extends Controller
         return view('customer.student_profile', compact('user', 'student', 'subjects', 'levels', 'groupedSubjects')); // Pass user data to the profile view
     }
     public function studmyclients()
-    { 
+    {
         $user = Auth::user();
         $courses_list = $this->getCourses();
         $courses_list_level = $this->getCoursesLevel();
-       
+
         $payments = Payment::where('student_id', $user->id)
-                            ->with(['tutor'])
-                            ->orderBy('created_at', 'desc')
-                            ->get();
-                            
-        return view('customer.student_myclient', compact('courses_list' ,'payments'));
+            ->with(['tutor'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('customer.student_myclient', compact('courses_list', 'payments'));
     }
 
     public function showInvoice($paymentId)
@@ -499,10 +499,10 @@ class CustomerController extends Controller
     public function downloadInvoice($paymentId)
     {
         $payment = Payment::with(['student', 'tutor'])->findOrFail($paymentId);
-        $pdf =Pdf::loadView('customer.pdf.invoice', compact('payment'));
-        return $pdf->download('Invoices_'.$payment->id.'.pdf');
+        $pdf = Pdf::loadView('customer.pdf.invoice', compact('payment'));
+        return $pdf->download('Invoices_' . $payment->id . '.pdf');
     }
-    
+
 
     public function studprivacy()
     {
@@ -520,15 +520,37 @@ class CustomerController extends Controller
         $tags = $user->tags ?? []; // Ensure an empty array if no tags exist
         return view('customer.student_tags', compact('tags'));
     }
+    
+
     public function history()
     {
         $user = Auth::user();
         $dailyViews = getUserViewCounts($user);
-        $user_views = UserView::where('user_id', $user->id)
-            ->with(['user:id,firstname,lastname', 'viewer:id,firstname,lastname,created_at'])
-            ->select('viewer_id')  // Add this to select the viewer_id
+
+        $views = UserView::with(['user' => function ($query) {
+            $query->select('id', 'username', 'firstname', 'lastname', 'role_id');
+        }])
+            ->where('viewer_id', $user->id)
+            ->orderBy('created_at', 'desc')
             ->get();
-        //dd( $user_views);
+
+        // Filter views only for users who are tutors
+        $user_views = $views->filter(function ($view) {
+            return $view->user && $view->user->role_id == config('constants.ROLE.TUTOR');
+        });
         return view('customer.student_history', compact('dailyViews', 'user_views', 'user'));
+    }
+
+
+    public function toggleStatus(Request $request)
+    {
+        $user = auth()->user();
+        $user->is_online = !$user->is_online;
+        $user->save();
+
+        return response()->json([
+            'status' => $user->is_online ? 'online' : 'offline',
+            'message' => 'Status updated successfully.',
+        ]);
     }
 }

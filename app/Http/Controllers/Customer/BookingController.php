@@ -104,12 +104,43 @@ class BookingController extends Controller
 
 	public function getBookingsJson()
 	{
+		$request = request();
 		$user_id = Auth::user()->id;
 		$now = Carbon::now();
 		$startRange = $now->copy()->subMonths(6)->startOfDay();
 		$endRange = $now->copy()->addMonths(6)->endOfDay();
 
-		$bookings = Booking::where('student_id', $user_id)->whereBetween('start_date', [$startRange, $endRange])->get();
+		$booking_obj = Booking::where('student_id', $user_id)
+						->whereBetween('start_date', [$startRange, $endRange]);
+
+		if (!empty($request->booking_on) && $request->booking_on == 'past') {
+			// Past Records 
+			$booking_obj->where(function ($q) {
+				$q->where('start_date', '<', now()->toDateString())
+					->orWhere(function ($subQ) {
+						$subQ->where('start_date', now()->toDateString())
+							->where('start_time', '<', now()->format('H:i:s'));
+					});
+			})->orderBy('start_date', 'DESC')->orderBy('start_time', 'DESC');
+		} else {
+			// Upcoming by default
+			$booking_obj->where(function ($q) {
+				$q->where('start_date', '>', now()->toDateString())
+					->orWhere(function ($subQ) {
+						$subQ->where('start_date', now()->toDateString())
+							->where('start_time', '>=', now()->format('H:i:s'));
+					});
+			})->orderBy('start_date', 'ASC')->orderBy('start_time', 'ASC');
+		}
+
+		if (!empty($request->booking_on) && $request->booking_on == 'cancel') {
+			$booking_obj->where('status', 3);
+		} else {
+			$booking_obj->whereIn('status', [1, 2]);
+		}
+
+		$bookings = $booking_obj->get();
+
 
 		$events = [];
 

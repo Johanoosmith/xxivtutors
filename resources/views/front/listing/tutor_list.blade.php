@@ -113,7 +113,7 @@
                             @endif
 
                             
-                            <div class="response"><span>{{ @$user->tutor->qualification_4 }}</span></div>
+                            <!-- <div class="response"><span>{{ @$user->tutor->qualification_4 }}</span></div> -->
                             
 
                             @if($user->tutor->distance)

@@ -48,8 +48,9 @@
                                     <th>Subject</th>
                                     <th>Title</th>
                                     <th>Question</th>
-                                    <th>Status</th>
                                     <th>Created At</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,11 +62,22 @@
                                         <td>{{ $question->subject->title ?? 'N/A' }}</td>
                                         <td>{{ $question->title }}</td>
                                         <td>{{ $question->question }}</td>
+                                        <td>{{ $question->created_at->format(config('constants.SITE.DATE_FORMAT')) }}</td>
+
                                         <td>
                                             @if ($question->status === 'approved')
                                                 <span class="badge bg-light-success">Accepted</span>
                                             @elseif ($question->status === 'pending')
                                                 <span class="badge bg-light-warning">Pending</span>
+                                              
+                                            @elseif ($question->status === 'reject')
+                                                <span class="badge bg-light-danger">Rejected</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($question->status === 'approved')
+                                            {{"-"}}
+                                            @elseif ($question->status === 'pending')
                                                 <div class="mt-1">
                                                     <button class="btn btn-success btn-sm approve-btn" data-id="{{ $question->id }}" title="Accept">
                                                         <i class="fas fa-check"></i>
@@ -75,15 +87,13 @@
                                                     </button>
                                                 </div>
                                             @elseif ($question->status === 'reject')
-                                                <span class="badge bg-light-danger">Rejected</span>
-                                                <br>
+                                               
                                                 <button type="button" class="btn btn-sm btn-link text-danger p-0 mt-1 view-reason-btn"
                                                     data-reason="{{ $question->reject_reason }}" title="View Full Reason">
                                                     View
                                                 </button>
                                             @endif
                                         </td>
-                                        <td>{{ $question->created_at->format(config('constants.SITE.DATE_FORMAT')) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

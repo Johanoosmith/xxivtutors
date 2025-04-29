@@ -33,7 +33,7 @@ class TutorsController extends Controller
         $search_text        =   '';
 
         $getRecords = User::with('tutor.specialization')
-        ->where('role_id', 2);
+        ->where('role_id', config('constants.ROLE.TUTOR'));
         
         if (!empty($input['fullname'])) {
             $search_text    =  $input['fullname'];
@@ -115,7 +115,7 @@ class TutorsController extends Controller
         $user = User::create([
             'firstname' => $validatedData['firstname'],
             'lastname' => $validatedData['lastname'],
-            'role_id' => 2,
+            'role_id' => config('constants.ROLE.TUTOR'),
             'email' => $validatedData['email'],
             'mobile' => $validatedData['mobile'],
             'address' => $validatedData['address'],
@@ -150,7 +150,7 @@ class TutorsController extends Controller
      */
     public function show($id)
     {
-        $tutor = User::where('id', $id)->where('role_id', 2)->with('specialization')->firstOrFail();
+        $tutor = User::where('id', $id)->where('role_id', config('constants.ROLE.TUTOR'))->with('specialization')->firstOrFail();
         // Change view name to "student.show"
         return view('admin.student.show', compact('user'));
     }

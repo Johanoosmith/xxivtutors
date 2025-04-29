@@ -87,7 +87,7 @@ class ManageUserController extends Controller
         $user->mobile = $request->input('contact');
         $user->password = bcrypt($request->input('password'));
         $user->status = $request->input('status');
-        $user->role_id = 1;
+        $user->role_id = config('constants.ROLE.STUDENT');
         $user->save();
 
         Student::create([

@@ -9,9 +9,9 @@
                 @auth
                 @php
                     $dashboardUrl = url('/customer/dashboard?tab=dashboard'); // Default URL
-                    if (Auth::user()->role_id == '2') {
+                    if (Auth::user()->role_id == config('constants.ROLE.TUTOR')) {
                         $dashboardUrl = url('/tutor/dashboard');
-                    } elseif (Auth::user()->role_id == '1') {
+                    } elseif (Auth::user()->role_id == config('constants.ROLE.STUDENT')) {
                         $dashboardUrl = url('/customer/dashboard?tab=dashboard');
                     }
                 @endphp

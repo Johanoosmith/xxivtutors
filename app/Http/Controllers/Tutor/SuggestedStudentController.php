@@ -41,7 +41,7 @@ class SuggestedStudentController extends Controller
     public function index()
 {
     $user = Auth::user();
-    if ($user->role_id != 2) {
+    if ($user->role_id != config('constants.ROLE.TUTOR')) {
         abort(403, 'Unauthorized action.');
     }
 

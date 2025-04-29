@@ -13,7 +13,7 @@
             {{ html()->modelForm($user,'PATCH',route('admin.users.update',$user->id))->class('validatedForm')->id('user_form')->attribute('enctype', 'multipart/form-data')->open() }}
                 {{ csrf_field() }}
               
-                @if($user->role_id == 2)
+                @if($user->role_id == config('constants.ROLE.TUTOR'))
                     @include('includes.admin.user.tutor_form')
                 @else
                     @include('includes.admin.user.form')

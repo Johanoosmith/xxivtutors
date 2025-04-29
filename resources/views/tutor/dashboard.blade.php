@@ -118,13 +118,17 @@
 						<div class="row">
 							<div class="col-md-4">
 								<h2>Tutor Account</h2>
-									<p class="small">Last Logged in: 29th Jan 2025 11:21
+									<p class="small">{{ $user->last_login ? $user->last_login->diffForHumans() : 'Never logged in' }}
 									</p>
 							</div>
 							<div class="col-md-4">
-								<h4>Your Profile is Online</h4>
-								<p><a href="#">Switch Offline</a></p>
-							</div>
+                                    <h4>Your Profile is
+                                        <span id="status-label" class="{{ auth()->user()->is_online ? 'text-success' : 'text-danger' }}">
+                                            {{ auth()->user()->is_online ? 'Online' : 'Offline' }}
+                                        </span>
+                                    </h4>
+                                    <p><a href="" id="toggle-status-link">Switch {{ auth()->user()->is_online ? 'Offline' : 'Online' }}</a></p>
+                                </div>
 							<div class="col-md-4">
 								<h4>Your Profile Link:</h4>
 								<p>
@@ -174,4 +178,8 @@
     
 </main>
 
+@endsection
+
+@section('inline-js')
+<script src="{{asset('front/assets/js/togglestatus.js')}}">
 @endsection

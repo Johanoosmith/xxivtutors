@@ -44,7 +44,7 @@ class UserController extends Controller
         $arr['search']      =   $search;
         $showrecord         =   trans('admin.ADMIN_PAGE_LIMIT_NO');
         $search_text        =   '';
-        $getRecords         =   $getRecords->where('role_id',  "1");
+        $getRecords         =   $getRecords->where('role_id', config('constants.ROLE.STUDENT'));
         if (isset($input['search_text']) && $input['search_text'] != '') {
             $search_text    =  $input['search_text'];
             $getRecords     =  $getRecords->where(function ($query) use ($search_text) {
