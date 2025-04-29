@@ -102,7 +102,7 @@ class PageController extends Controller
         $arr['cities'] = City::where('status', 1)->orderBy('name', 'asc')->get();
         $arr['courses'] = Course::where('status', 1)->orderBy('title', 'asc')->get();
 
-        $arr['tutors'] = User::where('role_id', 2)->get();
+        $arr['tutors'] = User::where('role_id', config('constants.ROLE.TUTOR'))->get();
 
 
         $navigation = Category::all(); // Replace with your actual navigation fetching logic
@@ -158,8 +158,8 @@ class PageController extends Controller
             ->orderBy('title', 'asc')
             ->get();
 
-        $arr['tutors'] = User::where('role_id', 2)->get();
-        $arr['page'] = $page;
+            $arr['tutors'] = User::where('role_id', config('constants.ROLE.TUTOR'))->get();
+            $arr['page'] = $page;
         return view('front.search')->with($arr);
     }
     public function store(Request $request)
@@ -192,7 +192,7 @@ class PageController extends Controller
         $tutors = DB::table('users')
             //->join('tutor_specializations', 'users.id', '=', 'tutor_specializations.tutor_id')
             //->where('tutor_specializations.course_id', $course_id)
-            ->where('users.role_id', 2)
+            ->where('users.role_id', config('constants.ROLE.TUTOR'))
             ->whereIn('users.id', $tutor_list)
             ->select('users.*')
             ->get();

@@ -15,10 +15,11 @@ class SendLessonReminderEmails extends Command
 
     public function handle()
     {
-        $now = Carbon::now();
+        $now = Carbon::now();//gmt date and time
 
         // Tomorrow's date (Y-m-d format)
         $tomorrow = $now->copy()->addDay()->toDateString(); // e.g. 2025-04-22
+
 
         // Fetch all bookings with status 2 whose start_date is tomorrow
         $bookings = Booking::with(['student', 'tutor', 'subject', 'level'])
@@ -38,8 +39,8 @@ class SendLessonReminderEmails extends Command
                 $bookingMail->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_REMINDER');
                 if (privacySetting($booking->tutor_id, 'lesson_reminder_email')) {
                 $bookingMail->sendTutorBookingRelatedMail($booking, 'TUTOR_LESSON_REMINDER');
+                Log::channel('booking')->info("Sent reminder emails for booking ID: {$booking}");
                 }
-                Log::channel('booking')->info("Sent reminder emails for booking ID: {$booking->id}");
             } catch (\Exception $e) {
                 Log::channel('booking')->error("Failed to send reminder for booking ID: {$booking->id}. Error: " . $e->getMessage());
                 continue;

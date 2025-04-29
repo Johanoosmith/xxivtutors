@@ -47,8 +47,9 @@
                                     <th>Title</th>
                                     <th>Course</th>
                                     <th>Subject</th>
-                                    <th>Status</th>
                                     <th>Created At</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,11 +60,22 @@
                                         <td>{{ $article->title }}</td>
                                         <td>{{ $article->course->title ?? ' ' }}</td>
                                         <td>{{ $article->subject->title ?? ' ' }}</td>
+                                        <td>{{ $article->created_at->format(config('constants.SITE.DATE_FORMAT')) }}</td>
                                         <td>
                                             @if ($article->status == '1')
                                                 <span class="badge bg-light-success">Approved</span>
                                             @elseif($article->status == '0')
                                                 <span class="badge bg-light-warning">Pending</span>
+                                                
+                                            @elseif($article->status == '2')
+                                                <span class="badge bg-light-danger">Rejected</span>
+                                                
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($article->status == '1')
+                                                {{ '-' }}
+                                            @elseif($article->status == '0')
                                                 <div class="mt-1">
                                                     <button class="btn btn-success btn-sm approve-btn" data-id="{{ $article->id }}" title="Approve">
                                                         <i class="fas fa-check"></i>
@@ -73,15 +85,12 @@
                                                     </button>
                                                 </div>
                                             @elseif($article->status == '2')
-                                                <span class="badge bg-light-danger">Rejected</span>
-                                                <br>
                                                 <button type="button" class="btn btn-sm btn-link text-danger p-0 mt-1 view-reason-btn"
                                                     data-reason="{{ $article->reject_reason }}" title="View Full Reason">
                                                     View
                                                 </button>
                                             @endif
                                         </td>
-                                        <td>{{ $article->created_at->format(config('constants.SITE.DATE_FORMAT')) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
