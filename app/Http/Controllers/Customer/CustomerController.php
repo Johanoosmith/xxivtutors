@@ -56,7 +56,7 @@ class CustomerController extends Controller
 		*/
 
         $request = request();
-        $countries = Country::get()->pluck('name', 'id');
+        $countries = Country::getList();
         $countyies = County::get()->pluck('name', 'id'); // Fetch all records from the `county` table
         //dd($countries, $countyies);
         $formData = $request->session()->get('registration_form', []);
@@ -94,7 +94,7 @@ class CustomerController extends Controller
                     'county' => 'required|string|max:255',
                     'country' => 'required|string|max:255',
                     'postcode' => 'required|string|max:15',
-                    'phoneNumber' => 'required|string|max:15',
+                    'phoneNumber' => 'required|unique:users,mobile|string|max:15',
                     'dobYear' => 'required|integer',
                     'dobMonth' => 'required|integer',
                     'dobDay' => 'required|integer',
