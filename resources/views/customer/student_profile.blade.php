@@ -133,6 +133,7 @@
                     <h2>Information about {{ $user->firstname }} {{ $user->lastname }} </h2>
                     <p><strong>Willing to travel:</strong> {{ $student->distance ?? "NA" }} miles</p>
 
+                    @if(!empty($groupedSubjects) && count($groupedSubjects) > 0)
                     <h5>Subjects</h5>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped default-table">
@@ -156,6 +157,7 @@
                             </tbody>
                         </table>
                     </div>
+                    @endif
 
                     <!--<p><strong>Contact this Student:</strong></p>-->
 

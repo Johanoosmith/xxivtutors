@@ -23,10 +23,7 @@
                         @csrf
                         @method('PUT') 
                         <div class="row">
-                            <div class="col-12 form-field">
-                                <label class="form-label" for="username">Username</label>
-                                <input class="form-control" type="text" id="username" name="username" placeholder="Name" value="" required="" >
-                            </div>
+                           
                             <div class="col-md-6 form-field">
                                 <label class="form-label" for="currentPassword">Current Password</label>
                                 <input class="form-control" type="password" id="currentPassword" name="current_password" placeholder="Current Password" required="">

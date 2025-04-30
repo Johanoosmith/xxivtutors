@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,7 +9,7 @@ class Enquiry extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['sender_id', 'receiver_id', 'subject_tutor_id', 'content', 'status', 'is_read', 'report_reason','action_by'];
+    protected $fillable = ['sender_id', 'receiver_id', 'subject_tutor_id', 'content', 'status', 'is_read', 'report_reason', 'action_by'];
 
     // Define the relationship with the User model
     public function sender()
@@ -19,7 +20,7 @@ class Enquiry extends Model
     {
         return $this->belongsTo(User::class, 'receiver_id');
     }
-	public function subject_tutor()
+    public function subject_tutor()
     {
         return $this->belongsTo(SubjectTutor::class, 'subject_tutor_id');
     }
@@ -34,4 +35,8 @@ class Enquiry extends Model
         return $this->hasMany(EnquiryComment::class);
     }
 
+    public function action_by_user()
+    {
+        return $this->belongsTo(User::class, 'action_by');
+    }
 }

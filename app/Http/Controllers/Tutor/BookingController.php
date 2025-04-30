@@ -119,7 +119,9 @@ class BookingController extends Controller
 				'start' => $startDateTime->toIso8601String(),
 				//'end' => $startDateTime->toIso8601String(),
 				'end' => '',
-				'url'   => $isPast ? '' : route('tutor.booking.edit', $booking),
+				// 'url'   => $isPast ? '' : route('tutor.booking.edit', $booking),
+				'url'   => ($booking->status == 3 || $isPast) ? '' : route('tutor.booking.edit', $booking),
+
 				'className' => $isPast ? 'bg-secondary text-light' : 'bg-success text-white',
 			];
 		}
@@ -443,6 +445,9 @@ class BookingController extends Controller
 
 	public function edit(Booking $booking)
 	{
+		if ($booking->tutor_id !== auth()->user()->id) {
+			abort(403, 'Unauthorized action.');
+		}
 		$request = request();
 
 		list($startHour, $startMinute) = explode(':', $booking->start_time);

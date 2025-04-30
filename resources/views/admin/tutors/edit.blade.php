@@ -186,6 +186,15 @@ class="form-check-input"
         </select>
     </div>
 </div>
+<div class="form-group row">
+    <div class="col-sm-4">
+        <label for="status" class="form-label">Booking Status</label>
+        <select name="booking_status" id="status" class="form-control">
+            <option value="1" {{ old('booking_status', $tutor->tutor->booking_status ?? '') == 1 ? 'selected' : '' }}>Active</option>
+            <option value="0" {{ old('booking_status', $tutor->tutor->booking_status ?? '') == 0 ? 'selected' : '' }}>Inactive</option>
+        </select>
+    </div>
+</div>
 <!-- <div class="form-group row">
                 <div class="col-sm-4">
                     <label for="password">Password (leave blank to keep current password)</label>
