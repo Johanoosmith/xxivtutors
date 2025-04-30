@@ -95,7 +95,7 @@ class TutorsController extends Controller
             // 'qualification_2' => 'required|string',
             // 'qualification_3' => 'required|string',
             // 'qualification_4' => 'required|string',
-            'experience' => 'required|string',
+            //'experience' => 'required|string',
             // 'rate' => 'required|string',
             'status' => 'required|string',
             'password' => 'nullable|string|min:8',
@@ -211,7 +211,7 @@ class TutorsController extends Controller
             //  'tutor.qualification_2' => 'required|string',
             //  'tutor.qualification_3' => 'required|string',
             //  'tutor.qualification_4' => 'required|string',
-             'tutor.experience' => 'required|string',
+            // 'tutor.experience' => 'required|string',
             //  'tutor.rate' => 'required|string',
              'tutor.rating' => 'nullable|numeric|min:0|max:5',
          ]);

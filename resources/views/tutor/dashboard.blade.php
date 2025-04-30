@@ -53,8 +53,7 @@
 									id="comments"
 									maxlength="6500"
 									name="short_description"
-									style="height:210px; vertical-align: top;">{{ old('short_description', $tutor->short_description ?? '') }}
-								</textarea>
+									style="height:210px; vertical-align: top;">{{ old('short_description', $tutor->short_description ?? '') }}</textarea>
 
 								</div>
 								<div class="col-12 form-field">

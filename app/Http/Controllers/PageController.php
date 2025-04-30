@@ -369,6 +369,7 @@ class PageController extends Controller
             
 
             $query->whereHas('tutor', function ($q) use ($request) {
+                $q->where('tutors.list_in_directory', 1);
                 if ($request->distance != null) {
                     $q->whereBetween('tutors.distance', [0, $request->distance]);
                 }
