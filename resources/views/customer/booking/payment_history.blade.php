@@ -12,9 +12,7 @@
 							Your current balance: £ 0
 					</div>
 					
-					<div class="alert alert-danger alert-dismissible alert-alt fade show">
-						We can no longer accept any further payments on account.
-					</div>
+				
 				</div>
             </div>
         </div>

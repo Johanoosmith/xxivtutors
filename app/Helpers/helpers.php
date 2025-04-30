@@ -893,3 +893,20 @@ function getUserLessonData($tutor_id){
 
 	return reset($summary);
 }
+
+function getUserProfileLink($user_id)
+{
+	$user = User::find($user_id);
+	if (!$user) {
+		return '#';
+	}
+
+	switch ($user->role_id) {
+		case 1:
+			return route('profile', ['id' => $user->id]);
+		case 2:
+			return route('tutor', ['id' => $user->id]);
+		default:
+			return '#';
+	}
+}

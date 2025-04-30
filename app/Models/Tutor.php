@@ -15,7 +15,7 @@ class Tutor extends Authenticatable
         'address', 'profile_image', 'short_description', 'full_description',
         'qualification_1', 'qualification_2', 'qualification_3', 'qualification_4',
         'experience', 'rate', 'status','tutor_specializations', 'user_id','title', 'town', 'county', 'country',
-        'list_in_directory','language','profile_status',
+        'list_in_directory','language','profile_status','booking_status'
     ];
     public function specialization()
     {

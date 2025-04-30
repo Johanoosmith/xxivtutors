@@ -236,10 +236,12 @@ class TutorsController extends Controller
          ]);
      
          $tutorData = $request->input('tutor');
+         $tutorData['booking_status'] = $request->input('booking_status'); // Save booking_status from dropdown
+         $tutorData['rating'] = $request->input('rating'); // Save booking_status from dropdown
+
          $tutorData['tutor_specializations'] = $request->has('tutor_specializations') 
              ? implode(",", $request->tutor_specializations) 
              : '';
-     
          $tutor->update($tutorData);
      
          if ($request->has('specialization')) {

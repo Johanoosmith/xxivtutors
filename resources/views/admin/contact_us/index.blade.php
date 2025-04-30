@@ -89,13 +89,15 @@
             @endforelse
                     </tbody>
                 </table>
+                @if (count($contacts))
+                            {!! $contacts->withQueryString()->links('pagination::bootstrap-5') !!}
+                        @endif
                 @endif
                 </div>
                 </div>
             </div>
         </div>
 </div>
-{{ $contacts->links() }}
 @endsection
 @section('inline-js')
 <script>

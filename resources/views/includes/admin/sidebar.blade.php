@@ -168,6 +168,19 @@
                         <span class="pc-mtext">Manage Contact Us</span>
                      </a>
                 </li> 
+
+                <li class=" nav-item {{ ($currentRoute === 'admin.contracts.index' || $currentRoute === 'admin.contracts.show') ? 'active' : '' }} ">
+                    <a class="pc-link" href="{{route('admin.contracts.index')}}">                    
+                    <span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
+                        <span class="pc-mtext">Manage Contract</span>
+                     </a>
+                </li> 
+                <li class=" nav-item {{ ($currentRoute === 'admin.enquiries.index') ? 'active' : '' }} ">
+                    <a class="pc-link" href="{{route('admin.enquiries.index')}}">                    
+                    <span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
+                        <span class="pc-mtext">Manage Enquiry</span>
+                     </a>
+                </li> 
                 <li class=" nav-item {{ ($currentRoute === 'admin.subscriber.index' || $currentRoute === 'admin.subscriber.create') ? 'active' : '' }} ">
                     <a class="pc-link" href="{{route('admin.subscriber.index')}}">                    
                     <span class="pc-micon"><i class="material-icons-two-tone">folder</i></span>
