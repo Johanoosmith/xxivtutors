@@ -83,6 +83,7 @@
                                 <th>Email</th>
                                 <th>Contact</th>
                                 <th>Status</th>
+                                <th>Booking Status</th>
                                 <th class="text-right">Action</th>
                             </tr>
                         </thead>
@@ -101,6 +102,18 @@
                                     <label class="badge bg-light-success">{{ ucfirst('active') }}</label>
                                     <!-- Green badge for active status -->
                                     @elseif($tutor->status == 0)
+                                    <label class="badge bg-light-warning">{{ ucfirst('inactive') }}</label>
+                                    <!-- Yellow badge for inactive status -->
+                                    @else
+                                    <label class="badge bg-light-warning">{{ ucfirst('unknown') }}</label>
+                                    <!-- Yellow badge for any other status -->
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($tutor->tutor->booking_status == 1)
+                                    <label class="badge bg-light-success">{{ ucfirst('active') }}</label>
+                                    <!-- Green badge for active status -->
+                                    @elseif($tutor->tutor->booking_status == 0)
                                     <label class="badge bg-light-warning">{{ ucfirst('inactive') }}</label>
                                     <!-- Yellow badge for inactive status -->
                                     @else

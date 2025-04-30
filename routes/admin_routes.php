@@ -11,6 +11,9 @@ use App\Http\Controllers\Admin\ManageContractController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TutorsController;
 use App\Http\Controllers\Admin\ContactUsController;
+use App\Http\Controllers\Admin\EnquiryController;
+use App\Http\Controllers\Admin\ContractController;
+
 
 
 
@@ -153,8 +156,11 @@ Route::group(['middleware' => ['admin']], function () {
 
 	Route::post('/admin/tutor/qualifications/reject/{id}', [TutorsController::class, 'reject'])->name('tutors.qualifications.reject');
 	Route::get('/contact-us',[ContactUsController::class,'index'])->name('contact-us.index');
+	Route::get('/enquiries', [EnquiryController::class, 'index'])->name('enquiries.index');
 
 
+	Route::get('/contracts', [ContractController::class, 'index'])->name('contracts.index');
+    Route::get('/contracts/{contract}', [ContractController::class, 'show'])->name('contracts.show');
 
 
 });

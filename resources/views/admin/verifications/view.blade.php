@@ -18,7 +18,7 @@ View Verification
                     <!-- List of Verification Details -->
                     <ul class="list-group">
                         <li class="list-group-item">
-                            <strong>User Name:</strong> {{ $Verification->user->full_name }}
+                            <strong>User Name:</strong> {{ $Verification->user->full_name  ?? '-'}}
                         </li>
 
                         @if(!empty($Verification->verification_type))
@@ -29,18 +29,18 @@ View Verification
                         @endif
 
                         <li class="list-group-item">
-                            <strong>Document Type:</strong> {{ format_label($Verification->document_type) }}
+                            <strong>Document Type:</strong> {{ format_label($Verification->document_type ?? '') }}
                         </li>
 
                         @if(!empty($Verification->dbs_number))
                         <li class="list-group-item">
-                            <strong>DBS Number:</strong> {{ $Verification->dbs_number }}
+                            <strong>DBS Number:</strong> {{ $Verification->dbs_number}}
                         </li>
                         @endif
 
                         @if(!empty($Verification->country_id))
                         <li class="list-group-item">
-                            <strong>Country:</strong> {{ $Verification->country->name }}
+                            <strong>Country:</strong> {{ $Verification->country->name ?? '' }}
                         </li>
                         @endif
 
