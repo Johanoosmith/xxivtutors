@@ -398,7 +398,7 @@ class TutorController extends Controller
             'title'    => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email,' . Auth::id(),
-            'mobile'   => 'required|string|max:15',
+            'mobile'   => 'required|string|max:15|unique:users,mobile,' . Auth::id(),
             'postcode' => 'nullable|string|max:10',
             'address'  => 'nullable|string',
             'town'     => 'required|string|max:255',
