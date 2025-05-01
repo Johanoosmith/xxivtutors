@@ -527,17 +527,13 @@ class CustomerController extends Controller
         $user = Auth::user();
         $dailyViews = getUserViewCounts($user);
 
-        $views = UserView::with(['user' => function ($query) {
+        $user_views = UserView::with(['user' => function ($query) {
             $query->select('id', 'username', 'firstname', 'lastname', 'role_id');
         }])
             ->where('viewer_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Filter views only for users who are tutors
-        $user_views = $views->filter(function ($view) {
-            return $view->user && $view->user->role_id == config('constants.ROLE.TUTOR');
-        });
         return view('customer.student_history', compact('dailyViews', 'user_views', 'user'));
     }
 

@@ -24,7 +24,7 @@ class MailConfigServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $emailSetting = DB::table('email_settings')->where('id',2)->first();
+        $emailSetting = DB::table('email_settings')->where('id',1)->first();
         if ($emailSetting) {
             $config = array(
                 'driver'     => $emailSetting->transport,

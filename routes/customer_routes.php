@@ -5,6 +5,8 @@ use App\Http\Controllers\Tutor\SubjectController;
 use App\Http\Controllers\Tutor\BookingController;
 use App\Http\Controllers\Tutor\TagController; 
 use App\Http\Controllers\Tutor\TutorFeedbackController;
+use App\Http\Controllers\Tutor\SuggestedStudentController;
+
 
 
 
@@ -20,7 +22,7 @@ use App\Http\Controllers\Customer\EnquiryController;
 use App\Http\Controllers\Customer\SubjectStudentController;
 use App\Http\Controllers\Customer\BookingController as BookingStudentController;
 use App\Http\Controllers\Customer\TagController as TagStudentController;
-use App\Http\Controllers\ToggleStatusController;
+
 
 
 #use App\Models\Enquiry;
@@ -94,6 +96,8 @@ Route::middleware(['auth'])->prefix('tutor')->group(function () {
 		Route::get('/headlines', [TutorController::class, 'headlines'])->name('tutor.headlines');
 		Route::get('/headlines/update', [TutorController::class, 'headlinesupdate'])->name('tutor.headlines.update');
 		Route::get('/foundme', [TutorController::class, 'foundme'])->name('tutor.foundme');
+		Route::get('/suggested-students', [SuggestedStudentController::class, 'index'])->name('tutor.suggested-students');
+
 		/*
 			Route::get('/subjects', [SubjectController::class, 'index'])->name('tutor.subjects.index');
 			Route::get('/subjects/create', [SubjectController::class, 'create'])->name('tutor.subjects.create');

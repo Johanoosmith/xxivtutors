@@ -1,77 +1,93 @@
 (function ($) {
-    "use strict";
+	"use strict";
 
 
 	let ProTutor = (function () {
-        
-		var customCeil = function(num) {
+
+		var customCeil = function (num) {
 			return num === Math.floor(num) ? num : Math.floor(num) + 1;
 		}
-		var getStudentRate = function(hourly_rate){
-			let increment = (hourly_rate * STUDENT_RATE_PERCENT)/100;
+		var getStudentRate = function (hourly_rate) {
+			let increment = (hourly_rate * STUDENT_RATE_PERCENT) / 100;
 			let student_price = parseFloat(hourly_rate) + parseFloat(increment);
 			return customCeil(student_price);
 		}
-		
+
 		var handleStudentRate = function () {
-            jQuery(document).on('blur', '.dsc-hourly-rate', function(){
-				var updateContainer	= jQuery(this).data('update-container');
-				var hourly_rate	= jQuery(this).val();
-				var student_rate= getStudentRate(hourly_rate); 
+			jQuery(document).on('blur', '.dsc-hourly-rate', function () {
+				var updateContainer = jQuery(this).data('update-container');
+				var hourly_rate = jQuery(this).val();
+				var student_rate = getStudentRate(hourly_rate);
 
 				jQuery('#HourlyRateBox').html(hourly_rate);
-			
-				if(jQuery(updateContainer).is('input')){
+
+				if (jQuery(updateContainer).is('input')) {
 					jQuery(updateContainer).val(student_rate);
-				}else{
+				} else {
 					jQuery(updateContainer).html(student_rate);
 				}
-					
+
 			});
-        };
-		
-		var handleDatePicker = function(){
-			
+		};
+
+		var handleDatePicker = function () {
 			jQuery('.date-picker').datepicker({
 				minDate: new Date(),
-				dateFormat:'dd/mm/yy',
+				dateFormat: 'dd/mm/yy',
 				altFormat: 'dd/mm/yy',
-				onSelect: function (date, datepicker) { 
-					if (date != "") { 
-						//alert("Selected Date: " + date); 
-					} 
-					console.log('on-select');
-				} 
+				onSelect: function (date, datepicker) {
+					if (date !== "") {
+						// Split and convert date
+						var parts = date.split('/');
+						if (parts.length === 3) {
+							var day = parseInt(parts[0]);
+							var month = parseInt(parts[1]) - 1; // JS months are 0-indexed
+							var year = parseInt(parts[2]);
+							var jsDate = new Date(year, month, day);
+
+							if (!isNaN(jsDate)) {
+								var jsDay = jsDate.getDay(); // 0=Sunday ... 6=Saturday
+
+								// Map JS day (0–6) to your $days (1–7)
+								var bladeDay = jsDay === 0 ? 7 : jsDay; // Sunday becomes 7, Monday stays 1, etc.
+
+								// Uncheck all first
+								jQuery('input[name="day[]"]').prop('checked', false);
+
+								// Check the one that matches
+								jQuery('#day' + bladeDay).prop('checked', true);
+							}
+						}
+					}
+				}
 			});
-			
+
 			jQuery('.card-date').datepicker({
-			  minDate: new Date(),
-			  dateFormat:'mm/yy',
-			  altFormat: 'mm/yy',
-			  
-			  changeMonth: true,
-			  changeYear: true,
-			  changeDay:false, 
-			  beforeShow: function(input, inst) {
-				$(inst.dpDiv).addClass("hide-days");
-			 },
-			 onClose: function(dateText, inst) {
-				var month = $("#ui-datepicker-div .ui-datepicker-month option:selected").val();
-				var year = $("#ui-datepicker-div .ui-datepicker-year option:selected").val();
-				$(this).datepicker('setDate', new Date(year, month, 1)); // Set to first of the selected month
-			 }
-			  
+				minDate: new Date(),
+				dateFormat: 'mm/yy',
+				altFormat: 'mm/yy',
+				changeMonth: true,
+				changeYear: true,
+				changeDay: false,
+				beforeShow: function (input, inst) {
+					$(inst.dpDiv).addClass("hide-days");
+				},
+				onClose: function (dateText, inst) {
+					var month = $("#ui-datepicker-div .ui-datepicker-month option:selected").val();
+					var year = $("#ui-datepicker-div .ui-datepicker-year option:selected").val();
+					$(this).datepicker('setDate', new Date(year, month, 1)); // Set to first of selected month
+				}
 			});
 		}
-		
-		var handleValidation = function(){
-			
-			
+
+		var handleValidation = function () {
+
+
 			jQuery(document).on('input', '.numeric', function (e) {
 				var value = $(this).val().replace(/\D/g, ""); // Remove non-numeric characters
 				$(this).val(value);
 			});
-			
+
 			jQuery('#expiry_date').on('input', function (e) {
 				var value = $(this).val().replace(/\D/g, ""); // Remove non-numeric characters
 
@@ -127,19 +143,19 @@
 			});
 		};
 
-        /* Functions Calling */
-        return {
-            load: function () {
-                handleStudentRate();
+		/* Functions Calling */
+		return {
+			load: function () {
+				handleStudentRate();
 				handleDatePicker();
 				handleValidation();
 				handleGlobalSubmit();
-            },
-        };
-    })();
+			},
+		};
+	})();
 
-    /* jQuery Window Load */
-    jQuery(window).on("load", function () {
-        ProTutor.load();
-    });
+	/* jQuery Window Load */
+	jQuery(window).on("load", function () {
+		ProTutor.load();
+	});
 })(jQuery);

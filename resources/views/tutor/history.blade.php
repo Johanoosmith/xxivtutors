@@ -26,17 +26,17 @@
                                 @foreach ($user_views as $view)
                                 <tr style="height: 38px;">
                                     <td>
-                                        <a href="{{ route('profile', $view->user->id) }}">
+                                        <a href="{{ getUserProfileLink( $view->user->id ?? null) }}" target="_blank">
                                             {{ $view->user->firstname ?? 'N/A' }} {{ $view->user->lastname ?? 'N/A' }}
                                         </a>
                                     </td>
                                     <td>
-                                    {{ $view->created_at ? $view->created_at->format('d-m-Y') : 'N/A' }}
+                                        {{ $view->created_at ? $view->created_at->format('d-m-Y') : 'N/A' }}
                                     </td>
                                     <td class="mobno">
                                         <div class="infobut" style="position: relative; top: -4px;">
                                             <a href="{{ route('tutor.enquiries.create', ['user_id' =>$view->id]) }}">
-                                            <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Message" style="width: 20px; height: 20px;">
+                                                <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Message" style="width: 20px; height: 20px;">
                                             </a>
                                         </div>
                                     </td>
@@ -44,7 +44,7 @@
                                 @endforeach
                             </tbody>
 
-                          
+
                         </table>
                     </div>
                     <div class="cardcontent">

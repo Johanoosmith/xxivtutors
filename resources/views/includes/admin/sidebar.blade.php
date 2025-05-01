@@ -32,8 +32,8 @@
                     <a class="pc-link"  href="{{route('admin.settings.tab','general')}}">General Settings</a></li>
                     -->
                     
-                        <li class="pc-item  {{ $currentRoute === 'admin.header.index' ? 'active' : '' }} {{ $currentRoute === 'admin.header.edit' ? 'active' : '' }} {{ $currentRoute === 'admin.header.create' ? 'active' : '' }}">
-                        <a class="pc-link " href="{{route('admin.header.index')}}">Header</a></li>
+                        <!-- <li class="pc-item  {{ $currentRoute === 'admin.header.index' ? 'active' : '' }} {{ $currentRoute === 'admin.header.edit' ? 'active' : '' }} {{ $currentRoute === 'admin.header.create' ? 'active' : '' }}">
+                        <a class="pc-link " href="{{route('admin.header.index')}}">Header</a></li> -->
 
                         <!-- <li class="pc-item  {{ $currentRoute === 'admin.footer.index' ? 'active' : '' }} {{ $currentRoute === 'admin.footer.edit' ? 'active' : '' }} {{ $currentRoute === 'admin.footer.create' ? 'active' : '' }}">
                             <a class="pc-link " href="{{route('admin.footer.index')}}">Footer</a></li> -->
@@ -256,7 +256,7 @@
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pc-h-dropdown">
-                        <a href="{{url('home')}}" target="_blank" class="dropdown-item">
+                        <a href="{{url('/')}}" target="_blank" class="dropdown-item">
                             <i class="material-icons-two-tone">language</i>
                             <span>View Website</span>
                         </a>

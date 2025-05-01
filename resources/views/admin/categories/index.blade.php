@@ -1,11 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 
-@if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            {{ $message }}
-        </div>
-@endif
+
 
 <div class="row">
 		<div class="col-md-12">
@@ -66,7 +62,7 @@
                     </form>
                 <div class="table-responsive">
                 @if($categories->isEmpty())
-                <p>No tutors found.</p>
+                <p>No Categories found.</p>
                 @else
                 <table class="table table-hover">
                     <thead>
@@ -79,9 +75,9 @@
                         </tr>
                     </thead>
                     <tbody class="list" id="pages">
-                        @foreach ($categories as $category)
+                        @foreach ($categories as $index => $category)
                             <tr>
-                                <td>{{ $category->id }}</td>
+                                <td>{{$categories->firstItem() + $index }}</td>
                                 <td>{{ $category->name }}</td>
                                 <td>
                                     @if($category->status == '1')
@@ -104,7 +100,7 @@
                                         <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-info btn-sm action-btn edit" data-toggle="tooltip" title="" data-original-title="Edit">
                                             <i class="far fa-edit">Edit</i>
                                         </a>
-                                        <a href="{{ route('admin.delete-tutors', $category->id) }}" onclick="confirmation(event)" class="btn btn-danger btn-sm action-btn delete" data-toggle="tooltip" title="Delete">
+                                        <a href="{{ route('admin.delete-cat', $category->id) }}" onclick="confirmation(event)" class="btn btn-danger btn-sm action-btn delete" data-toggle="tooltip" title="Delete">
                                             <i class="far fa-delete"></i> Delete
                                         </a> 													
                                     </div>				
@@ -113,6 +109,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                @if (count($categories))
+                            {!! $categories->withQueryString()->links('pagination::bootstrap-5') !!}
+                        @endif
                 @endif
                 </div>
             </div>

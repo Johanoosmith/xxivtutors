@@ -48,6 +48,17 @@
                         @if(privacySetting($user->id,'display_postcode'))
                         <p><strong>Post Code: </strong>{{ $user->postcode ?? ''}}</p>
                         @endif
+                        @if(!empty($tutor->availability))
+                        <p><strong>Availability: </strong>{{$tutor->availability}}</p>
+                        @endif
+                        @if(!empty($tutor->distance))
+                        @if($tutor->distance == 0)
+                        <p><strong>Willing to travel: </strong>Home Only</p>
+                        @else
+                        <p><strong>Willing to travel: </strong>{{ $tutor->distance }} miles</p>
+                        @endif
+                        @endif
+
                         <p>
                             <strong style="color: {{ $user->is_online ? 'green' : 'red' }}">
                                 {{ $user->is_online ? 'I Am Online' : 'I Am Offline' }}
@@ -77,6 +88,8 @@
                         </div>
                     </div>
                     @endif
+
+                
                     @php
                     $isTutor = auth()->check() && auth()->user()->role_id == config('constants.ROLE.TUTOR');
                     @endphp

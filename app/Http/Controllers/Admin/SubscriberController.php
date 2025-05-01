@@ -25,7 +25,8 @@ class SubscriberController extends Controller
         }
     
         // Fetch the filtered results with pagination (optional)
-        $subscribers = $query->paginate(10);
+        $perPage = $request->get('per_page', 10);
+        $subscribers = $query->paginate($perPage);
     
         // Pass the results and the current filters to the view
         return view('admin.subscribers.index', [

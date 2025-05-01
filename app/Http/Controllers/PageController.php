@@ -326,6 +326,7 @@ class PageController extends Controller
             || $request->subject_title != null 
             || $request->postcode != null) 
         {
+    
             if ($request->subject != null) {
                 $query->whereHas('tutor.subject_tutors', function ($q) use ($request) {
                     $q->where('slug', $request->subject);

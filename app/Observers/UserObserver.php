@@ -12,7 +12,7 @@ class UserObserver
         if ($user->isDirty('status')) {
             $newStatus = $user->status;
 
-            $slug = $newStatus == 1 ? 'USER_ACTIVATION' : 'USER_DEACTIVATED';
+            $slug = $newStatus == 1 ? 'USER_ACTIVATED' : 'USER_DEACTIVATED';
             $data = [
                 'user_name' => $user->fullname ?? 'User',
             ];

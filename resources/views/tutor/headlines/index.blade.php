@@ -41,7 +41,7 @@
                             <div class="col-12 form-field">
                                 <input type="hidden" name="section" value="profile">
                                 <input type="hidden" name="openaccount" id="openaccount" value="yes">
-                                <label class="form-label" for="edit-bio">Headline 1</label>
+                                <label class="form-label" for="edit-bio">Headline</label>
                                 <textarea class="form-control" id="headline" name="headline_text" rows="4">{{ old('headline_text', $headline->headline_text ?? '') }}</textarea>
                             </div>
                             <p><b>

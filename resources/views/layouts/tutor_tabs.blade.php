@@ -71,8 +71,8 @@
 		</li>
 
 		<li>
-			<li class="nav-link {{ request()->routeIs('suggested-students') ? 'active' : '' }}">
-			<a href="{{ route('suggested-students')}}">
+			<li class="nav-link {{ request()->routeIs('tutor.suggested-students') ? 'active' : '' }}">
+			<a href="{{ route('tutor.suggested-students')}}">
 			<svg class="icon">
 				<use xlink:href="#article"></use>
 			</svg>

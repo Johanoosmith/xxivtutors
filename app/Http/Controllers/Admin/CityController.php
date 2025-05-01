@@ -7,12 +7,21 @@ use Illuminate\Http\Request;
 
 class CityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $cities = City::get();
+        $query = City::query();
+    
+        // Apply search if 'search' is present in the request
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+    
+        // Paginate the results, 10 per page
+        $perPage = $request->get('per_page', 10);
+        $cities = $query->orderBy('id', 'desc')->paginate($perPage);
+    
         return view('admin.city.index', compact('cities'));
     }
-
     public function create()
     {
         $cities = City::all();
@@ -27,7 +36,7 @@ class CityController extends Controller
 
         $city  = City::create($request->all());
 
-        return redirect()->route('admin.cities.index')->with('alert-success', 'City added successfully!');
+        return redirect()->route('admin.cities.index')->with('success', 'City added successfully!');
     }
 
     public function edit($id)
@@ -46,7 +55,7 @@ class CityController extends Controller
         
         $city->update($cityData);
     
-        return redirect()->route('admin.cities.index')->with('alert-success', 'City updated successfully!');
+        return redirect()->route('admin.cities.index')->with('success', 'City updated successfully!');
     }
     public function destroy($id)
     {
