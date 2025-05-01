@@ -13,6 +13,7 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\BookingMailController;
+use App\Models\Tutor;
 
 
 class BookingController extends Controller
@@ -132,7 +133,7 @@ class BookingController extends Controller
 	public function create()
 	{
 		$user_id = Auth::user()->id;
-
+		$tutor_booking_status = Tutor::where('user_id', $user_id)->value('booking_status');
 		$tutor_subjects = $students = [];
 		if (empty(request()->old('lesson_repeat'))) {
 			//request()->old('lesson_repeat', 1);
@@ -152,7 +153,7 @@ class BookingController extends Controller
 		];
 
 
-		return view('tutor.booking.create', compact('tutor_subjects', 'students', 'days'));
+		return view('tutor.booking.create', compact('tutor_subjects', 'students', 'days','tutor_booking_status'));
 	}
 
 	public function store(Request $request)

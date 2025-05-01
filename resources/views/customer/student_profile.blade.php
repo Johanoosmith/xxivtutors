@@ -44,6 +44,10 @@
                         <p><strong>Member Since: </strong> {{ $user->created_at->format('d M Y') }}</p>
                         <p><strong>Last Login: </strong> {{ $user->last_login ? $user->last_login->diffForHumans() : 'Never logged in' }}</p>
                         <p><strong>Home Town: </strong>{{ $student->town ?? "NA"}}</p>
+                        @if(!empty($student->availability))
+                        <p><strong>Availability: </strong>{{$student->availability}}</p>
+                        @endif
+                       
                         <p>
                             <strong style="color: {{ $user->is_online ? 'green' : 'red' }}">
                                 {{ $user->is_online ? 'I Am Online' : 'I Am Offline' }}
@@ -131,8 +135,13 @@
 
                 <div class="studnet-info">
                     <h2>Information about {{ $user->firstname }} {{ $user->lastname }} </h2>
-                    <p><strong>Willing to travel:</strong> {{ $student->distance ?? "NA" }} miles</p>
-
+                    @if(!empty($student->distance))
+                        @if($student->distance == 0)
+                        <p><strong>Willing to travel: </strong>Home Only</p>
+                        @else
+                        <p><strong>Willing to travel: </strong>{{ $student->distance }} miles</p>
+                        @endif
+                        @endif
                     @if(!empty($groupedSubjects) && count($groupedSubjects) > 0)
                     <h5>Subjects</h5>
                     <div class="table-responsive">

@@ -70,7 +70,6 @@ Route::get('/category/{id}', [CategoryController::class, 'show'])->name('categor
 Route::get('/tutors', [PageController::class, 'tutorFilter'])->name('tutors.tutorFilter');
 Route::get('/student', [PageController::class, 'student'])->name('student.student');
 Route::get('/tutors/{id}', [TutorDetailsController::class, 'show'])->name('tutors.show');
-Route::get('/tutor/suggested-students', [SuggestedStudentController::class, 'index'])->name('suggested-students');
 
 
 

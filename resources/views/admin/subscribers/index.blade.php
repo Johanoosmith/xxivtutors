@@ -73,7 +73,7 @@
                     <tbody>
                     @foreach ($subscribers as $index => $subscriber)
                 <tr>
-                        <td>{{ $index + 1 }}</td>
+                        <td>{{$subscribers->firstItem() + $index  }}</td>
                         <td>{{ $subscriber->name }}</td>
                         <td>{{ $subscriber->email }}</td>
                         <td>{{ ucfirst($subscriber->role) }}</td>
@@ -90,6 +90,9 @@
                      @endforeach
                     </tbody>
                 </table>
+                @if (count($subscribers))
+                    {!! $subscribers->withQueryString()->links('pagination::bootstrap-5') !!}
+                    @endif
                 @endif
                 </div>
                 </div>

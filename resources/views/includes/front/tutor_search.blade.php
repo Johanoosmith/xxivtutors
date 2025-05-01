@@ -4,6 +4,10 @@
         $subjects = getSubjectList();
         $levels = getLevelList();
     @endphp
+    @php
+    $subjectFromRequest = request('subject');
+    $oldSubjectTitle = old('subject_title');
+@endphp
     <script>
         // Convert Laravel $subjects to JavaScript array with id, title, and slug
         var availableTags = @json($subjects->map(fn($subject) => ['label' => $subject->title, 'value' => $subject->id, 'slug' => $subject->slug]));
@@ -19,7 +23,7 @@
 
         <div class="field">
             <input type="text" name="subject_title" id="SubjectSearch" class="input" placeholder="Enter a subject"
-                value="{{ old('subject_title', request('subject_title')) }}">
+            value="{{ $oldSubjectTitle ?: ($subjectFromRequest ?? '') }}">
             <input type="hidden" name="subject_id" id="FilterSubjectValue"
                 value="{{ old('subject_id', request('subject_id')) }}">
             <input type="hidden" name="subject" id="FilterSubjectslug" value="{{ old('subject', request('subject')) }}">

@@ -26,7 +26,7 @@
                                 @foreach ($user_views as $view)
                                 <tr style="height: 38px;">
                                     <td>
-                                        <a href="{{ route('tutor', $view->user->id) }}">
+                                    <a href="{{ getUserProfileLink( $view->user->id ?? null) }}" target="_blank">
                                             {{ $view->user->firstname ?? 'N/A' }} {{ $view->user->lastname ?? 'N/A' }}
                                         </a>
                                     </td>
