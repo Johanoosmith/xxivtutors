@@ -429,79 +429,150 @@ class StripeService
 	#Representative
 	#Terms of service acceptance
 	
-	public function createAccount($data){
+	// public function createAccount($data){
 		
-		/*
-			purushottam.saini@dotsquares.com: acct_1QxnSeH40VX7GP1J
-		*/
+	// 	/*
+	// 		purushottam.saini@dotsquares.com: acct_1QxnSeH40VX7GP1J
+	// 	*/
 		
+	// 	$response['status'] = 0;
+	// 	$response['error']['text'] = '';
+	// 	try {
+			
+	// 		$response['data'] = $this->stripeObj->accounts->create(array(
+	// 										'type'=>'express',
+	// 										'country' => $data['country'],
+	// 										'email' => $data['email'],
+	// 										'capabilities' => [
+	// 											'card_payments' => ['requested' => true],
+	// 											'transfers' => ['requested' => true],
+	// 										],
+											
+	// 										//'controller' => [
+	// 											//'fees' => ['payer' => 'application'],
+	// 											///'losses' => ['payments' => 'application'],
+	// 											//'stripe_dashboard' => ['type' => 'express'],
+	// 											//'requirement_collection'=>'stripe'
+	// 										//],
+											
+	// 										'business_type'=>'individual',
+	// 										'business_profile'=>[
+	// 											'mcc'=>7299,
+	// 											//'url'=>url('/'),
+	// 											'url'=>url('/'),
+	// 										],
+	// 										'company'=>[
+	// 											'name'=>$data['company']
+	// 										],
+	// 										'individual' => [
+	// 											'first_name' => $data['first_name'],
+	// 											'last_name' => $data['last_name'],
+	// 											'email' => $data['email'],
+	// 											'phone' => $data['phone'],
+	// 											'dob' => [
+	// 												'day' 	=> $data['dob_day'],
+	// 												'month' => $data['dob_month'],
+	// 												'year'	=> $data['dob_year']
+	// 											],
+	// 											'address' => [
+	// 												'line1' => $data['address_line1'],
+	// 												'city'	=> $data['city'],
+	// 												'state' => $data['state'],
+	// 												'postal_code' => $data['postal_code'],
+	// 												'country' => $data['country']
+	// 											],
+	// 										],
+											
+	// 										/*
+	// 										'tos_acceptance' => [
+	// 											'date' => time(),
+	// 											'ip' => $_SERVER['REMOTE_ADDR'] // Get user's IP
+	// 										],
+	// 										*/
+											
+	// 									  )
+	// 									);
+	// 		$response['status'] = 1;
+	// 	}catch(Exception $e) {
+	// 		$response['status'] = 0;
+	// 	  	$response['error']['text'] = $e->getMessage();
+			
+	// 		Log::info('Create account failed. '. $e->getMessage(), [
+	// 			'payload'=>$data
+	// 		]);
+			
+	// 	}
+	// 	return $response;
+	// }
+
+
+
+
+	public function createAccount($data)
+	{
 		$response['status'] = 0;
 		$response['error']['text'] = '';
+	
 		try {
-			
-			$response['data'] = $this->stripeObj->accounts->create(array(
-											'type'=>'express',
-											'country' => $data['country'],
-											'email' => $data['email'],
-											'capabilities' => [
-												'card_payments' => ['requested' => true],
-												'transfers' => ['requested' => true],
-											],
-											
-											//'controller' => [
-												//'fees' => ['payer' => 'application'],
-												///'losses' => ['payments' => 'application'],
-												//'stripe_dashboard' => ['type' => 'express'],
-												//'requirement_collection'=>'stripe'
-											//],
-											
-											'business_type'=>'individual',
-											'business_profile'=>[
-												'mcc'=>7299,
-												//'url'=>url('/'),
-												'url'=>url('/'),
-											],
-											'company'=>[
-												'name'=>$data['company']
-											],
-											'individual' => [
-												'first_name' => $data['first_name'],
-												'last_name' => $data['last_name'],
-												'email' => $data['email'],
-												'phone' => $data['phone'],
-												'dob' => [
-													'day' 	=> $data['dob_day'],
-													'month' => $data['dob_month'],
-													'year'	=> $data['dob_year']
-												],
-												'address' => [
-													'line1' => $data['address_line1'],
-													'city'	=> $data['city'],
-													'state' => $data['state'],
-													'postal_code' => $data['postal_code'],
-													'country' => $data['country']
-												],
-											],
-											
-											/*
-											'tos_acceptance' => [
-												'date' => time(),
-												'ip' => $_SERVER['REMOTE_ADDR'] // Get user's IP
-											],
-											*/
-											
-										  )
-										);
+			$accountParams = [
+				'type' => 'express',
+				'country' => $data['country'],
+				'email' => $data['email'],
+				'capabilities' => [
+					'card_payments' => ['requested' => true],
+					'transfers' => ['requested' => true],
+				],
+				'business_type' => $data['business_type'],
+				'business_profile' => [
+					'mcc' => 7299,
+					'url' => url('/'),
+				],
+			];
+	
+			if ($data['business_type'] === 'individual') {
+				$accountParams['individual'] = [
+					'first_name' => $data['first_name'],
+					'last_name'  => $data['last_name'],
+					'email'      => $data['email'],
+					'phone'      => $data['phone'],
+					'dob' => [
+						'day'   => $data['dob_day'],
+						'month' => $data['dob_month'],
+						'year'  => $data['dob_year']
+					],
+					'address' => array_filter([
+						'line1'       => $data['address_line1'],
+						'city'        => $data['city'],
+						'state'       => $data['state'] ?? null,
+						'postal_code' => $data['postal_code'],
+						'country'     => $data['country']
+					]),
+				];
+			} else { // business_type is company
+				$accountParams['company'] = [
+					'name' => $data['company'],
+					'address' => array_filter([
+						'line1'       => $data['address_line1'],
+						'city'        => $data['city'],
+						'state'       => $data['state'] ?? null,
+						'postal_code' => $data['postal_code'],
+						'country'     => $data['country']
+					]),
+				];
+			}
+	
+			$response['data'] = $this->stripeObj->accounts->create($accountParams);
 			$response['status'] = 1;
-		}catch(Exception $e) {
+	
+		} catch (Exception $e) {
 			$response['status'] = 0;
-		  	$response['error']['text'] = $e->getMessage();
-			
-			Log::info('Create account failed. '. $e->getMessage(), [
-				'payload'=>$data
+			$response['error']['text'] = $e->getMessage();
+	
+			Log::info('Create account failed. ' . $e->getMessage(), [
+				'payload' => $data
 			]);
-			
 		}
+	
 		return $response;
 	}
 	
