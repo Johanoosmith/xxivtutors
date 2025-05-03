@@ -28,7 +28,8 @@ class SuggestedTutorController extends Controller
             ->leftJoin('county', 'tutors.county', '=', 'county.id')
             ->whereNotNull('subject_tutors.id') // <== Prevent null rows
             ->select(
-                'subject_tutors.*',
+                'subject_tutors.subject_id', // Select only subject_id and level_id
+                'subject_tutors.level_id',
                 'levels.title as level_title',
                 'subjects.title as subject_title',
                 'county.name as county',
@@ -36,7 +37,6 @@ class SuggestedTutorController extends Controller
                 'tutors.user_id as tutor_user_id'
             )->whereNotNull('tutors.user_id')->distinct()
             ->get();
-        // dd($tutors);
         return view('customer.student_suggestedtutor', compact('tutors'));
     }
 }
