@@ -29,6 +29,7 @@
 		@include('includes.admin.footer')    
         @include('includes.admin.footer_script')  
         @include('includes.admin.message')
+        <script src="{{asset('front/assets/js/admin.js')}}"></script>
         @section('inline-js')
         @show
     </body>

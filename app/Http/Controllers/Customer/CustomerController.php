@@ -21,6 +21,8 @@ use App\Services\StripeService;
 use App\Models\Tutor;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Notification;
+use Illuminate\Support\Facades\Log;
+
 
 
 
@@ -63,9 +65,17 @@ class CustomerController extends Controller
 
         return view('auth.register', compact('formData', 'step', 'countries', 'countyies'));
     }
+
     public function store($step)
     {
         $request = request();
+        if (($step == 2 && !session()->has('registration_form.1')) ||
+            ($step == 3 && (!session()->has('registration_form.1') || !session()->has('registration_form.2')))
+        ) {
+            return redirect()->route('register.step', 1)->withErrors([
+                'step' => 'Please complete the previous steps before proceeding.',
+            ]);
+        }
         // Validation rules for each step
         $rules = [];
         switch ($step) {
@@ -82,6 +92,12 @@ class CustomerController extends Controller
                 ];
                 break;
             case 2:
+                $dobYearRule = ['required', 'integer'];
+                // Apply stricter DOB rule only for tutors
+                if (session('registration_form.1.role') === 'tutor') {
+                    $dobYearRule[] = 'max:' . (date('Y') - 14); // At least 14 years old
+                }
+
                 $rules = [
                     'title' => 'required|string|max:255',
                     'gender' => 'required|in:male,female',
@@ -95,7 +111,8 @@ class CustomerController extends Controller
                     'country' => 'required|string|max:255',
                     'postcode' => 'required|string|max:15',
                     'phoneNumber' => 'required|unique:users,mobile|string|max:15',
-                    'dobYear' => 'required|integer',
+                    // 'dobYear' => 'required|integer',
+                    'dobYear' => $dobYearRule,
                     'dobMonth' => 'required|integer',
                     'dobDay' => 'required|integer',
                 ];
@@ -113,15 +130,9 @@ class CustomerController extends Controller
 
         // Validate the request
         $validatedData = $request->validate($rules);
-        // dd($validatedData);
-
         // Save data to session
         $request->session()->put('registration_form.' . $step, $validatedData);
-        // $step2 = $request->session()->get('registration_form.2', []);
-
-        // // Dump the data and stop further script execution
-        // dd($step2);
-
+        
 
         if ($step < 3) {
             // Redirect to the next step
@@ -144,93 +155,108 @@ class CustomerController extends Controller
             );
             // Optionally, you can hash the password here if you're saving it to the database
             //$userData['password'] = hash($userData['password']);
+            DB::beginTransaction();
 
-            $user = User::create([
-                'role_id' => ($userData['role'] == 'tutor') ? config('constants.ROLE.TUTOR') : config('constants.ROLE.STUDENT'),
-                'username' => $userData['username'],
-                'email' => $userData['email'],
-                'password' => Hash::make($userData['password']),
-                'gender' => $userData['gender'],
-                'firstname' => $userData['firstName'],
-                'lastname' => $userData['lastName'],
-                'address' => trim($userData['address1'] . ' ' . $userData['address2']),
-                'postcode' => $userData['postcode'],
-                'mobile' => $userData['phoneNumber'],
-                'dob_year' => $userData['dobYear'],
-                'dob_month' => $userData['dobMonth'],
-                'dob_day'     => $userData['dobDay'],
-                'status' => ($userData['role'] === 'tutor') ? 0 : 1,
-            ]);
-
-            Notification::create([
-                'user_id' => $user->id,
-                'display_postcode' => 1,
-                'display_qualification' => 1,
-                'new_enquiry_email' => 1,
-                'email_on_profile_view' => 1,
-                'feedback_email' => 1,
-                'payment_email' => 1,
-                'lesson_reminder_email' => 1,
-            ]);
-
-            if ($userData['role'] === 'tutor') {
-                Tutor::create([
-                    'user_id' => $user->id,
-                    'title' => $userData['title'],
-                    'town' => $userData['town'],
-                    'county' => $userData['county'],
-                    'country' => $userData['country'],
-                    'short_description' => $userData['yourbio'] ?? null,
-                    'full_description' => $userData['yourexperience'] ?? null,
-                    'profile_status' => 1,
-                    'list_in_directory' => 1,
-                    'language' => $userData['language']
+            try {
+                $user = User::create([
+                    'role_id' => ($userData['role'] == 'tutor') ? config('constants.ROLE.TUTOR') : config('constants.ROLE.STUDENT'),
+                    'username' => $userData['username'],
+                    'email' => $userData['email'],
+                    'password' => Hash::make($userData['password']),
+                    'gender' => $userData['gender'],
+                    'firstname' => $userData['firstName'],
+                    'lastname' => $userData['lastName'],
+                    'address' => trim($userData['address1'] . ' ' . $userData['address2']),
+                    'postcode' => $userData['postcode'],
+                    'mobile' => $userData['phoneNumber'],
+                    'dob_year' => $userData['dobYear'],
+                    'dob_month' => $userData['dobMonth'],
+                    'dob_day'     => $userData['dobDay'],
+                    'status' => ($userData['role'] === 'tutor') ? 0 : 1,
                 ]);
-            } else {
-                Student::create([
+
+                Notification::create([
                     'user_id' => $user->id,
-                    'title' => $userData['title'],
-                    'town' => $userData['town'],
-                    'county' => $userData['county'],
-                    'country' => $userData['country'],
-                    'language' => $userData['language'],
-                    'distance' => $userData['distance'],
-                    'bio' => $userData['yourbio'],
-                    'experience' => $userData['yourexperience'],
+                    'display_postcode' => 1,
+                    'display_qualification' => 1,
+                    'new_enquiry_email' => 1,
+                    'email_on_profile_view' => 1,
+                    'feedback_email' => 1,
+                    'payment_email' => 1,
+                    'lesson_reminder_email' => 1,
                 ]);
+
+                if ($userData['role'] === 'tutor') {
+                    Tutor::create([
+                        'user_id' => $user->id,
+                        'title' => $userData['title'],
+                        'town' => $userData['town'],
+                        'county' => $userData['county'],
+                        'country' => $userData['country'],
+                        'short_description' => $userData['yourbio'] ?? null,
+                        'full_description' => $userData['yourexperience'] ?? null,
+                        'profile_status' => 1,
+                        'list_in_directory' => 1,
+                        'language' => $userData['language']
+                    ]);
+                } else {
+                    Student::create([
+                        'user_id' => $user->id,
+                        'title' => $userData['title'],
+                        'town' => $userData['town'],
+                        'county' => $userData['county'],
+                        'country' => $userData['country'],
+                        'language' => $userData['language'],
+                        'distance' => $userData['distance'],
+                        'bio' => $userData['yourbio'],
+                        'experience' => $userData['yourexperience'],
+                    ]);
+                }
+                // Send email
+                $userArray = $user->toArray();
+                // Add username manually (not needed because it's already in $userArray)
+                $userArray['username']      = $user->username;
+                $userArray['student_name']  = $user->firstname . ' ' . $user->lastname;
+                $userArray['tutor_name']    = $user->firstname . ' ' . $user->lastname;
+                $userArray['password']      = $userData['password'];
+
+                // if ($user && $user->role_id == config('constants.ROLE.TUTOR')) {
+                //     $this->stripeAccountCreate($user->id);
+                // }
+                DB::commit();
+                if ($userData['role'] === 'tutor') {
+                    $emailSent = sendMail($user->email, $userArray, 'TUTOR_REGISTRATION');
+                } else {
+                    $emailSent = sendMail($user->email, $userArray, 'STUDENT_REGISTRATION');
+                }
+
+
+                if ($userData['role'] === 'student') {
+                    session()->flash('message', 'Registration successful! Log in to explore your dashboard and start learning.');
+                } elseif ($userData['role'] === 'tutor') {
+                    session()->flash('message', 'Registration successful! Once approved, you’ll be ready to start tutoring.');
+                }
+
+                // Optionally, you can clear the session data after saving
+                $request->session()->forget('registration_form');
+            } catch (\Exception $e) {
+                DB::rollBack();
+
+                // Log the full error with message and stack trace
+                Log::error('User registration failed: ' . $e->getMessage(), [
+                    'exception' => $e,
+                    'step_data' => $userData ?? []
+                ]);
+
+                return redirect()->back()->withErrors(['error' => $e->getMessage()]);
             }
-            // Send email
-            $userArray = $user->toArray();
-            // Add username manually (not needed because it's already in $userArray)
-            $userArray['username']      = $user->username;
-            $userArray['student_name']  = $user->firstname . ' ' . $user->lastname;
-            $userArray['tutor_name']    = $user->firstname . ' ' . $user->lastname;
-            $userArray['password']      = $userData['password'];
 
-            if ($userData['role'] === 'tutor') {
-                $emailSent = sendMail($user->email, $userArray, 'TUTOR_REGISTRATION');
-            } else {
-                $emailSent = sendMail($user->email, $userArray, 'STUDENT_REGISTRATION');
-            }
-
-            // if($user && $user->role_id == config('constants.ROLE.TUTOR')){
-            // 	$this->stripeAccountCreate($user->id);
-            // }
-
-            if ($userData['role'] === 'student') {
-                session()->flash('message', 'Registration successful! Log in to explore your dashboard and start learning.');
-            } elseif ($userData['role'] === 'tutor') {
-                session()->flash('message', 'Registration successful! Once approved, you’ll be ready to start tutoring.');
-            }
-
-            // Optionally, you can clear the session data after saving
-            $request->session()->forget('registration_form');
             // Redirect or return a response
             return redirect()->route('login');
         }
     }
 
-    public function stripeAccountCreate($user_id)
+     public function stripeAccountCreate($user_id)
     {
 
         $this->stripeService = new StripeService();
@@ -239,6 +265,10 @@ class CustomerController extends Controller
 
         $country = \App\Models\Country::where('id', $user['tutor']['country'])->first();
         $county    = \App\Models\County::where('id', $user['tutor']['county'])->first();
+        $countryCode = !empty($country) ? $country->code2l : 'GB';
+        $unsupportedIndividualCountries = ['AE']; // Add more countries as needed
+
+    $businessType = in_array($countryCode, $unsupportedIndividualCountries) ? 'company' : 'individual';
 
         $data = [
             'first_name' => $user['firstname'],
@@ -250,12 +280,16 @@ class CustomerController extends Controller
             'dob_year'    => $user['dob_year'],
             'address_line1' => $user['address'],
             'city'             => (!empty($user['tutor']['town'])) ? $user['tutor']['town'] : 'Eastbourne',
-            'state'         => (!empty($county['name'])) ? $county['name'] : 'Avon',
             'postal_code'     => $user['postcode'],
             'company'        => $user['username'],
             'country'         => !empty($country) ? $country->code2l : 'GB',
-        ];
+            'business_type' => $businessType,
 
+        ];
+        // Only add 'state' if country is GB
+        if ($countryCode === 'GB' && !empty($county['name'])) {
+            $data['state'] = $county['name'];
+        }
 
         $response    = $this->stripeService->createAccount($data);
 
@@ -520,7 +554,7 @@ class CustomerController extends Controller
         $tags = $user->tags ?? []; // Ensure an empty array if no tags exist
         return view('customer.student_tags', compact('tags'));
     }
-    
+
 
     public function history()
     {
