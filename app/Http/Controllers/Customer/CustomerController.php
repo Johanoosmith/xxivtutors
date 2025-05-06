@@ -121,8 +121,8 @@ class CustomerController extends Controller
                 $rules = [
                     'language' => 'required|string|max:255',
                     'distance' => 'required|in:0,1,2,3,4,5,8,10,12,15,20,30,50',
-                    'yourbio' => 'nullable|string|max:1000',
-                    'yourexperience' => 'nullable|string|max:1000',
+                    'yourbio' => 'required|string|max:1000',
+                    'yourexperience' => 'required|string|max:1000',
                     'consent' => 'required'
                 ];
                 break;
@@ -215,7 +215,7 @@ class CustomerController extends Controller
                 // Send email
                 $userArray = $user->toArray();
                 // Add username manually (not needed because it's already in $userArray)
-                $userArray['username']      = $user->username;
+                $userArray['email']      = $user->email;
                 $userArray['student_name']  = $user->firstname . ' ' . $user->lastname;
                 $userArray['tutor_name']    = $user->firstname . ' ' . $user->lastname;
                 $userArray['password']      = $userData['password'];

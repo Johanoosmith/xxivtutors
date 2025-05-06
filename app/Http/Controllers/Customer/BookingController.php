@@ -198,34 +198,58 @@ class BookingController extends Controller
 		}
 	}
 
-	public function confirmed(Request $request,$id)
-	{
+	// public function confirmed(Request $request,$id)
+	// {
 
-		$user_id = Auth::user()->id;
-		// $booking = Booking::where('student_id',$user_id)
-		// 				->where('start_date','>=',Carbon::now()->toDateString())
-		// 				->where('start_time','>',Carbon::now()->toTimeString())
-		// 				->findOrFail($request->id);
-		$booking = Booking::where('student_id', $user_id)
-			->where(function ($query) {
-				$query->where('start_date', '>', Carbon::now()->toDateString())  // Start date is in the future
-					->orWhere(function ($query) {
-						$query->where('start_date', '=', Carbon::now()->toDateString())  // Start date is today
-							->where('start_time', '>', Carbon::now()->toTimeString());  // Start time is in the future today
-					});
-			})
-			->find($id);
-		if ($booking) {
-			$booking->status = 2; // Confirm Booking
-			$booking->save();
-			$mailController = new BookingMailController();
-			$mailController->sendTutorBookingRelatedMail($booking, 'TUTOR_BOOKING_CONFIRMATION');
-			$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_CONFIRMATION');
-			return redirect()->route('customer.booking.index')->with('success', 'Booking is confirmed successfully.');
-		} else {
-			return redirect()->route('customer.booking.index')->with('error', 'You are unable to confirm this booking');
+	// 	$user_id = Auth::user()->id;
+	// 	$booking = Booking::where('student_id', $user_id)
+	// 		->where(function ($query) {
+	// 			$query->where('start_date', '>', Carbon::now()->toDateString())  // Start date is in the future
+	// 				->orWhere(function ($query) {
+	// 					$query->where('start_date', '=', Carbon::now()->toDateString())  // Start date is today
+	// 						->where('start_time', '>', Carbon::now()->toTimeString());  // Start time is in the future today
+	// 				});
+	// 		})
+	// 		->find($id);
+	// 	if ($booking) {
+	// 		$booking->status = 2; // Confirm Booking
+	// 		$booking->save();
+	// 		$mailController = new BookingMailController();
+	// 		$mailController->sendTutorBookingRelatedMail($booking, 'TUTOR_BOOKING_CONFIRMATION');
+	// 		$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_CONFIRMATION');
+	// 		return redirect()->route('customer.booking.index')->with('success', 'Booking is confirmed successfully.');
+	// 	} else {
+	// 		return redirect()->route('customer.booking.index')->with('error', 'You are unable to confirm this booking');
+	// 	}
+	// }
+
+	public function confirmed(Request $request, $id)
+	{
+		$user_id = Auth::id();
+		$booking = Booking::where('student_id', $user_id)->find($id);
+	
+		if (!$booking) {
+			return redirect()->route('customer.booking.index')->with('error', 'Booking not found.');
 		}
+
+		// Combine start_date and start_time into a single Carbon datetime
+		$bookingDateTime = Carbon::parse($booking->start_date . ' ' . $booking->start_time);
+			// Check if booking is at least 12 hours in the future
+		if (Carbon::now()->diffInMinutes($bookingDateTime, false) < 720) { // 720 minutes = 12 hours
+			return redirect()->route('customer.booking.index')->with('error', 'Bookings must be confirmed at least 12 hours before the scheduled time.');
+		}
+	
+		$booking->status = 2; // Confirm Booking
+		$booking->save();
+	
+		$mailController = new BookingMailController();
+		$mailController->sendTutorBookingRelatedMail($booking, 'TUTOR_BOOKING_CONFIRMATION');
+		$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_CONFIRMATION');
+	
+		return redirect()->route('customer.booking.index')->with('success', 'Booking is confirmed successfully.');
 	}
+	
+
 
 
 	public function payment_details(Request $request)

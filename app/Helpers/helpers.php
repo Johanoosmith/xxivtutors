@@ -44,11 +44,12 @@ function privacySetting(int $userId, string $settingKey): bool
 	return isset($notification->$settingKey) && $notification->$settingKey == 1;
 }
 
-function getSiteVariable(){
-	return [
-		'site_name'=>'MyProTutor',
-		'support_email'=>'support@tutor.com'
-	];
+function getSiteVariable()
+{
+    return [
+        'site_name' => config('constants.SITE.TITLE'),
+        'support_email' => config('constants.SITE.EMAIL'),
+    ];
 }
 
 function finalQuery($queries){

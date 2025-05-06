@@ -13,10 +13,7 @@ use App\Http\Controllers\Admin\TutorsController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\ContractController;
-
-
-
-
+use App\Http\Controllers\Admin\PaymentController;
 use Mockery\VerificationDirector;
 
 Route::get('/', 'App\Http\Controllers\Admin\AdminController@login')->name('adlogin');
@@ -161,6 +158,10 @@ Route::group(['middleware' => ['admin']], function () {
 
 	Route::get('/contracts', [ContractController::class, 'index'])->name('contracts.index');
     Route::get('/contracts/{contract}', [ContractController::class, 'show'])->name('contracts.show');
+
+	//payment listing 06/05/25
+	Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+
 
 
 });
