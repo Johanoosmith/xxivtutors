@@ -212,6 +212,12 @@
                         <span class="pc-mtext">Manage Feedback</span>
                     </a>
                 </li>
+                     <li class="nav-item {{ ($currentRoute === 'admin.payments.index') ? 'active' : '' }}">
+                    <a class="pc-link" href="{{ route('admin.payments.index') }}">
+                        <span class="pc-micon"><i class="material-icons-two-tone">feedback</i></span>
+                        <span class="pc-mtext">Manage Payments</span>
+                    </a>
+                </li>
                 
                 <li class="nav-item {{ ($currentRoute === 'admin.questions.index' || $currentRoute === 'admin.questions.edit' || $currentRoute === 'admin.questions.create') ? 'active' : '' }}">
                     <a class="pc-link" href="{{ route('admin.questions.index') }}">

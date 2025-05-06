@@ -46,12 +46,12 @@
 		</div>
 	</div>
 	<div class="col-12 form-field">
-		<label class="form-label" for="bio">Your Bio</label>
+		<label class="form-label" for="bio">Your Bio <span class="required text-danger">*</span> </label>
 		<textarea class="form-control" id="bio" name="yourbio">{{ old('yourbio') }}</textarea>
 	</div>
 
 	<div class="col-12 form-field">
-		<label class="form-label" for="experience">Your Experience</label>
+		<label class="form-label" for="experience">Your Experience <span class="required text-danger">*</span> </label>
 		<textarea class="form-control" id="experience" name="yourexperience">{{ old('yourexperience') }}</textarea>
 	</div>
 

@@ -68,20 +68,20 @@ class BookingController extends Controller
 		$bookings = $query->paginate($perPage);
 
 		$booking_json = $this->getBookingsJson();
-		
+
 		return view('tutor.booking.index', compact('bookings', 'booking_json', 'booking_on'));
 	}
 
 	public function getBookingsJson()
-	{   
+	{
 		$request = request();
 		$user_id = Auth::user()->id;
 		$now = Carbon::now();
 		$startRange = $now->copy()->subMonths(6)->startOfDay();
 		$endRange = $now->copy()->addMonths(6)->endOfDay();
 
-		$booking_obj = Booking::where('tutor_id',$user_id)->whereBetween('start_date', [$startRange, $endRange]);
-		
+		$booking_obj = Booking::where('tutor_id', $user_id)->whereBetween('start_date', [$startRange, $endRange]);
+
 		if (!empty($request->booking_on) && $request->booking_on == 'past') {
 			// Past Records 
 			$booking_obj->where(function ($q) {
@@ -153,15 +153,15 @@ class BookingController extends Controller
 		];
 
 
-		return view('tutor.booking.create', compact('tutor_subjects', 'students', 'days','tutor_booking_status'));
+		return view('tutor.booking.create', compact('tutor_subjects', 'students', 'days', 'tutor_booking_status'));
 	}
 
 	public function store(Request $request)
 	{
 		$user_id = Auth::user()->id;
-        // dd($request->all());
+		// dd($request->all());
 		$request->merge([
-			 'start_date' => Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d'),
+			'start_date' => Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d'),
 			//'start_date' => Carbon::createFromFormat('m/d/Y', $request->start_date)->format('Y-m-d'),
 
 			'start_time' => sprintf('%02d:%02d', $request->start_time_hour, $request->start_time_minute)
@@ -179,28 +179,46 @@ class BookingController extends Controller
 			'start_date'        => ['required', 'date', 'after_or_equal:' . now()->toDateString()],
 			'start_time_hour' => 'required|min:00|max:23',
 			'start_time_minute' => 'required|in:00,15,30,45',
-			'start_time'        => [
+			// 'start_time'        => [
+			// 	'required',
+			// 	'date_format:H:i',
+			// 	function ($attribute, $value, $fail) use ($request) {
+			// 		$currentDate = Carbon::today()->toDateString();
+			// 		$selectedDate = $request->start_date;
+
+			// 		if ($selectedDate === $currentDate) {
+			// 			$currentTime = now()->format('H:i');
+			// 			if ($value < $currentTime) {
+			// 				$fail('The start time must be greater than the current time.');
+			// 			}
+			// 		}
+			// 	},
+			// ],
+			'start_time' => [
 				'required',
 				'date_format:H:i',
 				function ($attribute, $value, $fail) use ($request) {
-					$currentDate = Carbon::today()->toDateString();
-					$selectedDate = $request->start_date;
+					if (!$request->start_date) return;
 
-					if ($selectedDate === $currentDate) {
-						$currentTime = now()->format('H:i');
-						if ($value < $currentTime) {
-							$fail('The start time must be greater than the current time.');
+					try {
+						$bookingDateTime = Carbon::createFromFormat('Y-m-d H:i', $request->start_date . ' ' . $value);
+						$minBookingTime = now()->addHours(12);
+
+						if ($bookingDateTime->lt($minBookingTime)) {
+							$fail('The booking must be made at least 12 hours in advance.');
 						}
+					} catch (\Exception $e) {
+						$fail('Invalid date/time format.');
 					}
 				},
 			],
+
 			'day'       => 'required|array', // Ensure `day` is an array
 			'day.*'     => 'required|integer|in:1,2,3,4,5,6,7',
 			'duration'  => 'required|integer'
 		]);
 
 		$startDate = Carbon::parse($request->start_date);
-		// dd($startDate);
 		$startTime = $request->start_time;
 		$lessonRepeat = $request->lesson_repeat;
 		$days = $request->day; // Array of days
@@ -324,7 +342,7 @@ class BookingController extends Controller
 			->where('student_id', $request->student_id)
 			->first();
 
-		if(!empty($existingContract)){
+		if (!empty($existingContract)) {
 			return $existingContract;
 		}
 
@@ -480,18 +498,36 @@ class BookingController extends Controller
 			'start_date'        => ['required', 'date', 'after_or_equal:' . now()->toDateString()],
 			'start_time_hour' => 'required|min:00|max:23',
 			'start_time_minute' => 'required|in:00,15,30,45',
-			'start_time'        => [
+			// 'start_time'        => [
+			// 	'required',
+			// 	'date_format:H:i',
+			// 	function ($attribute, $value, $fail) use ($request) {
+			// 		$currentDate = Carbon::today()->toDateString();
+			// 		$selectedDate = $request->start_date;
+
+			// 		if ($selectedDate === $currentDate) {
+			// 			$currentTime = now()->format('H:i');
+			// 			if ($value < $currentTime) {
+			// 				$fail('The start time must be greater than the current time.');
+			// 			}
+			// 		}
+			// 	},
+			// ],
+			'start_time' => [
 				'required',
 				'date_format:H:i',
 				function ($attribute, $value, $fail) use ($request) {
-					$currentDate = Carbon::today()->toDateString();
-					$selectedDate = $request->start_date;
+					if (!$request->start_date) return;
 
-					if ($selectedDate === $currentDate) {
-						$currentTime = now()->format('H:i');
-						if ($value < $currentTime) {
-							$fail('The start time must be greater than the current time.');
+					try {
+						$bookingDateTime = Carbon::createFromFormat('Y-m-d H:i', $request->start_date . ' ' . $value);
+						$minBookingTime = now()->addHours(12);
+
+						if ($bookingDateTime->lt($minBookingTime)) {
+							$fail('The booking must be made at least 12 hours in advance.');
 						}
+					} catch (\Exception $e) {
+						$fail('Invalid date/time format.');
 					}
 				},
 			],
@@ -520,19 +556,19 @@ class BookingController extends Controller
 	{
 		try {
 			$user_id = Auth::user()->id;
-	
+
 			// Attempt to find the booking by the tutor ID and booking ID
 			$booking = Booking::where('tutor_id', $user_id)->findOrFail($request->booking_id);
-	
+
 			// Update the booking status and cancel details
 			$booking->status = 3;
 			$booking->cancel_by = 'Lesson cancelled by tutor.';
 			$booking->save();
-	
+
 			// Send cancellation email to the student
 			$mailController = new BookingMailController();
 			$mailController->sendStudentBookingRelatedMail($booking, 'STUDENT_BOOKING_CANCELLED');
-	
+
 			// Redirect with success message
 			return redirect()->route('tutor.booking.index')->with('success', 'Booking cancelled successfully.');
 		} catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -540,7 +576,7 @@ class BookingController extends Controller
 			return redirect()->route('tutor.booking.index')->with('error', 'You cannot cancel this booking.');
 		}
 	}
-	
+
 
 	public function help()
 	{
