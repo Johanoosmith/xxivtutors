@@ -23,6 +23,7 @@ use App\Models\Notification as NotificationTable;
 
 
 
+
 function sendMail($email, $data, $slug){
 	$site_var = getSiteVariable();
 	$data	  = array_merge($data, $site_var);
@@ -910,4 +911,12 @@ function getUserProfileLink($user_id)
 		default:
 			return '#';
 	}
+}
+
+
+if (!function_exists('getLanguages')) {
+    function getLanguages()
+    {
+        return DB::table('languages')->where('status', '1')->orderBy('name')->get();
+    }
 }
