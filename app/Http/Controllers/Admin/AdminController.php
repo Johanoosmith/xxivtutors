@@ -47,7 +47,7 @@ class AdminController extends Controller
     //loginProcess for login check
     public function loginProcess(Request $request)
     {
-        $input = $request->all();       
+        $input = $request->all();     
         $validator = validator::make($request->all(), [
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required']

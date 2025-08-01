@@ -195,6 +195,38 @@ class TutorController extends Controller
         //dd($tutorsdata);
         return view('tutor.dashboard', compact('user', 'tutorsdata', 'languages'));
     }
+    // public function updateTutorprofile(Request $request, $id)
+    // {
+    //     $validatedData = $request->validate([
+    //         'short_description' => 'nullable|string|max:6500',
+    //         'availability' => 'nullable|string',
+    //         'online_teaching_experience' => 'nullable|string',
+    //         'your_experience' => 'nullable|string',
+    //         'language' => 'nullable|exists:languages,id',
+    //         'distance' => 'nullable|numeric|min:0|max:50',
+    //     ]);
+
+    //     // Find the tutor and ensure it belongs to the authenticated user
+    //     $tutor = Tutor::where('user_id', $id)->firstOrFail();
+
+    //     if (!$tutor) {
+    //         return redirect()->back()->with('error', 'Tutor Not Found');
+    //     }
+
+    //     // Update tutor fields
+    //     $tutor->short_description = $validatedData['short_description'];
+    //     $tutor->availability = $validatedData['availability'];
+    //     $tutor->online_teaching_experience = $validatedData['online_teaching_experience'];
+    //     $tutor->your_experience = $validatedData['your_experience'];
+    //     $tutor->language = $validatedData['language'];
+    //     $tutor->distance = $validatedData['distance'];
+
+    //     // Save changes to the database
+    //     $tutor->save();
+
+    //     return redirect()->back()->with('success', 'Tutor updated successfully');
+    // }
+
     public function updateTutorprofile(Request $request, $id)
     {
         $validatedData = $request->validate([
@@ -202,7 +234,8 @@ class TutorController extends Controller
             'availability' => 'nullable|string',
             'online_teaching_experience' => 'nullable|string',
             'your_experience' => 'nullable|string',
-            'language' => 'nullable|exists:languages,id',
+            'language' => 'nullable|array',
+            'language.*' => 'integer|exists:languages,id',
             'distance' => 'nullable|numeric|min:0|max:50',
         ]);
 
@@ -213,12 +246,17 @@ class TutorController extends Controller
             return redirect()->back()->with('error', 'Tutor Not Found');
         }
 
+        $tutor->fill($request->except('language'));
+
+
         // Update tutor fields
         $tutor->short_description = $validatedData['short_description'];
         $tutor->availability = $validatedData['availability'];
         $tutor->online_teaching_experience = $validatedData['online_teaching_experience'];
         $tutor->your_experience = $validatedData['your_experience'];
-        $tutor->language = $validatedData['language'];
+        $tutor->language = $request->filled('language')
+            ? implode(',', $request->language)
+            : null;
         $tutor->distance = $validatedData['distance'];
 
         // Save changes to the database

@@ -1,46 +1,55 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="ltr">
-    <head> 
-        @include('includes.front.head')  
-        
-		<link rel="icon" href="{{ asset('uploads/logos/favicon.ico') }}" type="image/x-icon" />
 
-		<!-- <link rel="icon" href="{{ asset(config('settings.favicon', 'uploads/logos/favicon.ico')) }}" type="image/x-icon"> -->
-		<link rel="shortcut icon" href="{{ asset(config('settings.favicon', 'uploads/logos/favicon.ico')) }}" type="image/x-icon">
-		<!-- <link rel="icon" href="{{asset('front/assets/images/favicon.ico')}}"> -->
-		<!-- Bundle -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="{{asset('front/assets/css/bootstrap.min.css') }}">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.css" />
-		<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-        @yield('page-css')
-		@section('inline-css')	
-		<!-- Style Sheet -->
-		<link rel="stylesheet" href="{{asset('front/assets/css/style.css')}}">
-		<link rel="stylesheet" href="{{asset('front/assets/css/responsive.css')}}">
-		<link rel="stylesheet" href="{{asset('front/assets/css/custom.css')}}">
-		
+<head>
+    @include('includes.front.head')
 
-		<!-- Add this to your <head> section -->
-			<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-	
+    <link rel="icon" href="{{ asset('uploads/logos/favicon.ico') }}" type="image/x-icon" />
+
+    <!-- <link rel="icon" href="{{ asset(config('settings.favicon', 'uploads/logos/favicon.ico')) }}" type="image/x-icon"> -->
+    <link rel="shortcut icon" href="{{ asset(config('settings.favicon', 'uploads/logos/favicon.ico')) }}"
+        type="image/x-icon">
+    <!-- <link rel="icon" href="{{ asset('front/assets/images/favicon.ico') }}"> -->
+    <!-- Bundle -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ asset('front/assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    @yield('page-css')
+    @section('inline-css')
+        <!-- Style Sheet -->
+        <link rel="stylesheet" href="{{ asset('front/assets/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('front/assets/css/responsive.css') }}">
+        <link rel="stylesheet" href="{{ asset('front/assets/css/custom.css') }}">
+
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+        <!-- jQuery (required for Select2) -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <!-- Add this to your <head> section -->
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
 
-		@yield('custom-css')	
-        @show      
-    </head>   
-   
-    <body class="site_body home-body bg-lightgrey @yield('body_class')">    	       
-	       
-       
-        @include('includes.front.header')
-        @yield('content')
-        @include('includes.front.footer')
-        @include('includes.front.footer_script')
-		@yield('page-js')
-		
-		@yield('custom-js')
-        @section('inline-js')
-        @show
-    </body>
-</html> 
+
+        @yield('custom-css')
+    @show
+</head>
+
+<body class="site_body home-body bg-lightgrey @yield('body_class')">
+
+
+    @include('includes.front.header')
+    @yield('content')
+    @include('includes.front.footer')
+    @include('includes.front.footer_script')
+    @yield('page-js')
+
+    @yield('custom-js')
+    @section('inline-js')
+    @show
+</body>
+
+</html>

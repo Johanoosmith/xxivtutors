@@ -86,7 +86,7 @@ class CustomerController extends Controller
                 $rules = [
                     'role' => 'required|in:tutor,student',
                     // 'username' => 'required|string|max:255',
-                    'username' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z0-9]+$/'],
+                    'username' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z0-9]+$/','unique:users,username'],
                     'email' => 'required|email|unique:users,email',
                     'password' => 'required|min:6|confirmed',
                 ];
@@ -102,7 +102,7 @@ class CustomerController extends Controller
                     'title' => 'required|string|max:255',
                     'gender' => 'required|in:male,female',
                     'firstName' => 'required|string|max:255',
-                    'lastName' => 'required|string|max:255',
+                    'lastName' => 'nullable|string|max:255',
                     'address1' => 'required|string|max:255',
                     'address2' => 'nullable|string|max:255',
                     'town' => 'required|string|max:255',
@@ -119,7 +119,10 @@ class CustomerController extends Controller
                 break;
             case 3:
                 $rules = [
-                    'language' => 'required|string|max:255',
+                    // 'language' => 'required|string|max:255',
+                    'language' => 'required|array|min:1',
+                    'language.*' => 'integer|exists:languages,id',
+
                     'distance' => 'required|in:0,1,2,3,4,5,8,10,12,15,20,30,50',
                     'yourbio' => 'required|string|max:1000',
                     'yourexperience' => 'required|string|max:1000',
@@ -131,8 +134,14 @@ class CustomerController extends Controller
         // Validate the request
         $validatedData = $request->validate($rules);
         // Save data to session
+
+        if (isset($validatedData['language']) && is_array($validatedData['language'])) {
+            $validatedData['language'] = implode(',', $validatedData['language']);
+        }
         $request->session()->put('registration_form.' . $step, $validatedData);
-        
+        // Convert language array to comma-separated string
+
+
 
         if ($step < 3) {
             // Redirect to the next step
@@ -256,7 +265,7 @@ class CustomerController extends Controller
         }
     }
 
-     public function stripeAccountCreate($user_id)
+    public function stripeAccountCreate($user_id)
     {
 
         $this->stripeService = new StripeService();
@@ -268,7 +277,7 @@ class CustomerController extends Controller
         $countryCode = !empty($country) ? $country->code2l : 'GB';
         $unsupportedIndividualCountries = ['AE']; // Add more countries as needed
 
-    $businessType = in_array($countryCode, $unsupportedIndividualCountries) ? 'company' : 'individual';
+        $businessType = in_array($countryCode, $unsupportedIndividualCountries) ? 'company' : 'individual';
 
         $data = [
             'first_name' => $user['firstname'],
