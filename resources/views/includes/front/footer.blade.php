@@ -161,7 +161,7 @@
                         Safeguarding</a>
                 </div>
                 <div class="col text-center text-lg-end mt-3 mt-lg-0">
-                    <p>Website Designed & Developed by: <a href="https://www.dotsquares.com/" target="_blank"><img src="{{asset('front/assets/images/dotsquares.png')}}" alt="Dotsquares"> </a></p>
+                    {{-- <p>Website Designed & Developed by: <a href="https://www.dotsquares.com/" target="_blank"><img src="{{asset('front/assets/images/dotsquares.png')}}" alt="Dotsquares"> </a></p> --}}
                 </div>
             </div>
         </div>
